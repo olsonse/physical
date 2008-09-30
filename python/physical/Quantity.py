@@ -5,7 +5,8 @@ class Quantity:
     This is the documentation for a physical Quantity.
     """
 
-    def __init__(self,coeff,units):
+    def __init__(self,coeff,units,name=None):
+        self.name = name
         self.coeff = 1. * coeff
         self.units = units.copy()
         for k in self.units.keys():
@@ -46,19 +47,41 @@ class Quantity:
             if e != -1:
                 str = str + '^' + `-e`
 
-        return str + '>'
+        str = str + '>'
+
+        if self.name is not None:
+            str = str + ' (' + self.name + ')'
+
+        return str
 
     def __add__(self,other):
-        self.unitsMatch(other)
-        return Quantity(self.coeff + other.coeff, self.units)
+        um = self.unitsMatch(other)
+        if um < 0:
+            return self.coeff + other
+        elif um == 0:
+            return self.coeff + other.coeff
+        else:
+            return Quantity(self.coeff + other.coeff, self.units)
 
     def __sub__(self,other):
-        self.unitsMatch(other)
-        return Quantity(self.coeff - other.coeff, self.units)
+        um = self.unitsMatch(other)
+        if um < 0:
+            return self.coeff - other
+        elif um == 0:
+            return self.coeff - other.coeff
+        else:
+            return Quantity(self.coeff - other.coeff, self.units)
 
     def __cmp__(self,other):
-        self.unitsMatch(other)
-        return cmp(self.coeff, other.coeff)
+        um = self.unitsMatch(other)
+        if um < 0:
+            return cmp(self.coeff, other)
+        elif um == 0:
+            print 'hi'
+            return cmp(self.coeff, other.coeff)
+        else:
+            print 'bye'
+            return cmp(self.coeff, other.coeff)
 
     def __mul__(self,other):
         if other.__class__ == Quantity:
@@ -79,6 +102,9 @@ class Quantity:
         # fundamental numeric type.  Otherwise, other.__mul__ should have been
         # called (which might in turn call Quantity.__rmul__).  This works for
         # instance if we do (Quantity)*(numpy.ndarray).
+        if self.units.keys() == [ ]:
+            # so, self is not actually a unit... flatten
+            return other * self.coeff
         return Quantity(other * self.coeff, self.units)
 
     # assume that the type in coeff supports truediv
@@ -90,6 +116,7 @@ class Quantity:
         return self.__rdiv__(other)
 
     def __div__(self,other):
+        """ Quantity / other """
         try:
             c = 1. * self.coeff / other.coeff
             u = self.multUnits(other, -1)
@@ -102,10 +129,13 @@ class Quantity:
             return Quantity(c, u)
 
     def __rdiv__(self,other):
+        """ other / Quantity """
         c = other / self.coeff
         u = self.units.copy()
         for k in u.keys():
             u[k] = -u[k]
+        if u.keys() == [ ]:
+            return c
         return Quantity(c, u)
 
     def __pow__(self,exponent):
@@ -122,12 +152,18 @@ class Quantity:
             u[k] = int(u[k] * exponent)
 
         c  = self.coeff ** exponent
+        if u.keys() == [ ]:
+            return c
         return Quantity(c, u)
 
     def __neg__(self):
+        if self.units.keys() == [ ]:
+            return -self.coeff
         return Quantity(-self.coeff, self.units)
 
     def __abs__(self):
+        if self.units.keys() == [ ]:
+            return abs(self.coeff)
         return Quantity(abs(self.coeff), self.units)
 
     def __complex__(self):
@@ -156,7 +192,31 @@ class Quantity:
         return u
 
     def unitsMatch(self,other):
+        """
+        Compares units of two quantities to see if they match.
+        If both items are of type Quantity and they match return 1
+        If only one is a unit then:
+            1. raise an exception if this Quantity has non-null units
+            or
+            2. return -1 if this Quantity has null units.
+        If both are of type Quantity, and...
+            1. both are of an empty type, return 0
+            2. only one is an empty type, raise an exception
+        """
         if other.__class__ != Quantity:
+            if self.units.keys() == [ ]:
+                # Neither are really Quantity types, so we'll just
+                # give a softer indicator than an exception
+                return -1
+            raise RuntimeError(UnitsMismatch)
+
+        if self.units.keys() == [ ] and other.units.keys() == [ ]:
+            # Neither are really Quantity types, so we'll just
+            # give a soft indicator of 'equal enough'
+            return 0
+
+        if self.units.keys() == [ ] or other.units.keys() == [ ]:
+            # Only one has valid units, raise exception
             raise RuntimeError(UnitsMismatch)
 
         otherkeys = other.units.keys()
@@ -165,6 +225,8 @@ class Quantity:
                 raise RuntimeError(UnitsMismatch)
             if self.units[k] != other.units[k]:
                 raise RuntimeError(UnitsMismatch)
+        # to return True, self/other are equiv. Quantity types
+        return 1
 
 UnitsMismatch = 'Units mismatch:  cannot add/subtract/compare mismatched units'
 UnitsNotRoot  = 'Units not root:  cannot take non-even root of units'
