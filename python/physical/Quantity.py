@@ -215,17 +215,13 @@ class Quantity:
             # give a soft indicator of 'equal enough'
             return 0
 
-        if self.units.keys() == [ ] or other.units.keys() == [ ]:
-            # Only one has valid units, raise exception
-            raise RuntimeError(UnitsMismatch)
 
-        otherkeys = other.units.keys()
-        for k in self.units.keys():
-            if k not in otherkeys:
-                raise RuntimeError(UnitsMismatch)
-            if self.units[k] != other.units[k]:
-                raise RuntimeError(UnitsMismatch)
-        # to return True, self/other are equiv. Quantity types
+        sutuples = self.units.items()
+        outuples = other.units.items()
+        sutuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
+        outuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
+        if sutuples != outuples:
+            raise RuntimeError(UnitsMismatch)
         return 1
 
 UnitsMismatch = 'Units mismatch:  cannot add/subtract/compare mismatched units'
