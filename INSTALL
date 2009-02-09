@@ -3,4 +3,5 @@ Installation Instructions
 
 Because of the change to the Boost.build system, I still need to implement
 installation of some sort.  If you use Boost.build, using the c++ portion is
-easy.  
+easy.  In the near future, I'll be switching to the cmake build system (most
+likely at least).
