@@ -1,0 +1,19 @@
+# Copyright 2004-2008 Spencer Olson
+
+constant VERSION : [ MATCH "\\$Revision: *([0-9]*) *\\$" : "$Revision: 636 $" ] ;
+
+project /physical
+    : requirements
+        <include>cxx/physical
+    : usage-requirements
+        <include>cxx
+    : build-dir build
+    ;
+
+alias physical
+    : # sources
+      [ glob cxx/physical/*.h ]
+    : # no build requirements
+    : # no default build
+    : <include>cxx ;
+

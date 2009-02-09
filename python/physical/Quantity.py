@@ -77,10 +77,8 @@ class Quantity:
         if um < 0:
             return cmp(self.coeff, other)
         elif um == 0:
-            print 'hi'
             return cmp(self.coeff, other.coeff)
         else:
-            print 'bye'
             return cmp(self.coeff, other.coeff)
 
     def __mul__(self,other):
@@ -143,11 +141,12 @@ class Quantity:
         # power by the 'exponent'.  Throw an exception of this is not
         # possible. 
         u = self.units.copy()
+        fexp = float(abs(exponent))
         for k in u.keys():
-            if abs(exponent) < 1:
-                if ((float(u[k]) % (1.0/float(abs(exponent)))) != 0):
+            if fexp < 1:
+                if ((float(u[k]) % (1.0/fexp)) != 0):
                     raise RuntimeError(UnitsNotRoot)
-            elif (abs(exponent)% 1) != 0:
+            elif (int(fexp) - fexp) != 0:
                 raise RuntimeError(UnitsNotDimensionless)
             u[k] = int(u[k] * exponent)
 
@@ -215,12 +214,7 @@ class Quantity:
             # give a soft indicator of 'equal enough'
             return 0
 
-
-        sutuples = self.units.items()
-        outuples = other.units.items()
-        sutuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
-        outuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
-        if sutuples != outuples:
+        if self.units != other.units:
             raise RuntimeError(UnitsMismatch)
         return 1
 

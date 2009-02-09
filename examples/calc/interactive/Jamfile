@@ -1,0 +1,15 @@
+lib boost_regex : : <name>boost_regex ;
+
+lib readline :
+    : <name>readline
+    :
+    : <define>HAVE_READLINE_READLINE_H
+      <define>HAVE_READLINE_HISTORY_H
+      <define>HAVE_LIBREADLINE
+      <define>HAVE_READLINE_HISTORY
+    ;
+
+exe testInteractive : testInteractive_obj
+    /physical//physical readline boost_regex ;
+
+obj testInteractive_obj : testInteractive.cpp /physical//physical readline ;

@@ -1,0 +1,1 @@
+exe testDataOnly : testDataOnly.cpp /physical//physical ;

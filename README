@@ -1,0 +1,16 @@
+        physical Package
+    - Copyright 2003-2009 Spencer E. Olson
+
+Much of the data for the units and constants listed in this header are
+freely available on usenet servers.  The reference for the original
+header is comp.lang.cpp/2004-10/2217 by E. Robert Tisdale (10/17/04).
+The namespace layout is original to the posting by E. Robert Tisdale.
+
+E. R. Tisdale <E.Robert.Tisdale_at_jpl.nasa.gov>.
+
+There were a lot of other comments on usenet for improving the header from
+Tisdale, including British spelling of various units and so on.  This file
+is based on the unaltered version from E. R. Tisdale.
+
+This software is released under the MIT license (see COPYING file).
+

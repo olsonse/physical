@@ -1,0 +1,6 @@
+Installation Instructions
+*************************
+
+Because of the change to the Boost.build system, I still need to implement
+installation of some sort.  If you use Boost.build, using the c++ portion is
+easy.  
