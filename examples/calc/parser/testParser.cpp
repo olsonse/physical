@@ -1,6 +1,7 @@
 #include <iostream>
 #include <physical/calc/infix.h>
 
+using namespace runtime; /* strip runtime:: prefix off of physical::* */
 physical::calc::InfixCalc calc;
 
 typedef physical::calc::symbol sym;

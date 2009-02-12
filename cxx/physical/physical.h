@@ -15,28 +15,38 @@
  *
  * */
 
-#ifndef PHYSICAL_DATA_H
-#define PHYSICAL_DATA_H
+#if defined (PHYSICAL_DATA_FOR_RUNTIME) || !defined(PHYSICAL_DATA_H)
+#  if !defined (PHYSICAL_DATA_FOR_RUNTIME)
+#    define PHYSICAL_DATA_H
+#  endif
 
-#ifndef PHYSICAL_DATA_QUANTITY
+#ifndef PHYSICAL_QUANTITY
 /** The units/constants library defaults to just providing the information via
  * doubles. */
-#  define PHYSICAL_DATA_QUANTITY double
+#  define PHYSICAL_QUANTITY double
 #endif
 
-#ifndef PHYSICAL_QUANTITY_INITIALIZER
-/** The default initializer for the library only sets the coefficient. */
+#ifndef PHYSICAL_QUANTITY_CLASS
+#  define PHYSICAL_QUANTITY_CLASS PHYSICAL_QUANTITY
 #  define _QUANTITY(name,c)       const Quantity name = c
 #  define _QUANTITYu(name,c,u)    const Quantity name = c
 #  define _QUANTITYn(name,c,n)    const Quantity name = c
 #  define _QUANTITYun(name,c,u,n) const Quantity name = c
 #else
-/** The initializer allows to be specialized so that units and name can be
- * used. */
-#  define _QUANTITY(name,c)       const Quantity name = PHYSICAL_QUANTITY_INITIALIZER(c,"",#name)
-#  define _QUANTITYu(name,c,u)    const Quantity name = PHYSICAL_QUANTITY_INITIALIZER(c,u,"",#name)
-#  define _QUANTITYn(name,c,n)    const Quantity name = PHYSICAL_QUANTITY_INITIALIZER(c,n,#name)
-#  define _QUANTITYun(name,c,u,n) const Quantity name = PHYSICAL_QUANTITY_INITIALIZER(c,u,n,#name)
+   /** Sets only the coefficient of the physical::quantity. */
+#  define _QUANTITY(name,c)       const Quantity name = PHYSICAL_QUANTITY_CLASS(c,"",#name)
+   /** Sets the value of the coefficient and the units of the physical::quantity
+    * (if using the runtime library of course).
+    */
+#  define _QUANTITYu(name,c,u)    const Quantity name = PHYSICAL_QUANTITY_CLASS(c,u,"",#name)
+   /** Sets the value of the coefficient and the name of the physical::quantity
+    * (if using the runtime library of course).
+    */
+#  define _QUANTITYn(name,c,n)    const Quantity name = PHYSICAL_QUANTITY_CLASS(c,n,#name)
+   /** Sets the value of the coefficient, the units, and the name of the
+    * physical::quantity (if using the runtime library of course). 
+    */
+#  define _QUANTITYun(name,c,u,n) const Quantity name = PHYSICAL_QUANTITY_CLASS(c,u,n,#name)
 #endif
 
 #ifndef _OPEN_NAMESPACE
@@ -58,9 +68,9 @@ _BEGIN_NAMESPACE(physical) {
      * This type can be a scalar value, or perhaps a class that checks type
      * information.
      *
-     * @see PHYSICAL_DATA_QUANTITY
+     * @see PHYSICAL_QUANTITY_CLASS
      * */
-    typedef PHYSICAL_DATA_QUANTITY Quantity;
+    typedef PHYSICAL_QUANTITY_CLASS Quantity;
 
     // #### BEGIN OF UNIT CREATION #### #
     _BEGIN_NAMESPACE(unit) { // conversion factor
@@ -967,6 +977,21 @@ _BEGIN_NAMESPACE(physical) {
     _ALIAS_NAMESPACE(elements, element);
     // ####   END OF ELEMENT CREATION #### #
 _END_NAMESPACE}
+
+
+/* now do some cleanup for the macros used internally here. */
+#undef PHYSICAL_QUANTITY_CLASS
+#undef _QUANTITY
+#undef _QUANTITYu
+#undef _QUANTITYn
+#undef _QUANTITYun
+#undef _OPEN_NAMESPACE
+#undef _CLOSE_NAMESPACE
+#undef _ALIAS_NAMESPACE
+#undef _BEGIN_NAMESPACE
+#undef _END_NAMESPACE
+#undef _ELEMENT
+
 
 
 #endif // PHYSICAL_DATA_H

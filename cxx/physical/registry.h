@@ -6,38 +6,41 @@
  *
  * */
 
-#ifndef PHYSICAL_REGISTRY_H
-#define PHYSICAL_REGISTRY_H
+#if defined (PHYSICAL_REGISTRY_FOR_RUNTIME) || !defined(PHYSICAL_REGISTRY_H)
+#  if !defined (PHYSICAL_REGISTRY_FOR_RUNTIME)
+#    define PHYSICAL_REGISTRY_H
+#  endif
+
 
 #include <string>
 #include <map>
 
 /** Just a useful set of tools to help with the registry problem. */
 namespace monkeywrench {
-    static std::vector<std::string> id_stack;
+    static std::vector<std::string> namespace_stack;
 
     inline int push_namespace(const std::string & id) {
-        id_stack.push_back(id);
+        namespace_stack.push_back(id);
         return 0;
     }
 
     inline int pop_namespace() {
-        id_stack.pop_back();
+        namespace_stack.pop_back();
         return 0;
     }
 
     inline std::string get_namespace() {
         std::string retval;
-        if (id_stack.size() > 0)
-            retval = id_stack[0];
-        for (unsigned int i = 1; i < id_stack.size(); i++) {
-            retval.append("::").append(id_stack[i]);
+        if (namespace_stack.size() > 0)
+            retval = namespace_stack[0];
+        for (unsigned int i = 1; i < namespace_stack.size(); i++) {
+            retval.append("::").append(namespace_stack[i]);
         }
         return retval;
     }
 
     inline std::string get_prefix() {
-        if (id_stack.size() > 0)
+        if (namespace_stack.size() > 0)
             return get_namespace() + "::";
         else
             return "";

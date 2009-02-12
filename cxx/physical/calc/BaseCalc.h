@@ -1,14 +1,14 @@
 #ifndef  PHYSICAL_CALC_CALC_H
 #define  PHYSICAL_CALC_CALC_H
 
-#include "../quantity.h"
-#include "symbol.h"
-#include "units.h"
-#include "math.h"
+#include <physical/quantity.h>
+#include <physical/calc/symbol.h>
+#include <physical/calc/units.h>
+#include <physical/calc/math.h>
 
 #include <sstream>
 
-namespace physical {
+namespace runtime { namespace physical {
     namespace calc {
 
         struct no_result : physical::exception {
@@ -138,6 +138,6 @@ namespace physical {
             }
         };
     } /* namespace calc */
-} /* namespace physical */
+}} /* namespace runtime::physical */
 
 #endif // PHYSICAL_CALC_CALC_H

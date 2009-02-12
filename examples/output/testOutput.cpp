@@ -1,6 +1,7 @@
 #include <physical/quantity.h>
 #include <iostream>
 
+using namespace runtime; /* strip the runtime:: prefix from physical::* */
 using physical::Quantity;
 
 int main() {

@@ -11,6 +11,7 @@
 #include <physical/quantity.h>
 
 int main() {
+    using namespace runtime; /* strip the runtime:: prefix on runtime::physical::* */
     using physical::Quantity;
     Quantity a = Quantity(physical::unit::m,"","other::m");
 

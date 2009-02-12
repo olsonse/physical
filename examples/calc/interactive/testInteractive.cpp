@@ -67,6 +67,7 @@ extern int read_history ();
 
 
 
+using namespace runtime; /* strip the runtime:: prefix off of physical::* */
 physical::calc::InfixCalc calc;
 
 typedef physical::calc::symbol sym;

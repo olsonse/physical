@@ -27,12 +27,11 @@
 #include <complex>
 #include <vector>
 
-#include <physical/registry.h>
 
 
 
 
-#ifndef PHYSICAL_UNITS_QUANTITY_TYPE
+#ifndef PHYSICAL_QUANTITY
     /** The type of the coefficient in the physical::quantity<T> template and
      * throughout the units/constants library in general.
      *
@@ -40,11 +39,12 @@
      * of the functions within the quantity<> portion of the library may not
      * be able to instantiate.
      * */
-#  define PHYSICAL_UNITS_QUANTITY_TYPE physical::quantity<>::coeff_type
+#  define PHYSICAL_QUANTITY_COEFF_TYPE physical::quantity<>::coeff_type
+#else
+#  define PHYSICAL_QUANTITY_COEFF_TYPE PHYSICAL_QUANTITY
 #endif
 
-#define PHYSICAL_DATA_QUANTITY quantity<PHYSICAL_UNITS_QUANTITY_TYPE>
-#define PHYSICAL_QUANTITY_INITIALIZER   PHYSICAL_DATA_QUANTITY
+#define PHYSICAL_QUANTITY_CLASS quantity<PHYSICAL_QUANTITY_COEFF_TYPE>
 
 
 #define _OPEN_NAMESPACE(i,id)   namespace id { const int init_ ## i = monkeywrench::push_namespace(#id); } namespace id
@@ -57,8 +57,12 @@
 
 
 
+namespace runtime {
+#define PHYSICAL_REGISTRY_FOR_RUNTIME
+#include <physical/registry.h>
+#undef PHYSICAL_REGISTRY_FOR_RUNTIME
 
-namespace physical {
+    namespace physical {
 
     /** The base exception class for the physical namespace. */
     struct exception : std::runtime_error {
@@ -598,7 +602,9 @@ namespace physical {
 }
 
 /* now finally, load the data. */
-#include "physical.h"
+#define PHYSICAL_DATA_FOR_RUNTIME
+#include <physical/physical.h>
+#undef PHYSICAL_DATA_FOR_RUNTIME
 
 
 namespace physical {
@@ -769,6 +775,6 @@ namespace physical {
     } /* namespace math. */
 
     /* ****   END QUANTITY OPERATORS **** */
-}
+}} /* namespace runtime::physical */
 
 #endif // PHYSICAL_QUANTITY_H

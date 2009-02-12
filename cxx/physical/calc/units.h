@@ -1,10 +1,9 @@
 #ifndef PHYSICAL_CALC_UNITS_H
 #define PHYSICAL_CALC_UNITS_H
 
-#include "symbol.h"
+#include <physical/calc/symbol.h>
 
-namespace physical {
-namespace calc {
+namespace runtime { namespace physical { namespace calc {
 
 static void addPhysicalUnits(symbol::table & symbols) {
     using physical::Quantity;
@@ -39,7 +38,6 @@ static void addPhysicalUnits(symbol::table & symbols) {
     symbol::import(symbols, "physical::element::francium",  "*", "physical::element::Fr");
 }
 
-}
-}
+}}} /* namespace runtime::physical::calc */
 
 #endif // PHYSICAL_CALC_UNITS_H

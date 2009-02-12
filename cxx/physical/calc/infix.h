@@ -19,12 +19,11 @@
 #include <math.h>
 #include <vector>
 
-#include "../quantity.h"
-#include "symbol.h"
-#include "BaseCalc.h"
+#include <physical/quantity.h>
+#include <physical/calc/symbol.h>
+#include <physical/calc/BaseCalc.h>
 
-namespace physical {
-namespace calc {
+namespace runtime { namespace physical { namespace calc {
 
 // Semantic actions can be functors. The operator() function is called
 // with two iterators that specify the range of input that matches the production.
@@ -405,7 +404,6 @@ struct InfixCalc : BaseBoostCalc<InfixCalcEngine>, BaseCalc<InfixCalc> {
                   engine(base_calc::symbols,result,result_set) {}
 };
 
-} /* namespace calc */
-} /* namespace physical */
+}}} /* namespace runtime::physical::calc */
 
 #endif // PHYSICAL_CALC_INFIX_H

@@ -5,3 +5,22 @@ Because of the change to the Boost.build system, I still need to implement
 installation of some sort.  If you use Boost.build, using the c++ portion is
 easy.  In the near future, I'll be switching to the cmake build system (most
 likely at least).
+
+For the python implementation, just make sure that the python directory is
+added to your PYTHONPATH (however you choose do this).
+As an example, for bash,  you could add the following line to your
+.bash_profile file:
+export PYTHONPATH=":/PATH/TO/PHYSICAL-PACKAGE/python:"
+
+
+The gnuplot 'port' is not the most elegant (i.e. the namespaces are just
+tacked onto the names, such as 'arc_centesimal_minute' instead of
+'arc::centesimal::minute' but it has been handy for me.
+
+
+For the octave/matlab version, you only have to run the 'physical.m' script
+to get all of the units/contants loaded into memory as variables.  The
+namespaces are loaded as structs, except that the physical::unit(s) and
+physical::constant(s) prefixes are removed (perhaps this should not be the
+case, but oh well).
+

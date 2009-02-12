@@ -1,10 +1,10 @@
 #ifndef PHYSICAL_CALC_MATH_H
 #define PHYSICAL_CALC_MATH_H
 
-#include "../quantity.h"
-#include "symbol.h"
+#include <physical/quantity.h>
+#include <physical/calc/symbol.h>
 
-namespace physical {
+namespace runtime { namespace physical {
     namespace calc {
         static void addMathLib(symbol::table & symbols) {
             symbols["sin"]   = physical::math::sin   <Quantity::coeff_type>;
@@ -32,6 +32,6 @@ namespace physical {
             symbols["abs"]   = physical::math::fabs  <Quantity::coeff_type>;
         }
     }
-}
+}}
 
 #endif // PHYSICAL_CALC_MATH_H
