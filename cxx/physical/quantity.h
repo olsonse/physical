@@ -47,10 +47,10 @@
 #define PHYSICAL_QUANTITY_INITIALIZER   PHYSICAL_DATA_QUANTITY
 
 
-#define _OPEN_NAMESPACE(i,id)   namespace id { int init_ ## i = monkeywrench::push_namespace(#id); } namespace id
-#define  _CLOSE_NAMESPACE(i)    int uninit_ ## i =  monkeywrench::pop_namespace();
+#define _OPEN_NAMESPACE(i,id)   namespace id { const int init_ ## i = monkeywrench::push_namespace(#id); } namespace id
+#define  _CLOSE_NAMESPACE(i)    const int uninit_ ## i =  monkeywrench::pop_namespace();
 #define _ALIAS_NAMESPACE(alias,ns) \
-    static int I_ ## alias ## _ ## ns = \
+    const int I_ ## alias ## _ ## ns = \
         Quantity::registry().import(monkeywrench::get_prefix() + #ns, "*", \
                                     monkeywrench::get_prefix() + #alias); \
     namespace alias = ns

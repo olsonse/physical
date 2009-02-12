@@ -922,6 +922,9 @@ _BEGIN_NAMESPACE(physical) {
     _END_NAMESPACE} \
     _ALIAS_NAMESPACE(sym, name);
 
+    /** Periodic table information.
+     * @see http://physics.nist.gov/PhysRefData/Elements/index.html
+     */
     _BEGIN_NAMESPACE(element) {
         //       long-name    abrv.   n        mass       outer-electron ionization (eV)
         _ELEMENT(hydrogen,      H,    1,      1.00794,      13.5984 );
@@ -943,6 +946,17 @@ _BEGIN_NAMESPACE(physical) {
         _ELEMENT(chlorine,      Cl,  17,      35.453,       12.9676 );
         _ELEMENT(argon,         Ar,  18,      39.948,       15.7596 );
         _ELEMENT(potassium,      K,  19,      39.0983,       4.3407 );
+        _ELEMENT(calcium,       Ca,  20,      40.078,        6.1132 );
+        _ELEMENT(scandium,      Sc,  21,      44.955911,     6.5615 );
+        _ELEMENT(titanium,      Ti,  22,      47.867,        6.8281 );
+        _ELEMENT(vanadium,       V,  23,      50.9415,       6.7462 );
+        _ELEMENT(chromium,      Cr,  24,      51.9961,       6.7665 );
+        _ELEMENT(manganese,     Mn,  25,      54.9380499,    7.4340 );
+        _ELEMENT(iron,          Fe,  26,      55.845,        7.9024 );
+        _ELEMENT(cobalt,        Co,  27,      58.9332009,    7.8810 );
+        _ELEMENT(nickel,        Ni,  28,      58.6934,       7.6398 );
+        _ELEMENT(copper,        Cu,  29,      63.546,        7.7264 );
+        _ELEMENT(zinc,          Zn,  30,      65.409,        9.3942 );
         _ELEMENT(krypton,       Kr,  36,      83.798,       13.9996 );
         _ELEMENT(rubidium,      Rb,  37,      85.4678,       4.1771 );
         _ELEMENT(xenon,         Xe,  54,     131.293,       12.1298 );

@@ -16,17 +16,17 @@
 namespace monkeywrench {
     static std::vector<std::string> id_stack;
 
-    int push_namespace(const std::string & id) {
+    inline int push_namespace(const std::string & id) {
         id_stack.push_back(id);
         return 0;
     }
 
-    int pop_namespace() {
+    inline int pop_namespace() {
         id_stack.pop_back();
         return 0;
     }
 
-    std::string get_namespace() {
+    inline std::string get_namespace() {
         std::string retval;
         if (id_stack.size() > 0)
             retval = id_stack[0];
@@ -36,7 +36,7 @@ namespace monkeywrench {
         return retval;
     }
 
-    std::string get_prefix() {
+    inline std::string get_prefix() {
         if (id_stack.size() > 0)
             return get_namespace() + "::";
         else
@@ -52,7 +52,7 @@ namespace physical {
     namespace registry {
 
         template <class table>
-        static typename table::const_iterator
+        static inline typename table::const_iterator
         next_lower_bound(const table & tab, const std::string & txt) {
             std::string txtp1 = txt;
             txtp1[txt.length()-1] = ((char)*(txt.end()-1)) + (char)1;
@@ -107,7 +107,7 @@ namespace physical {
         };
 
         template <class Container, class Iter>
-        void erase_items(Container & c, Iter i, const Iter f) {
+        static inline void erase_items(Container & c, Iter i, const Iter f) {
             for (; i!=f; c.erase(*i), i++);
         }
         
