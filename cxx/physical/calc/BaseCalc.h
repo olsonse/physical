@@ -113,7 +113,7 @@ namespace runtime { namespace physical {
                 Quantity result;
                 do {
                     try {
-                        result = ((sub*)this)->parse_statement(first, s.end(), finished, result_set);
+                        result = static_cast<sub&>(*this).parse_statement(first, s.end(), finished, result_set);
                     } catch (syntax_error & e) {
                         // Display a caret that points to the position where the error
                         // was detected.
