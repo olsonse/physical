@@ -3,7 +3,7 @@
  * where applicable) organized into a bunch of namespaces.
  *
  * By runtime, I mean that errors from units mismatch will NOT be caught at
- * compile time like for boost units and other implementions, but rather
+ * compile time like for boost units and other implementations, but rather
  * exceptions will be thrown when such errors are encountered. 
  *
  * One of the main benefits to having runtime error control is that

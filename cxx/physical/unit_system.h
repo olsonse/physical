@@ -1,12 +1,37 @@
-#ifndef PHYSICAL_CONVERSION_H
-#define PHYSICAL_CONVERSION_H
+/** \file
+ * A registry for physical::quantity types that have been initialized
+ * properly.
+ *
+ * */
 
-#include <physical/physical.h>
+#if defined (PHYSICAL_CONVERSION_FOR_RUNTIME) || !defined(PHYSICAL_CONVERSION_H)
+#  if !defined (PHYSICAL_CONVERSION_FOR_RUNTIME)
+#    define PHYSICAL_CONVERSION_H
+#  endif
+
+#if !defined (PHYSICAL_CONVERSION_FOR_RUNTIME)
+#  include <physical/physical.h>
+#endif
 
 #warning "This set of unit system conversions is not yet complete or necessarily accurate.  Please check before using."
 
 namespace physical {
-    namespace unit_system {
+
+/** Calculate the conversion factor from SYS_SRC system of units to SYS_DST
+ * system of units for the dimension Dim.
+ *
+ *  Quantity Len_cgs = CONVERT(SI,CGS,Length,10.0*physical::unit::cm);
+ *  Quantity Len_cgs = 10.0*physical::unit::cm * (SI::length / CGS::length);
+ *  Quantity Len_cgs = 10.0*physical::unit::cm * CONVERT_FACTOR(SI,CGS,length)
+ *  Length<CGS> Len = convert<CGS>(10*physical::unit::cm);
+ *  Length<CGS> Len = 10*physical::unit::cm;
+ */
+#define CONVERT_FACTOR(SYS_SRC,SYS_DST,Dim) \
+    (physical::unit::system::SYS_SRC::Dim / physical::unit::system::SYS_DST::Dim)
+#define CONVERT(SYS_SRC,SYS_DST,Dim,Value) \
+    (Value * CONVERT_FACTOR(SYS_SRC,SYS_DST,Dim))
+
+    namespace unit { namespace system {
         namespace SI {
             const Quantity force        = unit::Newton;
             const Quantity energy       = unit::Joule;
@@ -130,7 +155,119 @@ namespace physical {
             namespace magnetic {
             }
         }
-    }/*namespace unit_system */
-}
+    }}/*namespace unit::system */
+
+
+/** Defines a structure of a unit system so that we can template on the unit
+ * system. */
+#define PHYSICAL_UNITS_SYS(SYS) \
+    namespace unit { \
+        struct SYS { \
+            inline static const Quantity & force() { \
+                return physical::unit::system::SYS::force; \
+            } \
+ \
+            inline static const Quantity & energy() { \
+                return physical::unit::system::SYS::energy; \
+            } \
+ \
+            inline static const Quantity & length() { \
+                return physical::unit::system::SYS::length; \
+            } \
+ \
+            inline static const Quantity & mass() { \
+                return physical::unit::system::SYS::mass; \
+            } \
+ \
+            inline static const Quantity & time() { \
+                return physical::unit::system::SYS::time; \
+            } \
+ \
+            inline static const Quantity & power() { \
+                return physical::unit::system::SYS::power; \
+            } \
+ \
+            inline static const Quantity & temperature() { \
+                return physical::unit::system::SYS::temperature; \
+            } \
+ \
+            inline static const Quantity & velocity() { \
+                return physical::unit::system::SYS::velocity; \
+            } \
+ \
+            inline static const Quantity & pressure() { \
+                return physical::unit::system::SYS::pressure; \
+            } \
+ \
+            inline static const Quantity & momentum() { \
+                return physical::unit::system::SYS::momentum; \
+            } \
+ \
+            inline static const Quantity & angular_momentum() { \
+                return physical::unit::system::SYS::angular_momentum; \
+            } \
+ \
+            struct electric { \
+                inline static const Quantity & k() { \
+                    return physical::unit::system::SYS::electric::k; \
+                } \
+ \
+                inline static const Quantity & potential() { \
+                    return physical::unit::system::SYS::electric::potential; \
+                } \
+ \
+                inline static const Quantity & field() { \
+                    return physical::unit::system::SYS::electric::field; \
+                } \
+ \
+                inline static const Quantity & charge() { \
+                    return physical::unit::system::SYS::electric::charge; \
+                } \
+ \
+                inline static const Quantity & e() { \
+                    return physical::unit::system::SYS::electric::e; \
+                } \
+ \
+                inline static const Quantity & current() { \
+                    return physical::unit::system::SYS::electric::current; \
+                } \
+ \
+                inline static const Quantity & resistance() { \
+                    return physical::unit::system::SYS::electric::resistance; \
+                } \
+ \
+                inline static const Quantity & conductance() { \
+                    return physical::unit::system::SYS::electric::conductance; \
+                } \
+ \
+                inline static const Quantity & resistivity() { \
+                    return physical::unit::system::SYS::electric::resistivity; \
+                } \
+ \
+                inline static const Quantity & conductivity() { \
+                    return physical::unit::system::SYS::electric::conductivity; \
+                } \
+            }; /* electric */ \
+ \
+            struct magnetic { \
+                inline static const Quantity & field() { \
+                    return physical::unit::system::SYS::magnetic::field; \
+                } \
+ \
+                inline static const Quantity & flux() { \
+                    return physical::unit::system::SYS::magnetic::flux; \
+                } \
+            }; /* magnetic */ \
+        }; /* sys struct */ \
+    }/*namespace unit::system */
+
+
+    /* create structures for all unit systems that are complete. */
+    PHYSICAL_UNITS_SYS(SI);
+    PHYSICAL_UNITS_SYS(atomic);
+    PHYSICAL_UNITS_SYS(electrostatic);
+    PHYSICAL_UNITS_SYS(esu);
+
+}/* namespace physical */
 
 #endif // PHYSICAL_CONVERSION_H
