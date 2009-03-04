@@ -10,7 +10,7 @@
 
 /** Intro message displayed in interactive mode. */
 const char * opening_msg =
-"physical::calculator: \n"
+"physical::calculator: $Id$\n"
 "Perhaps it might even rival with GNU units. :-)\n"
 "\n"
 "- 2007-2009 Spencer E. Olson\n"

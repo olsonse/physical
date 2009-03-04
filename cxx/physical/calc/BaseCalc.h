@@ -6,6 +6,8 @@
 #include <physical/calc/units.h>
 #include <physical/calc/math.h>
 
+#include <boost/spirit.hpp>
+
 #include <sstream>
 
 namespace runtime { namespace physical {

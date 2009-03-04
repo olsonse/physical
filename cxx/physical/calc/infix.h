@@ -2,6 +2,9 @@
 #ifndef PHYSICAL_CALC_INFIX_H
 #define PHYSICAL_CALC_INFIX_H
 
+#include <physical/quantity.h>
+#include <physical/calc/symbol.h>
+#include <physical/calc/BaseCalc.h>
 
 #include <boost/spirit.hpp>
 #include <boost/spirit/phoenix/binders.hpp>
@@ -18,10 +21,6 @@
 #include <stdexcept>
 #include <math.h>
 #include <vector>
-
-#include <physical/quantity.h>
-#include <physical/calc/symbol.h>
-#include <physical/calc/BaseCalc.h>
 
 namespace runtime { namespace physical { namespace calc {
 
@@ -96,6 +95,19 @@ class InfixCalcEngine : public boost::spirit::grammar<InfixCalcEngine> {
                        |lexeme_d[str_p("variables")][bind(&InfixCalcEngine::dump)(self, symbol::VARIABLE)]
                        |lexeme_d[str_p("functions")][bind(&InfixCalcEngine::dump)(self, symbol::FUNCTION)]
                        |eps_p                       [bind(&InfixCalcEngine::dump)(self, symbol::UNDEFINED)]
+                       )
+                  )
+                | (
+                    lexeme_d[str_p("set")] >> lexeme_d[str_p("output")]
+                    >> (
+                        lexeme_d[str_p("pretty")][bind(&Quantity::setPrintMode)(Quantity::PRETTY_PRINT)]
+                       |lexeme_d[str_p("math")][bind(&Quantity::setPrintMode)(Quantity::MATH_PRINT)]
+                       |lexeme_d[str_p("latex")]
+                        >> (
+                            lexeme_d[str_p("oneline")][bind(&Quantity::setPrintMode)(Quantity::LATEX_ONELINE_PRINT)]
+                           |eps_p                     [bind(&Quantity::setPrintMode)(Quantity::LATEX_PRINT)]
+                           )
+                       |lexeme_d[str_p("ugly")][bind(&Quantity::setPrintMode)(Quantity::UGLY_PRINT)]
                        )
                   )
                 | lexeme_d[str_p("help")][bind(&InfixCalcEngine::help)(self)]
@@ -341,6 +353,11 @@ class InfixCalcEngine : public boost::spirit::grammar<InfixCalcEngine> {
                      "\tdump constants                   : dumps the list of constant symbols\n"
                      "\tdump variables                   : dumps the list of variable symbols\n"
                      "\tdump functions                   : dumps the list of function symbols\n"
+                     "\tset output pretty                : sets the output to mimic GNU units output (default)\n"
+                     "\tset output math                  : sets the output to be mathematically correct\n"
+                     "\tset output latex                 : sets the output to formatted for latex math mode using \\frac{}{}\n"
+                     "\tset output latex oneline         : sets the output to formatted for latex math mode on one line\n"
+                     "\tset output ugly                  : sets the output to demonstrate the underlying units structure\n"
                      "\thelp                             : show this message\n"
                      "\tfrom <prefix> import {*|'regex'} : copy symbols from <prefix> into the\n"
                      "\t                                   root  namespace.  The symbols that\n"

@@ -126,15 +126,35 @@ namespace runtime {
         return out;
     }
 
-    /** Pretty/math print the units_pair. */
+    /** Pretty/math print the units_pair.
+     * NOTE: that this function does NOT print negative powers, rather it
+     * assumes that the calling function wraps this in the denominator
+     * correctly if that is necessary. */
     inline std::ostream & operator<< (std::ostream & out, const units_pair & p) {
         out << p.first;
-        if (p.second > 1)
-            out << '^' << p.second;
+        if (std::abs(p.second) > 1)
+            /* Again, NOTE that we print out positive exponents and assume
+             * that the calling function puts this in the denominator
+             * correctly. */
+            out << '^' << std::abs(p.second);
         return out;
     }
 
-    /** Print the units_map with a given seperator. */
+    /** LaTeX print the units_pair.
+     * NOTE: Just like operator<<(ostream,units_pair), this function does NOT
+     * print negative powers, rather it assumes that the calling function
+     * wraps this in the denominator correctly if that is necessary. */
+    inline std::ostream & latex_print(std::ostream & out, const units_pair & p) {
+        out << "\\mathrm{" << p.first << '}';
+        if (std::abs(p.second) > 1)
+            /* Again, NOTE that we print out positive exponents and assume
+             * that the calling function puts this in the denominator
+             * correctly. */
+            out << '^' << '{' << std::abs(p.second) << '}';
+        return out;
+    }
+
+    /** Print the units_map with a given separator. */
     inline std::ostream & sep_print (std::ostream & out, const units_map & u, const char * sep = " ") {
         const char * cur_sep = "";
         for (units_map::const_iterator i = u.begin(); i != u.end(); i++) {
@@ -152,6 +172,18 @@ namespace runtime {
     /** Pretty print the units_map. */
     inline std::ostream & operator<< (std::ostream & out, const units_map & u) {
         return sep_print(out, u);
+    }
+
+    /** LaTeX print the units_map. */
+    inline std::ostream & latex_print (std::ostream & out, const units_map & u) {
+        // unfortunately, this one is a little more complicated.
+        const char * cur_sep = "";
+        const char * const sep = "~";
+        for (units_map::const_iterator i = u.begin(); i != u.end(); i++) {
+            latex_print(out << cur_sep, (*i));
+            cur_sep = sep;
+        }
+        return out;
     }
 
 
@@ -250,22 +282,36 @@ namespace runtime {
     template<class T = double>
     class quantity {
       public:
-        typedef physical::registry::recorder< quantity<T> > registry_type;
-        static registry_type & registry() {
-            return registry_type::instance();
-        }
-
-        enum PRINT_TYPE {
-            PRETTY_PRINT,
-            MATH_PRINT,
-            UGLY_PRINT
-        };
-
-        static enum PRINT_TYPE print_type;
+        /* ******** BEGIN TYPEDEFS ***** */
 
         /** The data storage type of the coefficient of the physical
          * quantity. */
         typedef T coeff_type;
+
+        /** The registry type for this quantity type. */
+        typedef physical::registry::recorder< quantity<T> > registry_type;
+
+        /** The possible printing modes. */
+        enum PRINT_TYPE {
+            /** Pretty formatting similar to GNU units. */
+            PRETTY_PRINT,
+            /** Mathematically correct. */
+            MATH_PRINT,
+            /** Format for latex math mode. This format uses fractional
+             * format. */
+            LATEX_PRINT,
+            /** Format for latex math mode. This format is for single line
+             * fractions. */
+            LATEX_ONELINE_PRINT,
+            /** Unpleasant formatting that demonstrates the units structure. */
+            UGLY_PRINT
+        };
+
+        /* ********** END TYPEDEFS ***** */
+
+
+        /* ******** BEGIN DATA MEMBERS ********** */
+      public:
 
         /** The coefficient of this physical quantity. */
         coeff_type coeff;
@@ -281,6 +327,32 @@ namespace runtime {
          * the prettyPrint() function.
          * */
         std::string name;
+
+      private:
+
+        /** The current printing mode (except when explicitly stated in
+         * print(). */
+        static enum PRINT_TYPE print_type;
+
+        /* ********** END DATA MEMBERS ********** */
+
+
+
+        /* ******** BEGIN FUNCTION MEMBERS ****** */
+      public:
+
+        /** Set the current default print mode for this quantity type.
+         * @see PRINT_TYPE.
+         * */
+        static void setPrintMode(const enum PRINT_TYPE & t) {
+            print_type = t;
+        }
+
+        /** Get the global instance of the registry for this type of quantity.
+         * */
+        static registry_type & registry() {
+            return registry_type::instance();
+        }
 
         /** Copy constructor that allows specification of a different name. */
         quantity(const quantity & q,
@@ -317,29 +389,37 @@ namespace runtime {
             return out.str();
         }
 
-        /** Prints the physical quantity in an easy-to-read format similar to
-         * GNU units. */
-        std::ostream & prettyPrint(std::ostream & out) const {
-            units_map pos, neg;
-
-            /* first sort into pos or neg exponent (of units).  The results
+      private:
+        /** Split the unit set in units into a numerator and denominator. */
+        void splitNumeratorAndDenominator(units_map & num, units_map & den) const {
+            /* first sort into num or den exponent (of units).  The results
              * should already be sorted lexically because we use a map. */
             for (units_map::const_iterator i = units.begin(); i!= units.end(); i++) {
                 const units_pair & p = (*i);
                 if (p.second<0)
-                    neg[p.first] = p.second;
+                    den[p.first] = p.second;
                 else
-                    pos[p.first] = p.second;
+                    num[p.first] = p.second;
             }
+        }
+
+      public:
+        /** Prints the physical quantity in an easy-to-read format similar to
+         * GNU units.
+         * This function is called indirectly from print().
+         * */
+        std::ostream & prettyPrint(std::ostream & out) const {
+            units_map num, den;
+            splitNumeratorAndDenominator(num, den);
 
             out << '<' << coeff;
             
-            if (!pos.empty() || !neg.empty())
-                out << ' ' << pos;
+            if (!num.empty() || !den.empty())
+                out << ' ' << num;
 
             // now denominator
-            if (!neg.empty())
-                out <<  " / " << neg;
+            if (!den.empty())
+                out <<  " / " << den;
 
             out << '>';
 
@@ -350,36 +430,78 @@ namespace runtime {
         }
 
         /** Prints the physical quantity in a mathematically format that can
-         * be parsed by the calculator. */
+         * be parsed by the calculator. 
+         * This function is called indirectly from print().
+         * */
         std::ostream & mathPrint(std::ostream & out) const {
-            units_map pos, neg;
-
-            /* first sort into pos or neg exponent (of units).  The results
-             * should already be sorted lexically because we use a map. */
-            for (units_map::const_iterator i = units.begin(); i!= units.end(); i++) {
-                const units_pair & p = (*i);
-                if (p.second<0)
-                    neg[p.first] = p.second;
-                else
-                    pos[p.first] = p.second;
-            }
+            units_map num, den;
+            splitNumeratorAndDenominator(num, den);
 
             out << '(' << coeff;
 
-            if (!pos.empty())
-                math_print(out << " * ", pos);
+            if (!num.empty())
+                math_print(out << " * ", num);
 
             // now denominator
-            if (neg.size() == 1)
-                math_print(out <<  " / ", neg);
-            else if (!neg.empty())
-                math_print(out <<  " / (", neg) << ')';
+            if (den.size() == 1)
+                math_print(out <<  " / ", den);
+            else if (!den.empty())
+                math_print(out <<  " / (", den) << ')';
 
             out << ')';
 
             return out;
         }
 
+        /** Prints the physical quantity in a format suitable for LaTeX. 
+         * This function is called indirectly from print().
+         * */
+        std::ostream & latexPrint(std::ostream & out, const bool & oneline = true) const {
+            units_map num, den;
+            splitNumeratorAndDenominator(num, den);
+
+            int decade = int(std::log10(coeff));
+            coeff_type sig_figs = coeff / std::pow(10,decade);
+
+            out << sig_figs;
+            if (decade > 1)
+                out << " \\times 10^{" << decade << "} ";
+
+            if (!num.empty() || !den.empty())
+                out << '~'; // spacing between coeff and units
+
+            if (!oneline && !den.empty())
+                out << "\\frac{";
+
+            // print numerator
+            if (num.empty() && !den.empty())
+                out << '1';
+            else if (!num.empty())
+                latex_print(out, num);
+
+            if (!den.empty()) {
+                // separator
+                if (!oneline)
+                    out << "}{";
+                else
+                    out << '/';
+
+                latex_print(out, den);
+            }
+
+            if (!oneline && !den.empty())
+                out << "}";
+
+            return out;
+        }
+
+        /** Prints the quantity type using the given print mode.
+         * @param out
+         *      Output stream to which to write.
+         * @param t
+         *      Printing  mode to use for only this call to print.
+         * @see PRINT_TYPE.
+         * */
         inline std::ostream & print(std::ostream & out, const enum PRINT_TYPE & t) const {
             enum PRINT_TYPE old = quantity::print_type;
             quantity::print_type = t;
@@ -388,8 +510,19 @@ namespace runtime {
             return out;
         }
 
+        /** Prints the quantity type using the current print mode.
+         * @see PRINT_TYPE.
+         * */
         inline std::ostream & print(std::ostream & out) const {
             switch(quantity::print_type) {
+                case LATEX_ONELINE_PRINT:
+                    latexPrint(out);
+                    break;
+
+                case LATEX_PRINT:
+                    latexPrint(out,false);
+                    break;
+
                 case MATH_PRINT:
                     mathPrint(out);
                     break;
