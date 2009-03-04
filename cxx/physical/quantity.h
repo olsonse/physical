@@ -461,7 +461,7 @@ namespace runtime {
             splitNumeratorAndDenominator(num, den);
 
             int decade = int(std::log10(coeff));
-            coeff_type sig_figs = coeff / std::pow(10,decade);
+            coeff_type sig_figs = coeff / std::pow(static_cast<coeff_type>(10),decade);
 
             out << sig_figs;
             if (decade > 1)
