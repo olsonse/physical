@@ -28,7 +28,10 @@ namespace runtime {
       struct print_coeff {
         std::string operator() ( const C & coeff ) {
           std::ostringstream out;
-          out << coeff;
+          if (coeff == 0.0)
+            out << '0';
+          else
+            out << coeff;
           return out.str();
         }
       };
@@ -37,13 +40,14 @@ namespace runtime {
       struct print_coeff< std::complex<C>, pT > {
         std::string operator() ( const std::complex<C> & coeff ) {
           std::ostringstream out;
-          if (coeff.imag() != 0.0)
+          if (coeff.imag() != 0.0) {
+            char sign = coeff.imag() < 0 ? '-' : '+';
             out << '('
                 << print_coeff<C,pT>()(coeff.real())
-                << " + i*"
-                << print_coeff<C,pT>()(coeff.imag())
+                << ' ' << sign << " i*"
+                << print_coeff<C,pT>()(std::abs(coeff.imag()))
                 << ')';
-          else
+          } else
             out << print_coeff<C,pT>()(coeff.real());
           return out.str();
         }
@@ -53,9 +57,16 @@ namespace runtime {
       struct print_coeff< std::complex<C>, PRETTY_PRINT > {
         std::string operator() ( const std::complex<C> & coeff ) {
           std::ostringstream out;
-          out << coeff.real();
-          if (coeff.imag() != 0.0)
-            out << " + i" << coeff.imag();
+
+          if (coeff.real() == 0.0)
+            out << '0';
+          else
+            out << coeff.real();
+
+          if (coeff.imag() != 0.0) {
+            char sign = coeff.imag() < 0 ? '-' : '+';
+            out << ' ' << sign << " i" << std::abs(coeff.imag());
+          }
           return out.str();
         }
       };
@@ -87,13 +98,17 @@ namespace runtime {
               out << '(';
 
             out << print_coeff<C,LATEX_PRINT>()(coeff.real());
-
-            if (coeff.imag() != 0.0)
-              out << " + ";
           }
 
           if (coeff.imag() != 0.0) {
-            out << "i" << print_coeff<C,LATEX_PRINT>()(coeff.imag());
+
+            char sign = coeff.imag() < 0 ? '-' : '+';
+            if (coeff.real() != 0.0)
+              out << ' ' << sign << ' ';
+            else if (sign == '-')
+              out << sign;
+
+            out << "i" << print_coeff<C,LATEX_PRINT>()(std::abs(coeff.imag()));
             if (coeff.real() != 0.0)
               out << ')';
           }
