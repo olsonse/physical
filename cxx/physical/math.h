@@ -59,6 +59,44 @@ namespace runtime {
           using std::conj;
           return quantity<T>(conj(q.coeff), q.units);
         };
+
+        template < typename T >
+        struct Real {
+          const T & operator()( const T & t ) {
+            return t;
+          }
+        };
+
+        template < typename T >
+        struct Real< std::complex<T> > {
+          const T & operator()( const std::complex<T> & t ) {
+            return t.real();
+          }
+        };
+
+        template<class T>
+        inline quantity<T> real(const quantity<T> & q) {
+          return quantity<T>(Real<T>()(q.coeff), q.units);
+        };
+ 
+        template < typename T >
+        struct Imag {
+          T operator()( const T & t ) {
+            return 0;
+          }
+        };
+
+        template < typename T >
+        struct Imag< std::complex<T> > {
+          const T & operator()( const std::complex<T> & t ) {
+            return t.imag();
+          }
+        };
+
+        template<class T>
+        inline quantity<T> imag(const quantity<T> & q) {
+          return quantity<T>(Imag<T>()(q.coeff), q.units);
+        };
  
         template<class T>
         inline quantity<T> sin(const quantity<T> & q) {

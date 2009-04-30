@@ -9,6 +9,8 @@ namespace runtime { namespace physical {
     namespace calc {
         static void addMathLib(symbol::table & symbols) {
             symbols["conj"]  = physical::math::conj  <Quantity::coeff_type>;
+            symbols["real"]  = physical::math::real  <Quantity::coeff_type>;
+            symbols["imag"]  = physical::math::imag  <Quantity::coeff_type>;
             symbols["sin"]   = physical::math::sin   <Quantity::coeff_type>;
             symbols["cos"]   = physical::math::cos   <Quantity::coeff_type>;
             symbols["tan"]   = physical::math::tan   <Quantity::coeff_type>;
