@@ -1,6 +1,8 @@
 #ifndef physical_detail_ConvertCoeff_h
 #define physical_detail_ConvertCoeff_h
 
+#include <physical/except.h>
+
 #include <complex>
 
 namespace runtime {
@@ -16,14 +18,14 @@ namespace runtime {
 
       template < typename T, typename T2 >
       struct ConvertCoeff< std::complex<T>, std::complex<T2> > {
-        T2 operator()( const T & coeff ) {
+        T2 operator()( const std::complex<T> & coeff ) {
           return static_cast< std::complex<T2> >(coeff);
         }
       };
 
       template < typename T, typename T2 >
       struct ConvertCoeff< std::complex<T>, T2 > {
-        T2 operator()( const T & coeff ) {
+        T2 operator()( const std::complex<T> & coeff ) {
           if (coeff.imag() != 0.0)
             throw exception(ComplexNotSupported);
           else

@@ -21,13 +21,13 @@
 
 #include <physical/detail/print_coeff.h>
 #include <physical/detail/ConvertCoeff.h>
+#include <physical/except.h>
 
 
 #include <complex>
 #include <map>
 #include <string>
 #include <cmath>
-#include <stdexcept>
 #include <sstream>
 #include <algorithm>
 #include <vector>
@@ -59,7 +59,7 @@ namespace std {
 
 
 
-#ifndef PHYSICAL_QUANTITY
+#ifndef RUNTIME_PHYSICAL_QUANTITY
     /** The type of the coefficient in the physical::quantity<T> template and
      * throughout the units/constants library in general.
      *
@@ -69,7 +69,7 @@ namespace std {
      * */
 #  define PHYSICAL_QUANTITY_COEFF_TYPE physical::quantity<>::coeff_type
 #else
-#  define PHYSICAL_QUANTITY_COEFF_TYPE PHYSICAL_QUANTITY
+#  define PHYSICAL_QUANTITY_COEFF_TYPE RUNTIME_PHYSICAL_QUANTITY
 #endif
 
 #define PHYSICAL_QUANTITY_CLASS quantity<PHYSICAL_QUANTITY_COEFF_TYPE>
@@ -90,24 +90,50 @@ namespace runtime {
 #include <physical/registry.h>
 #undef PHYSICAL_REGISTRY_FOR_RUNTIME
 
-    namespace physical {
+  namespace physical {
+    /** Less-than operation for complex types.
+     * For better or for worse, we are going to define the comparison
+     * between two complex numbers as a comparison between their norms. */
+    template < typename T1, typename T2 >
+    bool operator< ( const std::complex<T1> & lhs,
+                     const std::complex<T2> & rhs ) {
+      return std::norm(lhs) < std::norm(rhs);
+    }
 
-    /** The base exception class for the physical namespace. */
-    struct exception : std::runtime_error {
-        exception(const std::string & s) : 
-        std::runtime_error(s) {}
-    };
+    /** Equality operation for complex types. */
+    template < typename T1, typename T2 >
+    bool operator== ( const std::complex<T1> & lhs,
+                      const std::complex<T2> & rhs ) {
+      return lhs.real() == rhs.real() && lhs.imag() == rhs.imag();
+    }
 
+    /** Inequality operation for complex types. */
+    template < typename T1, typename T2 >
+    bool operator!= ( const std::complex<T1> & lhs,
+                      const std::complex<T2> & rhs ) {
+      return !(lhs == rhs);
+    }
 
-    static const char * UnitsMismatch  = "Units mismatch:  cannot add/subtract/compare mismatched units";
-    static const char * UnitsMismatchR = "Units mismatch:  mismatched units in read operation";
-    static const char * UnitsMismatchF = "Units mismatch:  cannot operate on mismatched units";
-    static const char * UnitsNotRoot   = "Units not root:  cannot take non-even root of units";
-    static const char * UnitsNotDimensionless = "Units not dimensionless:  cannot create non-integer powers of unit";
-    static const char * UnitsNotDimensionlessExp = "Units not dimensionless:  exponent must be dimensionless";
-    static const char * ComplexNotSupported = "Operation on complex type not supported";
+    /** Greater-than operation for complex types. */
+    template < typename T1, typename T2 >
+    bool operator> ( const std::complex<T1> & lhs,
+                     const std::complex<T2> & rhs ) {
+      return !(lhs == rhs) && !(lhs < rhs);
+    }
 
+    /** Greater-than-or-equal-to operation for complex types. */
+    template < typename T1, typename T2 >
+    bool operator>= ( const std::complex<T1> & lhs,
+                      const std::complex<T2> & rhs ) {
+      return !(lhs < rhs);
+    }
 
+    /** Greater-than-or-equal-to operation for complex types. */
+    template < typename T1, typename T2 >
+    bool operator<= ( const std::complex<T1> & lhs,
+                      const std::complex<T2> & rhs ) {
+      return (lhs == rhs) || (lhs < rhs);
+    }
 
 
     /* **** BEGIN UNITS MAP **** */
@@ -401,6 +427,13 @@ namespace runtime {
          * */
         static void setPrintMode(const enum PRINT_TYPE & t) {
             print_type = t;
+        }
+
+        /** Get the current default print mode for this quantity type.
+         * @see PRINT_TYPE.
+         * */
+        static const PRINT_TYPE & getPrintMode() {
+            return print_type;
         }
 
         /** Get the global instance of the registry for this type of quantity.
@@ -809,7 +842,7 @@ namespace runtime {
       return q;
     }
 
-}
+  }
 
 /* now finally, load the data. */
 #define PHYSICAL_DATA_FOR_RUNTIME

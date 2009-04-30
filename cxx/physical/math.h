@@ -45,11 +45,11 @@ namespace runtime {
             return quantity<T>(std::sqrt(q.coeff), pow(q.units,0.5));
         };
 
-        const double & conj( const double & d ) {
+        inline const double & conj( const double & d ) {
           return d;
         }
 
-        const float & conj( const float & f ) {
+        inline const float & conj( const float & f ) {
           return f;
         }
 
@@ -62,14 +62,14 @@ namespace runtime {
 
         template < typename T >
         struct Real {
-          const T & operator()( const T & t ) {
+          inline const T & operator()( const T & t ) {
             return t;
           }
         };
 
         template < typename T >
         struct Real< std::complex<T> > {
-          const T & operator()( const std::complex<T> & t ) {
+          inline const T & operator()( const std::complex<T> & t ) {
             return t.real();
           }
         };
@@ -81,14 +81,14 @@ namespace runtime {
  
         template < typename T >
         struct Imag {
-          T operator()( const T & t ) {
+          inline T operator()( const T & t ) {
             return 0;
           }
         };
 
         template < typename T >
         struct Imag< std::complex<T> > {
-          const T & operator()( const std::complex<T> & t ) {
+          inline const T & operator()( const std::complex<T> & t ) {
             return t.imag();
           }
         };
