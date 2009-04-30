@@ -9,7 +9,7 @@ lib readline :
       <define>HAVE_READLINE_HISTORY
     ;
 
-exe testInteractive : testInteractive_obj
+exe testInteractive : testInteractive.cpp
     /physical//physical readline boost_regex ;
 
-obj testInteractive_obj : testInteractive.cpp /physical//physical readline ;
+# obj testInteractive_obj : testInteractive.cpp /physical//physical readline ;

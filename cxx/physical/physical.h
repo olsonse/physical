@@ -84,25 +84,25 @@ _BEGIN_NAMESPACE(physical) {
         _QUANTITY(dollars,              dollar);
         _QUANTITY(cent,                 dollar/100.0);
         _QUANTITY(cents,                cent);
-        _QUANTITY(dozen,                12.0);
+        _QUANTITY(dozen,                PHYSICAL_QUANTITY(12.0));
         _QUANTITY(doz,                  dozen);
         _QUANTITY(dz,                   dozen);
         _BEGIN_NAMESPACE(bakers) {
-            _QUANTITY(dozen,            13.0);
+            _QUANTITY(dozen,            PHYSICAL_QUANTITY(13.0));
             _QUANTITY(doz,              dozen);
             _QUANTITY(dz,               dozen);
         _END_NAMESPACE}
         _QUANTITY(gross,                12.0*dozen);
         _QUANTITY(gro,                  gross);
-        _QUANTITY(quire,                25.0);
+        _QUANTITY(quire,                PHYSICAL_QUANTITY(25.0));
         _QUANTITY(quires,               quire);
-        _QUANTITY(ream,                 500.0);
+        _QUANTITY(ream,                 PHYSICAL_QUANTITY(500.0));
         _QUANTITY(reams,                ream);
-        _QUANTITY(percent,              1.0/100.0);
+        _QUANTITY(percent,              PHYSICAL_QUANTITY(1.0/100.0));
         _QUANTITY(proof,                percent/2.0);
-        _QUANTITY(karat,                1.0/24.0);
+        _QUANTITY(karat,                PHYSICAL_QUANTITY(1.0/24.0));
         _QUANTITY(karats,               karat);
-        _QUANTITY(mole,                 6.0221367e+23);
+        _QUANTITY(mole,                 PHYSICAL_QUANTITY(6.0221367e+23));
         _QUANTITY(moles,                mole);
         _QUANTITY(mol,                  mole);
         _QUANTITY(pi,                   3.14159265358979323846*radians);
@@ -926,7 +926,7 @@ _BEGIN_NAMESPACE(physical) {
     /* This data is taken from physics.nist.gov. */
 #define _ELEMENT(name,sym,n,m,i) \
     _BEGIN_NAMESPACE(name) { \
-        _QUANTITYn(number,      n,                 "atomic number of "     #name); \
+        _QUANTITYn(number,    PHYSICAL_QUANTITY(n),"atomic number of "     #name); \
         _QUANTITYn(mass,        m * constant::amu, "atomic mass of "       #name); \
         _QUANTITYn(ionization,  i * constant::eV,  "ionization energy of " #name); \
     _END_NAMESPACE} \

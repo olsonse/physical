@@ -18,15 +18,43 @@
 #ifndef PHYSICAL_QUANTITY_H
 #define PHYSICAL_QUANTITY_H
 
+
+#include <physical/detail/print_coeff.h>
+#include <physical/detail/ConvertCoeff.h>
+
+
+#include <complex>
 #include <map>
 #include <string>
 #include <cmath>
 #include <stdexcept>
 #include <sstream>
 #include <algorithm>
-#include <complex>
 #include <vector>
 
+/* FIXME:  the following should be removed if the new standard is used.
+ * For now we use boost to implement the inverse trig functions for
+ * std::complex.
+ */
+#include <boost/math/complex/acos.hpp>
+#include <boost/math/complex/asin.hpp>
+#include <boost/math/complex/atan.hpp>
+#include <boost/math/complex/acosh.hpp>
+#include <boost/math/complex/asinh.hpp>
+#include <boost/math/complex/atanh.hpp>
+
+namespace std {
+  using ::acosh;
+  using ::asinh;
+  using ::atanh;
+
+  using boost::math::acos;
+  using boost::math::asin;
+  using boost::math::atan;
+  using boost::math::acosh;
+  using boost::math::asinh;
+  using boost::math::atanh;
+}
 
 
 
@@ -77,6 +105,7 @@ namespace runtime {
     static const char * UnitsNotRoot   = "Units not root:  cannot take non-even root of units";
     static const char * UnitsNotDimensionless = "Units not dimensionless:  cannot create non-integer powers of unit";
     static const char * UnitsNotDimensionlessExp = "Units not dimensionless:  exponent must be dimensionless";
+    static const char * ComplexNotSupported = "Operation on complex type not supported";
 
 
 
@@ -155,7 +184,9 @@ namespace runtime {
     }
 
     /** Print the units_map with a given separator. */
-    inline std::ostream & sep_print (std::ostream & out, const units_map & u, const char * sep = " ") {
+    inline std::ostream & sep_print ( std::ostream & out,
+                                      const units_map & u,
+                                      const char * sep = " ") {
         const char * cur_sep = "";
         for (units_map::const_iterator i = u.begin(); i != u.end(); i++) {
             out << cur_sep << (*i);
@@ -186,21 +217,22 @@ namespace runtime {
         return out;
     }
 
-
     /** Exponentiate a set of units by a non-integral factor. 
      * NOTE:  The result <b>MUST</b> be in integral units.
      * */
-    inline units_map pow(const units_map & units, const double & exponent) {
+    template < typename T >
+    inline units_map pow_float(const units_map & units, const T & exponent) {
         /* now loop through each of the units and try to divide/multiply the
          * power by the 'exponent'.  Throw an exception of this is not
          * possible. 
          * */
         units_map u = units;
-        double fexp = fabs(exponent);
+        T fexp = std::abs(exponent);
         for (units_map::iterator i = u.begin(); i != u.end(); i++) {
             units_pair & p = (*i);
             if (fexp < 1) {
-                if (fmod((double)p.second, 1.0/fexp) != 0)
+                register T fexp_inv = static_cast<T>(1)/fexp;
+                if (std::fmod(static_cast<T>(p.second), fexp_inv) != 0)
                     throw exception(UnitsNotRoot);
             } else if ( (int(fexp) - fexp) != 0 )
                 throw exception(UnitsNotDimensionless);
@@ -209,8 +241,28 @@ namespace runtime {
         return u;
     }
 
+    template < typename T >
+    inline units_map pow(const units_map & units, const T & exponent) {
+      if ( (exponent - int(exponent)) == 0 )
+        return pow<int>( units, int(exponent) );
+      else
+        return pow_float<T>( units, exponent );
+    }
+
+    template < typename T >
+    inline units_map pow( const units_map & units,
+                          const std::complex<T> & exponent) {
+      if (units.size() == 0)
+        return units;
+      else if (exponent.imag() != 0.0)
+        throw exception(ComplexNotSupported);
+      else
+        return pow<T>( units, exponent.real() );
+    }
+
     /** Exponentiate a set of units by an integral factor. */
-    inline units_map pow(const units_map & units, const int & exponent) {
+    template<>
+    inline units_map pow<int>(const units_map & units, const int & exponent) {
         units_map u = units;
         for (units_map::iterator i = u.begin(); i != u.end(); i++)
             (*i).second *= exponent;
@@ -277,6 +329,9 @@ namespace runtime {
 
 
 
+
+
+
     /** The basic physical quantity class where-in (almost) all units and
      * constants are stored. */
     template<class T = double>
@@ -294,17 +349,17 @@ namespace runtime {
         /** The possible printing modes. */
         enum PRINT_TYPE {
             /** Pretty formatting similar to GNU units. */
-            PRETTY_PRINT,
+            PRETTY_PRINT        = detail::PRETTY_PRINT,
             /** Mathematically correct. */
-            MATH_PRINT,
+            MATH_PRINT          = detail::MATH_PRINT,
             /** Format for latex math mode. This format uses fractional
              * format. */
-            LATEX_PRINT,
+            LATEX_PRINT         = detail::LATEX_PRINT,
             /** Format for latex math mode. This format is for single line
              * fractions. */
-            LATEX_ONELINE_PRINT,
+            LATEX_ONELINE_PRINT = detail::LATEX_ONELINE_PRINT,
             /** Unpleasant formatting that demonstrates the units structure. */
-            UGLY_PRINT
+            UGLY_PRINT          = detail::UGLY_PRINT
         };
 
         /* ********** END TYPEDEFS ***** */
@@ -403,6 +458,8 @@ namespace runtime {
             }
         }
 
+
+
       public:
         /** Prints the physical quantity in an easy-to-read format similar to
          * GNU units.
@@ -412,7 +469,7 @@ namespace runtime {
             units_map num, den;
             splitNumeratorAndDenominator(num, den);
 
-            out << '<' << coeff;
+            out << '<' << detail::print_coeff<coeff_type,detail::PRETTY_PRINT>()(coeff);
             
             if (!num.empty() || !den.empty())
                 out << ' ' << num;
@@ -437,7 +494,7 @@ namespace runtime {
             units_map num, den;
             splitNumeratorAndDenominator(num, den);
 
-            out << '(' << coeff;
+            out << '(' << detail::print_coeff<coeff_type,detail::MATH_PRINT>()(coeff);
 
             if (!num.empty())
                 math_print(out << " * ", num);
@@ -460,12 +517,7 @@ namespace runtime {
             units_map num, den;
             splitNumeratorAndDenominator(num, den);
 
-            int decade = int(std::log10(coeff));
-            coeff_type sig_figs = coeff / std::pow(static_cast<coeff_type>(10),decade);
-
-            out << sig_figs;
-            if (decade > 1)
-                out << " \\times 10^{" << decade << "} ";
+            out << detail::print_coeff<coeff_type,detail::LATEX_PRINT>()(coeff);
 
             if (!num.empty() || !den.empty())
                 out << '~'; // spacing between coeff and units
@@ -581,6 +633,22 @@ namespace runtime {
             return quantity(coeff - q.coeff, units);
         }
 
+        /** Assignment operation from another quantity. */
+        inline quantity & operator=(const quantity & q) {
+            coeff = q.coeff;
+            units = q.units;
+            name = q.name;
+            return *this;
+        }
+
+        /** Assignment operation from a coefficient (non-units) value. */
+        inline quantity & operator=(const T & t) {
+            coeff = t;
+            units.clear();
+            name.clear();
+            return *this;
+        }
+
         inline bool operator>(const quantity & q) const {
             assertMatch(q);
             return coeff > q.coeff;
@@ -638,6 +706,12 @@ namespace runtime {
         }
  
         /* ****   END QUANTITY OPERATORS **** */
+
+        template < typename T2 >
+        void getCoeff( T2 & t2 ) const {
+          t2 = detail::ConvertCoeff<T,T2>()(coeff);
+        }
+
     };
 
     template <class T>
@@ -646,15 +720,6 @@ namespace runtime {
 
     /* **** BEGIN QUANTITY OPERATORS **** */
     /* we define all operators here that do not need assertMatch */
-
-    /** The power operator.
-     * The templated ExpT parameter allows this function to instantiate the
-     * correct pow<ExpT>(units_map&) function. 
-     * */
-    template<class T, class ExpT>
-    inline quantity<T> pow(const quantity<T> & q, const ExpT & exponent) {
-        return quantity<T>(std::pow(q.coeff, exponent), pow(q.units,exponent));
-    }
 
     /** The >> operator prints out the quantity in a semi pretty fashion
      * similar to GNU units. */
@@ -719,17 +784,29 @@ namespace runtime {
         return quantity<T>( f / q.coeff, pow(q.units,(int)-1) );
     }
 
+    template < typename T >
+    std::complex<T> fmod( const std::complex<T> & lhs,
+                          const std::complex<T> & rhs ) {
+      if (lhs.imag() != 0.0 || rhs.imag() != 0.0)
+        throw exception(ComplexNotSupported);
+      return std::fmod(lhs.real(), rhs.real());
+    }
+
     /** Mod operator between a quantity and a quantity. */
     template<class T>
     inline quantity<T> operator%(const quantity<T> & q, const quantity<T> & d) {
-        return quantity<T>( fmod(q.coeff, d.coeff), q.units );
+      using physical::fmod;
+      using std::fmod;
+      return quantity<T>( fmod(q.coeff, d.coeff), q.units );
     }
 
     /** Mod operator between a quantity and a quantity. */
     template<class T>
     inline quantity<T> & operator%=(quantity<T> & q, const quantity<T> & d) {
-        q.coeff = fmod(q.coeff, d.coeff);
-        return q;
+      using physical::fmod;
+      using std::fmod;
+      q.coeff = fmod(q.coeff, d.coeff);
+      return q;
     }
 
 }
@@ -739,175 +816,6 @@ namespace runtime {
 #include <physical/physical.h>
 #undef PHYSICAL_DATA_FOR_RUNTIME
 
-
-namespace physical {
-    /** As set of unary mathematical functions that operate on quantity<T>
-     * types.  Many of these are just wrappers for math.h functions.
-     * */
-    namespace math {
-        /** Perform units checking for math functions of strictly dimensionless
-         * arguments. */
-        struct no_dims {
-            template <class T>
-            static inline void check(const quantity<T> & q) {
-                (void)q.assertUnitless();
-            }
-        };
- 
-        /** Perform units checking for math functions of angle or dimensionless
-         * arguments. */
-        template <class T>
-        struct w_angle {
-            static inline void check(const quantity<T> & q) {
-                /* FIXME:  should we allow the dimensionless case here too? */
-                if (!q.units.empty() && q.units != physical::unit::radian.units) {
-                    throw exception(UnitsMismatchF);
-                }
-            }
-        };
- 
-        template<class T>
-        quantity<T> sin(const quantity<T> & q) {
-            w_angle<T>::check(q);
-            return std::sin(q.coeff);
-        };
- 
-        template<class T>
-        quantity<T> cos(const quantity<T> & q) {
-            w_angle<T>::check(q);
-            return std::cos(q.coeff);
-        };
- 
-        template<class T>
-        quantity<T> tan(const quantity<T> & q) {
-            w_angle<T>::check(q);
-            return std::tan(q.coeff);
-        };
- 
-        template<class T>
-        quantity<T> asin(const quantity<T> & q) {
-            no_dims::check(q);
-            return std::asin(q.coeff) * physical::unit::radian;
-        };
- 
-        template<class T>
-        quantity<T> acos(const quantity<T> & q) {
-            no_dims::check(q);
-            return std::acos(q.coeff) * physical::unit::radian;
-        };
- 
-        template<class T>
-        quantity<T> atan(const quantity<T> & q) {
-            no_dims::check(q);
-            return std::atan(q.coeff) * physical::unit::radian;
-        };
- 
-        template<class T>
-        quantity<T> sinh(const quantity<T> & q) {
-            w_angle<T>::check(q);
-            return std::sinh(q.coeff);
-        };
- 
-        template<class T>
-        quantity<T> cosh(const quantity<T> & q) {
-            w_angle<T>::check(q);
-            return std::cosh(q.coeff);
-        };
- 
-        template<class T>
-        quantity<T> tanh(const quantity<T> & q) {
-            w_angle<T>::check(q);
-            return std::tanh(q.coeff);
-        };
- 
-        template<class T>
-        quantity<T> asinh(const quantity<T> & q) {
-            no_dims::check(q);
-            return std::asin(q.coeff) * physical::unit::radian;
-        };
- 
-        template<class T>
-        quantity<T> acosh(const quantity<T> & q) {
-            no_dims::check(q);
-            return std::acos(q.coeff) * physical::unit::radian;
-        };
- 
-        template<class T>
-        quantity<T> atanh(const quantity<T> & q) {
-            no_dims::check(q);
-            return std::atan(q.coeff) * physical::unit::radian;
-        };
- 
-        template<class T>
-        quantity<T> sinc(const quantity<T> & q) {
-            w_angle<T>::check(q);
-            return q.coeff==0 ? 1 : std::sin(q.coeff) / q.coeff;
-        };
- 
-        template<class T>
-        quantity<T> exp(const quantity<T> & q) {
-            w_angle<T>::check(q);
-            return std::exp(q.coeff);
-        };
- 
-        template<class T>
-        quantity<T> erf(const quantity<T> & q) {
-            w_angle<T>::check(q);
-            return ::erf(q.coeff);
-        };
- 
-        template<class T>
-        quantity<T> erfc(const quantity<T> & q) {
-            w_angle<T>::check(q);
-            return ::erfc(q.coeff);
-        };
- 
-        template<class T>
-        quantity<T> log(const quantity<T> & q) {
-            no_dims::check(q);
-            return std::log(q.coeff);
-        };
- 
-        template<class T>
-        quantity<T> log10(const quantity<T> & q) {
-            no_dims::check(q);
-            return std::log10(q.coeff);
-        };
- 
-        template<class T>
-        quantity<T> sqrt(const quantity<T> & q) {
-            return pow(q, 0.5);
-        };
- 
-        template<class T>
-        quantity<T> tgamma(const quantity<T> & q) {
-            no_dims::check(q);
-            return ::tgamma(q.coeff);
-        };
- 
-        /** Compute the floor of the quantity. */
-        template<class T>
-        quantity<T> floor(const quantity<T> & q) {
-            return quantity<T>(std::floor(q.coeff), q.units);
-        };
- 
-        /** Compute the ceil of the quantity. */
-        template<class T>
-        quantity<T> ceil(const quantity<T> & q) {
-            return quantity<T>(std::ceil(q.coeff), q.units);
-        };
- 
-        /** Compute the absolute value of the quantity.
-         * This function does not currently instantiate for std::complex types of
-         * coefficients. */
-        template<class T>
-        quantity<T> fabs(const quantity<T> & q) {
-            return quantity<T>(std::fabs(q.coeff), q.units);
-        };
-
-    } /* namespace math. */
-
-    /* ****   END QUANTITY OPERATORS **** */
-}} /* namespace runtime::physical */
+} /* namespace runtime */
 
 #endif // PHYSICAL_QUANTITY_H

@@ -9,6 +9,7 @@
 #include <boost/spirit.hpp>
 
 #include <sstream>
+#include <iomanip>
 
 namespace runtime { namespace physical {
     namespace calc {

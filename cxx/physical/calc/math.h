@@ -2,11 +2,13 @@
 #define PHYSICAL_CALC_MATH_H
 
 #include <physical/quantity.h>
+#include <physical/math.h>
 #include <physical/calc/symbol.h>
 
 namespace runtime { namespace physical {
     namespace calc {
         static void addMathLib(symbol::table & symbols) {
+            symbols["conj"]  = physical::math::conj  <Quantity::coeff_type>;
             symbols["sin"]   = physical::math::sin   <Quantity::coeff_type>;
             symbols["cos"]   = physical::math::cos   <Quantity::coeff_type>;
             symbols["tan"]   = physical::math::tan   <Quantity::coeff_type>;
@@ -29,7 +31,7 @@ namespace runtime { namespace physical {
             symbols["gamma"] = physical::math::tgamma<Quantity::coeff_type>;
             symbols["floor"] = physical::math::floor <Quantity::coeff_type>;
             symbols["ceil"]  = physical::math::ceil  <Quantity::coeff_type>;
-            symbols["abs"]   = physical::math::fabs  <Quantity::coeff_type>;
+            symbols["abs"]   = physical::math::abs   <Quantity::coeff_type>;
         }
     }
 }}

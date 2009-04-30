@@ -1,5 +1,6 @@
-#include <iostream>
 #include <physical/calc/infix.h>
+
+#include <iostream>
 
 using namespace runtime; /* strip runtime:: prefix off of physical::* */
 physical::calc::InfixCalc calc;

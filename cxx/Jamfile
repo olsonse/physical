@@ -1,0 +1,16 @@
+# this Jamroot is mostly for helping build unit-tests while developing in the
+# source
+
+import testing ; # for unit tests
+
+project /physical/unit-tests
+    : requirements
+        <library>/physical//physical
+        <library>/physical//boost_unit_test_framework
+    # : build-dir build
+    ;
+
+use-project /physical : ../ ;
+
+build-project physical/test ;
+# build-project physical/calc/test ;

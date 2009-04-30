@@ -1,19 +1,49 @@
 # Copyright 2004-2008 Spencer Olson
 
+echo " Physical constants library:  " ;
+echo "---------------" ;
+echo "            Possible compile/feature options" ;
+echo "              <phys-type>" ;
+echo "                Purpose:  Specify the basic type used by the physical library." ;
+echo "                values:" ;
+echo "                    complex [default] (std::complex<double>)" ;
+echo "                    cfloat            (std::complex<float>)" ;
+echo "                    double            (double)" ;
+echo "                    float             (float)" ;
+echo "          To select these features for building add them to the bjam command such as:" ;
+echo "          'bjam phys-type=cfloat'" ;
+echo "---------------" ;
+echo "" ;
+
+
 constant VERSION : [ MATCH "\\$Revision: *([0-9]*) *\\$" : "$Revision: 636 $" ] ;
+
+lib boost_regex : : <name>boost_regex ;
+lib boost_unit_test_framework : : <name>boost_unit_test_framework <link>static ;
 
 project /physical
     : requirements
         <include>cxx/physical
     : usage-requirements
         <include>cxx
-    : build-dir build
+        <library>/physical//boost_regex
+    # : build-dir build
     ;
 
 alias physical
     : # sources
       [ glob cxx/physical/*.h ]
+      [ glob cxx/physical/calc/*.h ]
     : # no build requirements
     : # no default build
     : <include>cxx ;
+
+
+import feature : feature ;
+
+feature phys-type : complex cfloat double float : composite ;
+feature.compose <phys-type>complex : <define>PHYSICAL_QUANTITY=\"std::complex<double>\" ;
+feature.compose <phys-type>cfloat : <define>PHYSICAL_QUANTITY=\"std::complex<float>\" ;
+feature.compose <phys-type>double : <define>PHYSICAL_QUANTITY=double ;
+feature.compose <phys-type>float : <define>PHYSICAL_QUANTITY=float ;
 

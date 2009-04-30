@@ -3,7 +3,26 @@
 
 #include <physical/calc/symbol.h>
 
+#include <complex>
+
 namespace runtime { namespace physical { namespace calc {
+
+namespace detail {
+  template < typename T >
+  struct AddOtherSymbols {
+    void operator() ( symbol::table & symbols ) {
+    }
+  };
+
+  template < typename T >
+  struct AddOtherSymbols< std::complex<T> > {
+    void operator() ( symbol::table & symbols ) {
+      using physical::Quantity;
+      Quantity i = std::complex<T>(0.0,1.0);
+      symbols["i"] = i;
+    }
+  };
+}
 
 static void addPhysicalUnits(symbol::table & symbols) {
     using physical::Quantity;
@@ -36,6 +55,9 @@ static void addPhysicalUnits(symbol::table & symbols) {
     symbol::import(symbols, "physical::element::cesium",    "*", "physical::element::Cs");
     symbol::import(symbols, "physical::element::mercury",   "*", "physical::element::Hg");
     symbol::import(symbols, "physical::element::francium",  "*", "physical::element::Fr");
+
+    /* add the "other" symbols last to make sure that these have precedence. */
+    detail::AddOtherSymbols<Quantity::coeff_type>()(symbols);
 }
 
 }}} /* namespace runtime::physical::calc */
