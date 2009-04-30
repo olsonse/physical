@@ -40,9 +40,9 @@ namespace runtime {
           if (coeff.imag() != 0.0)
             out << '('
                 << print_coeff<C,pT>()(coeff.real())
-                << " + "
+                << " + i*"
                 << print_coeff<C,pT>()(coeff.imag())
-                << "*i)";
+                << ')';
           else
             out << print_coeff<C,pT>()(coeff.real());
           return out.str();
@@ -55,7 +55,7 @@ namespace runtime {
           std::ostringstream out;
           out << coeff.real();
           if (coeff.imag() != 0.0)
-            out << " + " << coeff.imag() << "*i ";
+            out << " + i" << coeff.imag();
           return out.str();
         }
       };
@@ -78,20 +78,26 @@ namespace runtime {
       struct print_coeff< std::complex<C>, LATEX_PRINT > {
         std::string operator() ( const std::complex<C> & coeff ) {
           std::ostringstream out;
-          out << '('
-              << print_coeff<C,LATEX_PRINT>()(coeff.real())
-              << " + "
-              << print_coeff<C,LATEX_PRINT>()(coeff.imag())
-              << "*i)";
 
-          if (coeff.imag() != 0.0)
-            out << '('
-                << print_coeff<C,LATEX_PRINT>()(coeff.real())
-                << " + "
-                << print_coeff<C,LATEX_PRINT>()(coeff.imag())
-                << "*i)";
-          else
+          if (coeff.real() == 0.0 && coeff.imag() == 0.0)
+            return "0";
+
+          if (coeff.real() != 0.0) {
+            if (coeff.imag() != 0.0)
+              out << '(';
+
             out << print_coeff<C,LATEX_PRINT>()(coeff.real());
+
+            if (coeff.imag() != 0.0)
+              out << " + ";
+          }
+
+          if (coeff.imag() != 0.0) {
+            out << "i" << print_coeff<C,LATEX_PRINT>()(coeff.imag());
+            if (coeff.real() != 0.0)
+              out << ')';
+          }
+
           return out.str();
         }
       };
