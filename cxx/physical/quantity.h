@@ -93,11 +93,13 @@ namespace runtime {
   namespace physical {
     /** Less-than operation for complex types.
      * For better or for worse, we are going to define the comparison
-     * between two complex numbers as a comparison between their norms. */
+     * between two complex numbers as a comparison between their real components
+     * first and then imaginary components if the real components are equal. */
     template < typename T1, typename T2 >
     bool operator< ( const std::complex<T1> & lhs,
                      const std::complex<T2> & rhs ) {
-      return std::norm(lhs) < std::norm(rhs);
+      return lhs.real() < rhs.real() ||
+             (lhs.real() == rhs.real() && lhs.imag() < rhs.imag());
     }
 
     /** Equality operation for complex types. */
