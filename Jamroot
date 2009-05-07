@@ -23,7 +23,7 @@ lib boost_unit_test_framework : : <name>boost_unit_test_framework <link>static ;
 
 project /physical
     : requirements
-        <include>cxx/physical
+        <include>cxx
     : usage-requirements
         <include>cxx
         <library>/physical//boost_regex
