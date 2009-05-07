@@ -752,6 +752,10 @@ namespace runtime {
           return detail::ConvertCoeff<T,T2>()(coeff);
         }
 
+        const T & getCoeff() const {
+          return coeff;
+        }
+
     };
 
     template <class T>
