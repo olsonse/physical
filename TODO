@@ -1,0 +1,6 @@
+1.  Add a 'print with prefix' setting for Quantity types.  This is so that
+    items such as '10*kg' get printed as '10*physical::unit::kg'.  Do this so
+    that subsequent parsing will succeed even if the user has not done
+    'from physical::unit import *'.
+    This change would be relevant for both the c++ and python versions.
+

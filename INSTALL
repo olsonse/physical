@@ -3,8 +3,8 @@ Installation Instructions
 
 Because of the change to the Boost.build system, I still need to implement
 installation of some sort.  If you use Boost.build, using the c++ portion is
-easy.  In the near future, I'll be switching to the cmake build system (most
-likely at least).
+easy.  CMake files also accompany the package and make it easier to use in a
+CMake environment.  
 
 For the python implementation, just make sure that the python directory is
 added to your PYTHONPATH (however you choose do this).

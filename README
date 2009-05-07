@@ -9,8 +9,14 @@ The namespace layout is original to the posting by E. Robert Tisdale.
 E. R. Tisdale <E.Robert.Tisdale_at_jpl.nasa.gov>.
 
 There were a lot of other comments on usenet for improving the header from
-Tisdale, including British spelling of various units and so on.  This file
+Tisdale, including British spelling of various units and so on.  This library
 is based on the unaltered version from E. R. Tisdale.
+
+
+Since importing the file from E. R. Tisdale, I've extended this library heavily.
+Various new units and constants have been added.  Most constants have been
+checked and corrected according to CODATA from NIST:
+http://physics.nist.gov/cuu/Constants/index.html
 
 This software is released under the MIT license (see COPYING file).
 
