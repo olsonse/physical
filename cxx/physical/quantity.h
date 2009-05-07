@@ -22,6 +22,7 @@
 #include <physical/detail/print_coeff.h>
 #include <physical/detail/ConvertCoeff.h>
 #include <physical/except.h>
+#include <physical/registry.h>
 
 
 #include <complex>
@@ -31,31 +32,6 @@
 #include <sstream>
 #include <algorithm>
 #include <vector>
-
-/* FIXME:  the following should be removed if the new standard is used.
- * For now we use boost to implement the inverse trig functions for
- * std::complex.
- */
-#include <boost/math/complex/acos.hpp>
-#include <boost/math/complex/asin.hpp>
-#include <boost/math/complex/atan.hpp>
-#include <boost/math/complex/acosh.hpp>
-#include <boost/math/complex/asinh.hpp>
-#include <boost/math/complex/atanh.hpp>
-
-namespace std {
-  using ::acosh;
-  using ::asinh;
-  using ::atanh;
-
-  using boost::math::acos;
-  using boost::math::asin;
-  using boost::math::atan;
-  using boost::math::acosh;
-  using boost::math::asinh;
-  using boost::math::atanh;
-}
-
 
 
 
@@ -83,14 +59,20 @@ namespace std {
                                     monkeywrench::get_prefix() + #alias); \
     namespace alias = ns
 
+/** Imports namespace only in registry. */
+#define _IMPORT_NAMESPACE(ns) \
+    const int I_ ## using ## _ ## ns = \
+        Quantity::registry().import(monkeywrench::get_prefix() + #ns, "*", \
+                                    monkeywrench::get_namespace() )
+
+/** Imports namespace both in actual namespace and in registry. */
+#define _USING_NAMESPACE(ns)  _IMPORT_NAMESPACE(ns); using namespace ns
+
 
 
 namespace runtime {
-#define PHYSICAL_REGISTRY_FOR_RUNTIME
-#include <physical/registry.h>
-#undef PHYSICAL_REGISTRY_FOR_RUNTIME
-
   namespace physical {
+
     /** Less-than operation for complex types.
      * For better or for worse, we are going to define the comparison
      * between two complex numbers as a comparison between their real components
@@ -372,7 +354,7 @@ namespace runtime {
         typedef T coeff_type;
 
         /** The registry type for this quantity type. */
-        typedef physical::registry::recorder< quantity<T> > registry_type;
+        typedef registry::recorder< quantity<T> > registry_type;
 
         /** The possible printing modes. */
         enum PRINT_TYPE {
@@ -855,11 +837,12 @@ namespace runtime {
 
   }
 
+} /* namespace runtime */
+
 /* now finally, load the data. */
 #define PHYSICAL_DATA_FOR_RUNTIME
 #include <physical/physical.h>
 #undef PHYSICAL_DATA_FOR_RUNTIME
 
-} /* namespace runtime */
 
 #endif // PHYSICAL_QUANTITY_H

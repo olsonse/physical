@@ -1,5 +1,10 @@
-#ifndef physical_detail_errs_h
-#define physical_detail_errs_h
+/** \file
+ * Definitions of the exception class and associated error messages used in
+ * the physical library.
+ */
+
+#ifndef physical_except_h
+#define physical_except_h
 
 #include <stdexcept>
 
@@ -19,7 +24,19 @@ namespace runtime {
     static const char * UnitsNotDimensionless = "Units not dimensionless:  cannot create non-integer powers of unit";
     static const char * UnitsNotDimensionlessExp = "Units not dimensionless:  exponent must be dimensionless";
     static const char * ComplexNotSupported = "Operation on complex type not supported";
+
+    /** The sole purpose of this function is to quiet the stupid compiler. */
+    static inline unsigned long compiler_quietor() {
+      return
+        reinterpret_cast<unsigned long>(UnitsMismatch           ) 
+       +reinterpret_cast<unsigned long>(UnitsMismatchR          )
+       +reinterpret_cast<unsigned long>(UnitsMismatchF          )
+       +reinterpret_cast<unsigned long>(UnitsNotRoot            )
+       +reinterpret_cast<unsigned long>(UnitsNotDimensionless   )
+       +reinterpret_cast<unsigned long>(UnitsNotDimensionlessExp)
+       +reinterpret_cast<unsigned long>(ComplexNotSupported     );
+    }
   }
 }
 
-#endif // physical_detail_errs_h
+#endif // physical_except_h

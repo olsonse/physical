@@ -3,7 +3,7 @@
 path-constant EXAMPLES_TOP : . ;
 
 project /physical/examples
-    : build-dir build
+    # : build-dir build
     ;
 
 use-project /physical : ../ ;

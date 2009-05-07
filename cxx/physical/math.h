@@ -3,6 +3,33 @@
 
 #include <physical/quantity.h>
 
+/* FIXME:  the following should be removed if the new standard is used.
+ * For now we use boost to implement the inverse trig functions for
+ * std::complex.
+ */
+#include <boost/math/complex/acos.hpp>
+#include <boost/math/complex/asin.hpp>
+#include <boost/math/complex/atan.hpp>
+#include <boost/math/complex/acosh.hpp>
+#include <boost/math/complex/asinh.hpp>
+#include <boost/math/complex/atanh.hpp>
+
+#include <complex>
+#include <cmath>
+
+namespace std {
+  using ::acosh;
+  using ::asinh;
+  using ::atanh;
+
+  using boost::math::acos;
+  using boost::math::asin;
+  using boost::math::atan;
+  using boost::math::acosh;
+  using boost::math::asinh;
+  using boost::math::atanh;
+}
+
 namespace runtime {
   namespace physical {
     /** As set of unary mathematical functions that operate on quantity<T>

@@ -15,10 +15,21 @@
  *
  * */
 
-#if defined (PHYSICAL_DATA_FOR_RUNTIME) || !defined(PHYSICAL_DATA_H)
-#  if !defined (PHYSICAL_DATA_FOR_RUNTIME)
-#    define PHYSICAL_DATA_H
+#if ( defined(PHYSICAL_DATA_FOR_RUNTIME) && \
+     !defined(runtime_physical_physical_h) ) || \
+    (!defined(PHYSICAL_DATA_FOR_RUNTIME) && \
+     !defined(physical_physical_h) )
+
+#  if defined(PHYSICAL_DATA_FOR_RUNTIME)
+#    define runtime_physical_physical_h
+#  else
+#    define physical_physical_h
 #  endif
+
+#  if defined (PHYSICAL_DATA_FOR_RUNTIME)
+namespace runtime {
+#  endif
+
 
 #ifndef PHYSICAL_QUANTITY
 /** The units/constants library defaults to just providing the information via
@@ -29,25 +40,36 @@
 #ifndef PHYSICAL_QUANTITY_CLASS
 #  define PHYSICAL_QUANTITY_COEFF_TYPE PHYSICAL_QUANTITY
 #  define PHYSICAL_QUANTITY_CLASS PHYSICAL_QUANTITY
+#  define PHYSICAL_QUANTITY_INIT(name,c)     c
+#  define PHYSICAL_QUANTITY_INITu(name,c,u)  c
+#  define PHYSICAL_QUANTITY_INITn(name,c,n)  c
+#  define PHYSICAL_QUANTITY_INITun(name,c,n) c
 #  define _QUANTITY(name,c)       const Quantity name = c
 #  define _QUANTITYu(name,c,u)    const Quantity name = c
 #  define _QUANTITYn(name,c,n)    const Quantity name = c
 #  define _QUANTITYun(name,c,u,n) const Quantity name = c
+
 #else
+
+#  define PHYSICAL_QUANTITY_INIT(name,c)       PHYSICAL_QUANTITY_CLASS(c,"",#name)
+#  define PHYSICAL_QUANTITY_INITu(name,c,u)    PHYSICAL_QUANTITY_CLASS(c,u,"",#name)
+#  define PHYSICAL_QUANTITY_INITn(name,c,n)    PHYSICAL_QUANTITY_CLASS(c,n,#name)
+#  define PHYSICAL_QUANTITY_INITun(name,c,u,n) PHYSICAL_QUANTITY_CLASS(c,u,n,#name)
+
    /** Sets only the coefficient of the physical::quantity. */
-#  define _QUANTITY(name,c)       const Quantity name = PHYSICAL_QUANTITY_CLASS(c,"",#name)
+#  define _QUANTITY(name,c)       const Quantity name = PHYSICAL_QUANTITY_INIT(name,c)
    /** Sets the value of the coefficient and the units of the physical::quantity
     * (if using the runtime library of course).
     */
-#  define _QUANTITYu(name,c,u)    const Quantity name = PHYSICAL_QUANTITY_CLASS(c,u,"",#name)
+#  define _QUANTITYu(name,c,u)    const Quantity name = PHYSICAL_QUANTITY_INITu(name,c,u)
    /** Sets the value of the coefficient and the name of the physical::quantity
     * (if using the runtime library of course).
     */
-#  define _QUANTITYn(name,c,n)    const Quantity name = PHYSICAL_QUANTITY_CLASS(c,n,#name)
+#  define _QUANTITYn(name,c,n)    const Quantity name = PHYSICAL_QUANTITY_INITn(name,c,n)
    /** Sets the value of the coefficient, the units, and the name of the
     * physical::quantity (if using the runtime library of course). 
     */
-#  define _QUANTITYun(name,c,u,n) const Quantity name = PHYSICAL_QUANTITY_CLASS(c,u,n,#name)
+#  define _QUANTITYun(name,c,u,n) const Quantity name = PHYSICAL_QUANTITY_INITun(name,c,u,n)
 #endif
 
 #ifndef _OPEN_NAMESPACE
@@ -57,6 +79,14 @@
 
 #ifndef _ALIAS_NAMESPACE
 #  define _ALIAS_NAMESPACE(alias,ns) namespace alias = ns
+#endif
+
+#ifndef _USING_NAMESPACE
+#  define _USING_NAMESPACE(ns) using namespace ns
+#endif
+
+#ifndef _IMPORT_NAMESPACE
+#  define _IMPORT_NAMESPACE(ns)
 #endif
 
 #define _BEGIN_NAMESPACE(id)    _OPEN_NAMESPACE(0,id)
@@ -103,7 +133,7 @@ _BEGIN_NAMESPACE(physical) {
         _QUANTITY(proof,                percent/2.0);
         _QUANTITY(karat,                PHYSICAL_QUANTITY_COEFF_TYPE(1.0/24.0));
         _QUANTITY(karats,               karat);
-        _QUANTITY(mole,                 PHYSICAL_QUANTITY_COEFF_TYPE(6.0221367e+23));
+        _QUANTITY(mole,                 PHYSICAL_QUANTITY_COEFF_TYPE(6.02214179e23));
         _QUANTITY(moles,                mole);
         _QUANTITY(mol,                  mole);
         _QUANTITY(pi,                   3.14159265358979323846*radians);
@@ -333,7 +363,11 @@ _BEGIN_NAMESPACE(physical) {
         _QUANTITY(A,                    Ampere);
         _QUANTITY(Biot,                 10.0*Amperes);
         _QUANTITY(Biots,                Biot);
-        _QUANTITY(statAmpere,           Biot * 3.335641e-11); /* == (Biot * cm) / (s * c) */
+        _QUANTITY(abAmpere,             Biot);
+        _QUANTITY(abAmperes,            abAmpere);
+        _QUANTITY(abAmp,                abAmpere);
+        _QUANTITY(aA,                   abAmpere);
+        _QUANTITY(statAmpere,           Biot * 3.335641e-11); /* == Biot * (cm/s)/c */
         _QUANTITY(statAmperes,          statAmpere);
         _QUANTITY(statAmp,              statAmpere);
         _QUANTITY(statA,                statAmpere);
@@ -344,9 +378,12 @@ _BEGIN_NAMESPACE(physical) {
         _QUANTITY(statVolt,             erg / (statAmp * s));
         _QUANTITY(statVolts,            statVolt);
         _QUANTITY(statV,                statVolt);
+        _QUANTITY(abVolt,               (dyne *cm) / (abAmp * s));
         // electrical resistance
         _QUANTITY(Ohm,                  Volt/Ampere);
         _QUANTITY(Ohms,                 Ohm);
+        _QUANTITY(statOhm,              statVolt/statAmpere);
+        _QUANTITY(abOhm,                abVolt/abAmpere);
         // electrical conductance
         _QUANTITY(mho,                  1.0/Ohm);
         _QUANTITY(mhos,                 mho);
@@ -357,8 +394,12 @@ _BEGIN_NAMESPACE(physical) {
         _QUANTITY(Coulombs,             Coulomb);
         _QUANTITY(C,                    Coulomb);
         _QUANTITY(statCoulomb,          statAmpere*second);
-        _QUANTITY(statCoulombs,                 statCoulomb);
+        _QUANTITY(statCoulombs,         statCoulomb);
+        _QUANTITY(statCoul,             statCoulomb);
         _QUANTITY(statC,                statCoulomb);
+        _QUANTITY(abCoulomb,            abAmpere*second);
+        _QUANTITY(abCoulombs,           abCoulomb);
+        _QUANTITY(abCoul,               abCoulomb);
         _QUANTITY(Franklin,             statCoulomb);
         _QUANTITY(Franklins,            Franklin);
         // electrical capacity
@@ -369,17 +410,22 @@ _BEGIN_NAMESPACE(physical) {
         _QUANTITY(Weber,                Volt*second);
         _QUANTITY(Webers,               Weber);
         _QUANTITY(Wb,                   Weber);
-        _QUANTITY(Maxwell,              Weber/100000000.0);
+      //_QUANTITY(Maxwell,              Weber/100000000.0);
+        _QUANTITY(Maxwell,              abVolt * second);
         _QUANTITY(Maxwells,             Maxwell);
         _QUANTITY(M,                    Maxwell);
+        _QUANTITY(statMaxwell,          statVolt * second);
+        _QUANTITY(statMaxwells,         statMaxwell);
+        _QUANTITY(statM,                statMaxwell);
         // magnetic field B
         _QUANTITY(Tesla,                Weber/(meter*meter));
         _QUANTITY(Teslas,               Tesla);
         _QUANTITY(T,                    Tesla);
-        _QUANTITY(Gauss,                Tesla/10000.0);
+      //_QUANTITY(Gauss,                Tesla/10000.0);
+        _QUANTITY(Gauss,                abVolt * s / (cm*cm) );
         _QUANTITY(gamma,                Tesla/1000000000.0);
         // magnetic field H
-        _QUANTITY(Oerstedt,             79.57747*Ampere/meter);
+        _QUANTITY(Oerstedt,             79.57747*Ampere/meter);/* = gauss/mu0 */
         _QUANTITY(Oerstedts,            Oerstedt);
         _QUANTITY(Oe,                   Oerstedt);
         // magnetic inductivity
@@ -858,142 +904,70 @@ _BEGIN_NAMESPACE(physical) {
     _END_NAMESPACE}
     _ALIAS_NAMESPACE(units, unit);
     // ####   END OF UNIT CREATION #### #
+_END_NAMESPACE}
+
+#  if defined (PHYSICAL_DATA_FOR_RUNTIME)
+}/* namespace runtime. */
+#  endif
+
+
+#include <physical/constant/si.h>
+#include <physical/dimension/define.h>
+#include <physical/dimension/systems.h>
+#include <physical/constant/conversion.h>
+#include <physical/element.h>
+
+
+#  if defined (PHYSICAL_DATA_FOR_RUNTIME)
+namespace runtime {
+#  endif
+
+_OPEN_NAMESPACE(physical_1,physical) {
+    _ALIAS_NAMESPACE(dimensions, dimension);
 
     // #### BEGIN OF CONSTANT CREATION #### #
-    _BEGIN_NAMESPACE(constant) {
-        /* These using clauses will import these symbols into the constant
-         * namespace, but oh well... */
-        using unit::pi;
-        using unit::m;
-        using unit::s;
-        using unit::J;
-        using unit::C;
-        using unit::V;
-        using unit::kg;
-        using unit::F;
-        using unit::K;
-        using unit::A;
-        using unit::barns;
-        using unit::T;
-        using unit::rad;
-        using unit::W;
-        using unit::N;
-        _QUANTITYn(c,                 2.99792458e8*m/s,            "speed of light");
-        _QUANTITYn(Mach,              331.46*m/s,                  "speed of sound");
-        _QUANTITYn(h,                 6.6260755e-34*J*s,           "Planck constant");
-        _QUANTITYn(h_bar,             h/(2.0*pi),                  "Plank constant");
-        _QUANTITYn(g,                 unit::gravity,               "standard gravitational acceleration at sea level");
-        _QUANTITYn(e,                 1.60217733e-19*C,            "electron charge");
-        _QUANTITYn(eV,                e*V,                         "electron Volt");
-        _QUANTITYn(keV,               1000.0*eV,                   "kilo-electron Volt");
-        _QUANTITYn(MeV,               1000000.0*eV,                "Mega-electron Volt");
-        _QUANTITYn(GeV,               1000000000.0*eV,             "Giga-electron Volt");
-        _QUANTITYn(Rydberg,           13.6054*eV,                  "Rydberg energy");
-        _QUANTITY(Rydbergs,           Rydberg);
-        _QUANTITYn(Hartree,           2*Rydberg,                   "Atomic energy unit");
-        _QUANTITY(Hartrees,           Hartree);
-        _QUANTITYn(m_e,               9.1093897e-31*kg,            "electron mass");
-        _QUANTITYn(m_P,               1.6726231e-27*kg,            "proton mass");
-        _QUANTITYn(m_D,               1875.61339*MeV/(c*c),        "deuteron mass");
-        _QUANTITYn(atomic_mass_unit,  1.6605402e-27*kg,            "unified atomic mass unit");
-        _QUANTITY(atomic_mass_units,  atomic_mass_unit);
-        _QUANTITY(amu,                atomic_mass_unit);
-        _QUANTITY(Dalton,             atomic_mass_unit);
-        _QUANTITY(Daltons,            Dalton);
-        _QUANTITYn(epsilon,           8.854187817e-12*F/m,         "permittivity of free space");
-        _QUANTITYn(mu,                12.566370614e-7*N/(A*A),     "permeability of free space");
-        _QUANTITYun(alpha,            1.0/137.0359895, units_map(),"fine-structure constant");
-        _QUANTITYn(r_e,               2.81794092e-15*m,            "classical electron radius");
-        _QUANTITYn(lambda_bar,        3.86159323e-13*m,            "electron Compton wavelength");
-        _QUANTITYn(a_0,               0.529177249e-10*m,           "Bohr radius");
-        _QUANTITYn(lambda_1eV,        1.23984244e-6*m,             "wavelength of 1 eV/c particle");
-        _QUANTITYn(sigma_0,           0.66524616*barns,            "Thomson cross section");
-        _QUANTITYn(mu_B,              5.78838263e-11*MeV/T,        "Bohr magneton");
-        _QUANTITYn(mu_N,              3.15245166e-14*MeV/T,        "nuclear magneton");
-        _QUANTITYn(E_M_e,             1.75881962e11*C/kg*(rad/(s*T)), "electron cyclotron frequency/field");
-        _QUANTITYn(E_M_P,             9.5788309e7*C/kg*(rad/(s*T)),"proton cyclotron frequency/field");
-        _QUANTITYn(G,                 6.67259e-11*m*m*m/(kg*s*s),  "gravitational constant");
-        _QUANTITYun(N_A,              6.0221367e23, units_map(),   "Avogadro's constant");
-        _QUANTITYn(K_B,               1.380658e-23*J/K,            "Boltzmann constant");
-        _QUANTITYn(V_molar,           2.897756e-3*m*K,             "molar volume, ideal gas at standard temperature and pressure");
-        _QUANTITYn(sigma_SB,          5.67051e-8*W/(m*m*K*K*K*K),  "Stefan-Boltzmann constant");
-    _END_NAMESPACE}
+    /* we have decided for right now not to import constant::si::* because we
+     * want to put the template magic constants in constant::*
+     * For now, we'll import constant::si::* only the registry for the runtime
+     * business.
+     */
+    _OPEN_NAMESPACE(physical_1,constant) {
+      /* import constant::si::* into the default constants namespace */
+      //_USING_NAMESPACE(si);
+      _IMPORT_NAMESPACE(si);
+    _CLOSE_NAMESPACE(physical_1)}
+
+    /* FIXME:   We may need to make sure that the new template constants get
+     * read ahead of time (before this command). */
     _ALIAS_NAMESPACE(constants, constant);
     // ####   END OF CONSTANT CREATION #### #
+_CLOSE_NAMESPACE(physical_1)}
 
+#  if defined (PHYSICAL_DATA_FOR_RUNTIME)
+}/* namespace runtime. */
+#  endif
 
-    // #### BEGIN OF ELEMENT CREATION #### #
-    // FIXME:  finish filling out this periodic table data
-    /* This data is taken from physics.nist.gov. */
-#define _ELEMENT(name,sym,n,m,i) \
-    _BEGIN_NAMESPACE(name) { \
-        _QUANTITYn(number,    PHYSICAL_QUANTITY_COEFF_TYPE(n),"atomic number of "     #name); \
-        _QUANTITYn(mass,        m * constant::amu, "atomic mass of "       #name); \
-        _QUANTITYn(ionization,  i * constant::eV,  "ionization energy of " #name); \
-    _END_NAMESPACE} \
-    _ALIAS_NAMESPACE(sym, name);
-
-    /** Periodic table information.
-     * @see http://physics.nist.gov/PhysRefData/Elements/index.html
-     */
-    _BEGIN_NAMESPACE(element) {
-        //       long-name    abrv.   n        mass       outer-electron ionization (eV)
-        _ELEMENT(hydrogen,      H,    1,      1.00794,      13.5984 );
-        _ELEMENT(helium,        He,   2,      4.002602,     24.5874 );
-        _ELEMENT(lithium,       Li,   3,      6.941,         5.3917 );
-        _ELEMENT(beryllium,     Be,   4,      9.012182,      9.3227 );
-        _ELEMENT(boron,          B,   5,     10.812,         8.2980 );
-        _ELEMENT(carbon,         C,   6,      12.0107,      11.2603 );
-        _ELEMENT(nitrogen,       N,   7,      14.0067,      14.5341 );
-        _ELEMENT(oxygen,         O,   8,      15.9994,      13.6181 );
-        _ELEMENT(fluorine,       F,   9,      18.9984032,   17.4228 );
-        _ELEMENT(neon,          Ne,  10,      20.1797,      21.5645 );
-        _ELEMENT(sodium,        Na,  11,      22.989770,     5.1391 );
-        _ELEMENT(magnesium,     Mg,  12,      24.3051,       7.6462 );
-        _ELEMENT(aluminium,     Al,  13,      26.981538,     5.9858 );
-        _ELEMENT(silicon,       Si,  14,      28.0855,       8.1517 );
-        _ELEMENT(phosphorus,     P,  15,      30.973761,    10.4867 );
-        _ELEMENT(sulfur,         S,  16,      32.065,       10.3600 );
-        _ELEMENT(chlorine,      Cl,  17,      35.453,       12.9676 );
-        _ELEMENT(argon,         Ar,  18,      39.948,       15.7596 );
-        _ELEMENT(potassium,      K,  19,      39.0983,       4.3407 );
-        _ELEMENT(calcium,       Ca,  20,      40.078,        6.1132 );
-        _ELEMENT(scandium,      Sc,  21,      44.955911,     6.5615 );
-        _ELEMENT(titanium,      Ti,  22,      47.867,        6.8281 );
-        _ELEMENT(vanadium,       V,  23,      50.9415,       6.7462 );
-        _ELEMENT(chromium,      Cr,  24,      51.9961,       6.7665 );
-        _ELEMENT(manganese,     Mn,  25,      54.9380499,    7.4340 );
-        _ELEMENT(iron,          Fe,  26,      55.845,        7.9024 );
-        _ELEMENT(cobalt,        Co,  27,      58.9332009,    7.8810 );
-        _ELEMENT(nickel,        Ni,  28,      58.6934,       7.6398 );
-        _ELEMENT(copper,        Cu,  29,      63.546,        7.7264 );
-        _ELEMENT(zinc,          Zn,  30,      65.409,        9.3942 );
-        _ELEMENT(krypton,       Kr,  36,      83.798,       13.9996 );
-        _ELEMENT(rubidium,      Rb,  37,      85.4678,       4.1771 );
-        _ELEMENT(xenon,         Xe,  54,     131.293,       12.1298 );
-        _ELEMENT(cesium,        Cs,  55,     132.90545,      3.8939 );
-        _ELEMENT(mercury,       Hg,  80,     200.59,        10.4375 );
-        _ELEMENT(francium,      Fr,  87,     223,            4.0727 );
-    _END_NAMESPACE}
-    _ALIAS_NAMESPACE(elements, element);
-    // ####   END OF ELEMENT CREATION #### #
-_END_NAMESPACE}
 
 
 /* now do some cleanup for the macros used internally here. */
 #undef PHYSICAL_QUANTITY_CLASS
 #undef PHYSICAL_QUANTITY_COEFF_TYPE
+#undef PHYSICAL_QUANTITY_INIT
+#undef PHYSICAL_QUANTITY_INITu
+#undef PHYSICAL_QUANTITY_INITn
+#undef PHYSICAL_QUANTITY_INITun
 #undef _QUANTITY
 #undef _QUANTITYu
 #undef _QUANTITYn
 #undef _QUANTITYun
 #undef _OPEN_NAMESPACE
 #undef _CLOSE_NAMESPACE
+#undef _USING_NAMESPACE
+#undef _IMPORT_NAMESPACE
 #undef _ALIAS_NAMESPACE
 #undef _BEGIN_NAMESPACE
 #undef _END_NAMESPACE
-#undef _ELEMENT
 
 
 
-#endif // PHYSICAL_DATA_H
+#endif // physical_physical_h

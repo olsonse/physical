@@ -1,1 +1,2 @@
 unit-test quantity : quantity.cpp ;
+unit-test conversion : conversion.cpp ;

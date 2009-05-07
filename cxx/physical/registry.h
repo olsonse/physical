@@ -6,14 +6,13 @@
  *
  * */
 
-#if defined (PHYSICAL_REGISTRY_FOR_RUNTIME) || !defined(PHYSICAL_REGISTRY_H)
-#  if !defined (PHYSICAL_REGISTRY_FOR_RUNTIME)
-#    define PHYSICAL_REGISTRY_H
-#  endif
+#ifndef physical_registry_h
+#define physical_registry_h
 
 
 #include <string>
 #include <map>
+#include <vector>
 
 /** Just a useful set of tools to help with the registry problem. */
 namespace monkeywrench {
@@ -204,6 +203,13 @@ namespace physical {
         
     }
     /* ****   END PHYSICAL QUANTITY REGISTRY **** */
-
 }
-#endif // PHYSICAL_REGISTRY_H
+
+/* import the registry into runtime as well. */
+namespace runtime {
+  namespace physical {
+    namespace registry = ::physical::registry;
+  }
+}
+
+#endif // physical_registry_h

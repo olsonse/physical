@@ -67,10 +67,9 @@ extern int read_history ();
 
 
 
-using namespace runtime; /* strip the runtime:: prefix off of physical::* */
-physical::calc::InfixCalc calc;
+runtime::physical::calc::InfixCalc calc;
 
-typedef physical::calc::symbol sym;
+typedef runtime::physical::calc::symbol sym;
 
 template <class T>
 void fill_completion_container(const std::string & text,
@@ -122,7 +121,7 @@ char * variable_completer(const char * text, int state) {
     return strncpy((char*)malloc(txt.length()+1), txt.c_str(), txt.length() + 1);
 }
 
-using physical::calc::symbol;
+using runtime::physical::calc::symbol;
 
 char * get_line(const bool & interactive) {
     if (interactive)
@@ -171,18 +170,18 @@ int main() {
         bool result_set = false;
         do {
             try {
-                physical::Quantity result = calc.parse_statement(first, line.end(), finished, result_set);
+                runtime::physical::Quantity result = calc.parse_statement(first, line.end(), finished, result_set);
                 if (result_set)
                     std::cout << result << std::endl;
-            } catch (physical::calc::symbol_error & e) {
+            } catch (runtime::physical::calc::symbol_error & e) {
                 std::cout << e.what() << std::endl;
                 break;
-            } catch (physical::calc::syntax_error & e) {
+            } catch (runtime::physical::calc::syntax_error & e) {
                 // Display a caret that points to the position where the error
                 // was detected.
                 std::cerr << std::setw(e.stop - line.begin() + 3) << " " << "^ error\n";
                 break;
-            } catch (physical::exception & e) {
+            } catch (runtime::physical::exception & e) {
                 std::cout << e.what() << std::endl;
                 break;
             }
