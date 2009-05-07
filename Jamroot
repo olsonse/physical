@@ -2,6 +2,17 @@
 
 echo " Physical constants library:  " ;
 echo "---------------" ;
+echo " In bjam, there are two ways to import/use this library." ;
+echo " 1.  /physical//physical" ;
+echo "     This provides includes for the header only library." ;
+echo " 2.  /physical//runtime" ;
+echo "     This provides includes for the header only library and" ;
+echo "     it also provides a library dependency on boost_regex and" ;
+echo "     a header-library dependency on boost_math (used to " ;
+echo "     define some trig functions on std::complex<> that are" ;
+echo "     going to be included in the new standard, but are not" ;
+echo "     yet available" ;
+echo "---------------" ;
 echo "            Possible compile/feature options" ;
 echo "              <phys-type>" ;
 echo "                Purpose:  Specify the basic type used by the physical library." ;
@@ -26,7 +37,7 @@ project /physical
         <include>cxx
     : usage-requirements
         <include>cxx
-        <library>/physical//boost_regex
+        
     # : build-dir build
     ;
 
@@ -38,6 +49,11 @@ alias physical
     : # no default build
     : <include>cxx ;
 
+alias runtime
+    : physical
+    : # no build requirements
+    : # no default build
+    : <library>/physical//boost_regex ;
 
 import feature : feature ;
 

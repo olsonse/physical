@@ -44,7 +44,8 @@ namespace physical {
     PHYSICAL_TCQ  length     <atomic>::value  = constant::si::a_0;
     PHYSICAL_TCQ  mass       <atomic>::value  = constant::si::m_e;
     PHYSICAL_TCQ  time       <atomic>::value  = constant::si::h_bar
-                                              / constant::si::Hartree;
+                                              / constant::si::Hartree
+                                              * unit::radian;
     PHYSICAL_TCQ  charge     <atomic>::value  = constant::si::e;
     /* }******   END ATOMIC UNIT SYSTEM ****** */
 

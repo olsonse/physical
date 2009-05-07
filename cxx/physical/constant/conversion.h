@@ -27,10 +27,13 @@ namespace runtime {
 
 namespace physical {
   namespace constant {
+
+#include <physical/constant/detail/derived-dimensions.h>
+
 #   define _TQUANTITYn(v,dims) \
     /* convert_v_from_si class exists because I can't pass commas to macros.*/ \
     template < typename T >  \
-    struct convert_##v##_from_si : make_convert_ratio<system::si,dims,T> {}; \
+    struct convert_##v##_from_si : make_convert_ratio<T,system::si,dims> {}; \
     /* definition of where the value is stored. */ \
     template< typename T > \
     struct v { \
@@ -68,11 +71,8 @@ namespace physical {
     _TQUANTITYn(amu,                dimension::mass);
     _TQUANTITYn(Dalton,             dimension::mass);
     _TQUANTITYn(Daltons,            dimension::mass);
-    // typedef make_dim< dimension::capacitance,
-    //                   dimension::exp_dim<dimension::length,-1>::type
-    //                 >::type capacitance_per_length;
-    _TQUANTITYn(epsilon0,           dimension::electric::capacitance_per_length);
-    _TQUANTITYn(k_E,                dimension::electric::length_per_capacitance);
+    _TQUANTITYn(epsilon0,           detail::capacitance_per_length);
+    _TQUANTITYn(k_E,                detail::length_per_capacitance);
     _TQUANTITYn(mu0,                dimension::magnetic::permeability);
     _TQUANTITYn(alpha,              dimension::unity);
     _TQUANTITYn(g_e,                dimension::unity);
@@ -83,17 +83,17 @@ namespace physical {
     _TQUANTITYn(a_0,                dimension::length);
     _TQUANTITYn(lambda_1eV,         dimension::length);
     _TQUANTITYn(sigma_0,            dimension::area);
-//  _TQUANTITYn(mu_B,               5.78838263e-11*MeV/T);
-//  _TQUANTITYn(mu_N,               3.15245166e-14*MeV/T);
-//  _TQUANTITYn(e_m_e,              1.75881962e11*C/kg*(rad/(s*T)));
-//  _TQUANTITYn(e_m_p,              9.5788309e7*C/kg*(rad/(s*T)));
-//  _TQUANTITYn(G,                  6.67259e-11*m*m*m/(kg*s*s));
+    _TQUANTITYn(mu_B,               dimension::magnetic::moment);
+    _TQUANTITYn(mu_N,               dimension::magnetic::moment);
+    _TQUANTITYn(e_m_e,              dimension::charge_to_mass);
+    _TQUANTITYn(e_m_p,              dimension::charge_to_mass);
+    _TQUANTITYn(G,                  detail::G_dims);
     _TQUANTITYn(N_A,                dimension::unity);
-//  _TQUANTITYn(K_B,                1.380658e-23*J/K);
+    _TQUANTITYn(K_B,                detail::K_B_dims);
     _TQUANTITYn(stdtemp,            dimension::temperature);
     _TQUANTITYn(R,                  dimension::unity);
     _TQUANTITYn(V_molar,            dimension::volume);
-//  _TQUANTITYn(sigma_SB,           5.67051e-8*W/(m*m*K*K*K*K));
+    _TQUANTITYn(sigma_SB,           detail::sigma_SB_dims);
   }/* ****   END UNIT SYSTEM CONSTANTS **** */
 
 #undef _TQUANTITYn

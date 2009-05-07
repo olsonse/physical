@@ -25,18 +25,24 @@ namespace runtime {
 
 
 namespace physical {
-  /* little SQR function because I don't want to have to depend on
+  /** little SQR function because I don't want to have to depend on
    * olson_tools::power for this. */
   template < typename T >
   T SQR( const T & t ) {
     return t*t;
   }
 
-  /* little SQR function because I don't want to have to depend on
+  /** little CUBE function because I don't want to have to depend on
    * olson_tools::power for this. */
   template < typename T >
   T CUBE( const T & t ) {
     return t*t*t;
+  }
+
+  /** little x^4 function to ease things a bit. */
+  template < typename T >
+  T POW4( const T & t ) {
+    return t*t*t*t;
   }
 
   namespace dimension {
@@ -58,7 +64,15 @@ namespace physical {
     PHYSICAL_DIM(charge);
 
     /* derived dimensions can generally be used without specializing. */
+
+    /* Note:  BEFORE you consider adding dimensions to this list, please first
+     * determine whether:
+     * 1.  you would be adding a generally very useful dimension
+     * 2.  you can not use the make_dim<> and exp_dim<> classes to get what you
+     *     need local to your code.
+     */
     PHYSICAL_DIM_W_VAL(frequency,     1. / time<T>::value );
+    PHYSICAL_DIM_W_VAL(charge_to_mass, charge<T>::value / mass<T>::value );
     PHYSICAL_DIM_W_VAL(inverse_length,1. / length<T>::value );
     PHYSICAL_DIM_W_VAL(area,          1. / SQR(length<T>::value) );
     PHYSICAL_DIM_W_VAL(volume,        CUBE(length<T>::value) );
@@ -86,8 +100,6 @@ namespace physical {
       PHYSICAL_DIM_W_VAL(resistivity, resistance<T>::value * length<T>::value );
       PHYSICAL_DIM_W_VAL(conductivity,1. / resistivity<T>::value );
       PHYSICAL_DIM_W_VAL(capacitance, charge<T>::value / potential<T>::value );
-      PHYSICAL_DIM_W_VAL(capacitance_per_length, capacitance<T>::value / length<T>::value );
-      PHYSICAL_DIM_W_VAL(length_per_capacitance, 1./capacitance_per_length<T>::value );
     } /* electric */
     namespace magnetic {
       PHYSICAL_DIM_W_VAL(flux, electric::potential<T>::value * time<T>::value );
@@ -95,11 +107,14 @@ namespace physical {
       PHYSICAL_DIM_W_VAL(field, flux_density<T>::value );
       PHYSICAL_DIM_W_VAL(inductance,   flux<T>::value / electric::current<T>::value );
       PHYSICAL_DIM_W_VAL(permeability, inductance<T>::value / length<T>::value );
+      PHYSICAL_DIM_W_VAL(moment, energy<T>::value / flux_density<T>::value );
     } /* magnetic */
 
     PHYSICAL_DIM_W_VAL(unity, Quantity(1.0));
 
 
+
+    /** Exponentiates a dimension by an integer power. */
     template < template <typename> class dim, int power >
     struct exp_dim {
       template < typename T >
@@ -112,18 +127,121 @@ namespace physical {
     template < typename T >
     const Quantity exp_dim<dim,power>::type<T>::value = pow(dim<T>::value,power);
 
-    //template < template <typename> class dim >
-    //template < typename T >
-    //const Quantity exp_dim<dim,-1>::type<T>::value = 1./dim<T>::value;
 
-    //template < template <typename> class dim >
-    //template < typename T >
-    //const Quantity exp_dim<dim,-2>::type<T>::value = 1./SQR(dim<T>::value);
+    /** Exponentiation specialization for power = -1. */
+    template < template <typename> class dim>
+    struct exp_dim<dim,-1> {
+      template < typename T >
+      struct type {
+        static const Quantity value;
+      };
+    };
+    template < template <typename> class dim >
+    template < typename T >
+    const Quantity exp_dim<dim,-1>::type<T>::value = 1./dim<T>::value;
 
-    //template < template <typename> class dim >
-    //template < typename T >
-    //const Quantity exp_dim<dim,-3>::type<T>::value = 1./CUBE(dim<T>::value);
+    /** Exponentiation specialization for power = -2. */
+    template < template <typename> class dim>
+    struct exp_dim<dim,-2> {
+      template < typename T >
+      struct type {
+        static const Quantity value;
+      };
+    };
+    template < template <typename> class dim >
+    template < typename T >
+    const Quantity exp_dim<dim,-2>::type<T>::value = 1./SQR(dim<T>::value);
 
+    /** Exponentiation specialization for power = -3. */
+    template < template <typename> class dim>
+    struct exp_dim<dim,-3> {
+      template < typename T >
+      struct type {
+        static const Quantity value;
+      };
+    };
+    template < template <typename> class dim >
+    template < typename T >
+    const Quantity exp_dim<dim,-3>::type<T>::value = 1./CUBE(dim<T>::value);
+
+    /** Exponentiation specialization for power = -4. */
+    template < template <typename> class dim>
+    struct exp_dim<dim,-4> {
+      template < typename T >
+      struct type {
+        static const Quantity value;
+      };
+    };
+    template < template <typename> class dim >
+    template < typename T >
+    const Quantity exp_dim<dim,-4>::type<T>::value = 1./POW4(dim<T>::value);
+
+    /** Exponentiation specialization for power =  1. */
+    template < template <typename> class dim>
+    struct exp_dim<dim,1> {
+      template < typename T >
+      struct type {
+        static const Quantity value;
+      };
+    };
+    template < template <typename> class dim >
+    template < typename T >
+    const Quantity exp_dim<dim,1>::type<T>::value = dim<T>::value;
+
+    /** Exponentiation specialization for power =  2. */
+    template < template <typename> class dim>
+    struct exp_dim<dim,2> {
+      template < typename T >
+      struct type {
+        static const Quantity value;
+      };
+    };
+    template < template <typename> class dim >
+    template < typename T >
+    const Quantity exp_dim<dim,2>::type<T>::value = SQR(dim<T>::value);
+
+    /** Exponentiation specialization for power =  3. */
+    template < template <typename> class dim>
+    struct exp_dim<dim,3> {
+      template < typename T >
+      struct type {
+        static const Quantity value;
+      };
+    };
+    template < template <typename> class dim >
+    template < typename T >
+    const Quantity exp_dim<dim,3>::type<T>::value = CUBE(dim<T>::value);
+
+    /** Exponentiation specialization for power =  4. */
+    template < template <typename> class dim>
+    struct exp_dim<dim,4> {
+      template < typename T >
+      struct type {
+        static const Quantity value;
+      };
+    };
+    template < template <typename> class dim >
+    template < typename T >
+    const Quantity exp_dim<dim,4>::type<T>::value = POW4(dim<T>::value);
+
+
+
+    /** Dimension aggregation class.
+     * This class can be used to define a new dimension that is the aggregate of
+     * several other dimensions.  As an example, consider the Steffan-Boltzmann
+     * constant \f$ \sigma_{\rm SB} \f$.  To convert \f$ \sigma_{\rm SB} \f$
+     * from one unit system to another, local to physical::constant::detail::*
+     * we define the aggregate dimension <code>sigma_SB_dims</code> as:<br>
+     \verbatim
+       template < typename T >
+       struct sigma_SB_dims :
+         make_dim<
+           dimension::power,
+           exp_dim<dimension::length,-2>::type,
+           exp_dim<dimension::temperature,-4>::type
+         >::dim<T> {};
+     \endverbatim
+     */
     template < template <typename> class D0,
                template <typename> class D1 = unity,
                template <typename> class D2 = unity,
@@ -136,7 +254,7 @@ namespace physical {
                template <typename> class D9 = unity >
     struct make_dim {
       template < typename T >
-      struct type {
+      struct dim {
         static const Quantity value;
       };
     };
@@ -152,7 +270,7 @@ namespace physical {
                template <typename> class D8,
                template <typename> class D9 >
     template < typename T >
-    const Quantity make_dim<D0,D1,D2,D3,D4,D5,D6,D7,D8,D9>::type<T>::value =
+    const Quantity make_dim<D0,D1,D2,D3,D4,D5,D6,D7,D8,D9>::dim<T>::value =
       D0<T>::value * D1<T>::value * D2<T>::value * D3<T>::value *
       D4<T>::value * D5<T>::value * D6<T>::value * D7<T>::value *
       D8<T>::value * D9<T>::value;

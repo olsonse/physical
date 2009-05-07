@@ -11,9 +11,9 @@
 #include <physical/quantity.h>
 
 int main() {
-    using namespace runtime; /* strip the runtime:: prefix on runtime::physical::* */
-    using physical::Quantity;
-    Quantity a = Quantity(physical::unit::m,"","other::m");
+    namespace rphysical = runtime::physical; /* strip the runtime:: prefix on runtime::physical::* */
+    using rphysical::Quantity;
+    Quantity a = Quantity(rphysical::unit::m,"","other::m");
 
     std::cout << "a  = " << a << "\n"
                  "&a = " << &a << "\n"

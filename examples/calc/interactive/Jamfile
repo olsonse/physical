@@ -1,5 +1,3 @@
-lib boost_regex : : <name>boost_regex ;
-
 lib readline :
     : <name>readline
     :
@@ -9,7 +7,4 @@ lib readline :
       <define>HAVE_READLINE_HISTORY
     ;
 
-exe testInteractive : testInteractive.cpp
-    /physical//physical readline boost_regex ;
-
-# obj testInteractive_obj : testInteractive.cpp /physical//physical readline ;
+exe testInteractive : testInteractive.cpp /physical//runtime readline ;

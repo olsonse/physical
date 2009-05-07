@@ -1,5 +1,1 @@
-lib boost_regex : : <name>boost_regex ;
-
-exe testParser : testParser.cpp /physical//physical boost_regex ;
-
-# obj testParser_obj : testParser.cpp /physical//physical ;
+exe testParser : testParser.cpp /physical//runtime ;

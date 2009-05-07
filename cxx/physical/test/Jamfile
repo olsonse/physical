@@ -1,2 +1,3 @@
-unit-test quantity : quantity.cpp ;
-unit-test conversion : conversion.cpp ;
+unit-test quantity : quantity.cpp /physical//runtime ;
+unit-test conversion : conversion.cpp /physical//runtime ;
+compile-fail no-compile-conversion0.cpp /physical//runtime : : no-compile-conversion0 ;

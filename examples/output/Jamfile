@@ -1,1 +1,1 @@
-exe testOutput : testOutput.cpp /physical//physical ;
+exe testOutput : testOutput.cpp /physical//runtime ;

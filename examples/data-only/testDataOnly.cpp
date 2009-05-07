@@ -13,6 +13,7 @@
 
 using namespace physical::unit;
 using namespace physical::constant;
+namespace sys = physical::system;
 
 int main() {
     /* This access to the units/constants data provides the numbers only, in
@@ -25,7 +26,7 @@ int main() {
      * that there will be no intrinsic units mismatch checking.  Therefore,
      * there is no error generated when you try and add units in a incorrect
      * manner.  */
-    double v3 = v1 + v2 * s + sigma_SB + K_B;
+    double v3 = v1 + v2 * s + sigma_SB<sys::si>::value + K_B<sys::si>::value;
 
     std::cout << v1 << '\n'
               << v2 << '\n'
