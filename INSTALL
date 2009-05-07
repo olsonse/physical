@@ -6,6 +6,8 @@ installation of some sort.  If you use Boost.build, using the c++ portion is
 easy.  CMake files also accompany the package and make it easier to use in a
 CMake environment.  
 
+Note that the CMake files are a work in progress.
+
 For the python implementation, just make sure that the python directory is
 added to your PYTHONPATH (however you choose do this).
 As an example, for bash,  you could add the following line to your
