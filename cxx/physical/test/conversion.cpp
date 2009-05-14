@@ -78,7 +78,11 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
     BOOST_CHECK_EQUAL( constant::k_E<si>::value,       constant::si::k_E);
     BOOST_CHECK_EQUAL( constant::k_E<atomic>::value,   1);
     BOOST_CHECK_EQUAL( constant::k_E<esu>::value,      1);
-  
+
+    /* check the default implementation of the constants (SHOULD be SI). */
+    BOOST_CHECK_EQUAL( constant::c<>::value,           constant::si::c);
+    BOOST_CHECK_EQUAL( constant::eV<>::value,          constant::si::eV);
+
     /* these should all equal '1' because the dimensions are supposed to be
      * explicitly in SI units, even for each unit system.  By having all
      * dimensions defined in terms of a single system (SI as is done here), it is

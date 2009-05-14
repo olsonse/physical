@@ -6,13 +6,25 @@
  *
  * */
 
-#ifndef physical_registry_h
-#define physical_registry_h
+#if ( defined(PHYSICAL_DATA_FOR_RUNTIME) && \
+     !defined(runtime_physical_registry_h) ) || \
+    (!defined(PHYSICAL_DATA_FOR_RUNTIME) && \
+     !defined(physical_registry_h) )
+
+#  if defined(PHYSICAL_DATA_FOR_RUNTIME)
+#    define runtime_physical_registry_h
+#  else
+#    define physical_registry_h
+#  endif
 
 
 #include <string>
 #include <map>
 #include <vector>
+
+
+#ifndef physical_registry_h_monkeywrench
+#define physical_registry_h_monkeywrench
 
 /** Just a useful set of tools to help with the registry problem. */
 namespace monkeywrench {
@@ -45,8 +57,12 @@ namespace monkeywrench {
             return "";
     }
 }
+#endif // physical_registry_h_monkeywrench
 
 
+#  if defined (PHYSICAL_DATA_FOR_RUNTIME)
+namespace runtime {
+#  endif
 
 namespace physical {
 
@@ -205,11 +221,8 @@ namespace physical {
     /* ****   END PHYSICAL QUANTITY REGISTRY **** */
 }
 
-/* import the registry into runtime as well. */
-namespace runtime {
-  namespace physical {
-    namespace registry = ::physical::registry;
-  }
-}
+#  if defined (PHYSICAL_DATA_FOR_RUNTIME)
+}/* namespace runtime. */
+#  endif
 
 #endif // physical_registry_h

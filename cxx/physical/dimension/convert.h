@@ -25,7 +25,7 @@ namespace runtime {
 
 namespace physical {
 
-  template < typename System, template <typename> class Dim >
+  template < typename System, template <typename,int> class Dim >
   struct DimQuantity {
     DimQuantity( const Quantity & q ) : value(q) {}
     operator Quantity&() { return value; }
@@ -34,15 +34,15 @@ namespace physical {
   };
 
 
-  template< typename To, typename From, template <typename> class Dim >
+  template< typename To, typename From, template <typename,int> class Dim >
   struct make_convert_ratio {
     static Quantity value;
   };
 
-  template< typename To, typename From, template <typename> class Dim >
-  Quantity make_convert_ratio<To,From,Dim>::value = Dim< From >::value / Dim< To >::value;
+  template< typename To, typename From, template <typename,int> class Dim >
+  Quantity make_convert_ratio<To,From,Dim>::value = Dim<From,0>::value / Dim<To,0>::value;
   
-  template< typename From, template <typename> class Dim >
+  template< typename From, template <typename,int> class Dim >
   inline Quantity convert_ratio( const system::id::SYSTEM toId ) {
     switch (toId) {
       case system::si::Id:
@@ -62,13 +62,13 @@ namespace physical {
     }
   }
 
-  template< typename From, template <typename> class Dim >
+  template< typename From, template <typename,int> class Dim >
   inline DimQuantity<From,Dim> convert( const DimQuantity<From,Dim> & q, const system::id::SYSTEM toId ) {
     DimQuantity<From,Dim> result( q.value * convert_ratio<From, Dim>(toId) );
     return result;
   }
 
-  template< typename To, typename From, template <typename> class Dim >
+  template< typename To, typename From, template <typename,int> class Dim >
   inline DimQuantity<From,Dim> convert( const DimQuantity<From,Dim> & q ) {
     DimQuantity<From,Dim> result( q.value * make_convert_ratio<To, From, Dim>::value );
     return result;

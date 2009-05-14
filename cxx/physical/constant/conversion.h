@@ -35,7 +35,7 @@ namespace physical {
     template < typename T >  \
     struct convert_##v##_from_si : make_convert_ratio<T,system::si,dims> {}; \
     /* definition of where the value is stored. */ \
-    template< typename T > \
+    template< typename T = system::si > \
     struct v { \
       static const Quantity value; \
     }; \

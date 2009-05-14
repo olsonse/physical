@@ -6,10 +6,22 @@
  * dependent dimensions and constants.
  */
 
-#ifndef physical_sysytem_h
-#define physical_sysytem_h
+#if ( defined(PHYSICAL_DATA_FOR_RUNTIME) && \
+     !defined(runtime_physical_system_h) ) || \
+    (!defined(PHYSICAL_DATA_FOR_RUNTIME) && \
+     !defined(physical_system_h) )
+
+#  if defined(PHYSICAL_DATA_FOR_RUNTIME)
+#    define runtime_physical_system_h
+#  else
+#    define physical_system_h
+#  endif
 
 #include <string>
+
+#  if defined (PHYSICAL_DATA_FOR_RUNTIME)
+namespace runtime {
+#  endif
 
 namespace physical {
   namespace system {
@@ -33,31 +45,29 @@ namespace physical {
     };
 
 
-#define make_sys(sys,label) \
-    typedef define<id::sys> sys; template<> const std::string sys::name = label;
+#define physical_make_sys(sys)   typedef define<id::sys> sys
 
-    make_sys(    si, "SI");
-    make_sys(atomic, "atomic");
+    physical_make_sys(si);
+    physical_make_sys(atomic);
 
     /* *** CGS UNIT SYSTEMS *** */
     /** Basic CGS unit system -- no electromagnetic dimensions. */
-    make_sys(   cgs, "cgs");
-    make_sys(   esu, "esu");
-    make_sys(   emu, "emu");
+    physical_make_sys(cgs);
+    physical_make_sys(esu);
+    physical_make_sys(emu);
     typedef esu electrostatic;
     typedef emu electromagnetic;
 
-    make_sys(gaussian, "gaussian");
-    make_sys(heaviside_lorentz, "heaviside_lorentz");
+    physical_make_sys(gaussian);
+    physical_make_sys(heaviside_lorentz);
     typedef heaviside_lorentz hlu;
+
+#undef physical_make_sys
   }/* namespace physical::system */
 }/* namespace physical */
 
-/* import the system tags into runtime as well. */
-namespace runtime {
-  namespace physical {
-    namespace system = ::physical::system;
-  }
-}
+#  if defined (PHYSICAL_DATA_FOR_RUNTIME)
+}/* namespace runtime. */
+#  endif
 
 #endif // physical_sysytem_h

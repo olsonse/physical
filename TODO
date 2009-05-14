@@ -4,3 +4,6 @@
     'from physical::unit import *'.
     This change would be relevant for both the c++ and python versions.
 
+2.  I'd like to come up with a cleaner way to separate the runtime and
+    non-runtime portions of the library so that a more appropriate "#include"
+    interface can be presented to the user. 

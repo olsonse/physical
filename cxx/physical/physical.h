@@ -923,6 +923,9 @@ namespace runtime {
 #  endif
 
 _OPEN_NAMESPACE(physical_1,physical) {
+    /* just to make sure that the namespace exists if dimension* was not
+     * included. */
+    namespace dimension { }
     _ALIAS_NAMESPACE(dimensions, dimension);
 
     // #### BEGIN OF CONSTANT CREATION #### #

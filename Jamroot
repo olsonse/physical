@@ -41,11 +41,12 @@ project /physical
     # : build-dir build
     ;
 
-alias physical
+lib physical
     : # sources
+      [ glob cxx/physical/*.cpp ]
       [ glob cxx/physical/*.h ]
       [ glob cxx/physical/calc/*.h ]
-    : # no build requirements
+    : <link>static
     : # no default build
     : <include>cxx ;
 

@@ -7,7 +7,6 @@
 #include <string>
 
 #include <physical/quantity.h>
-#include <physical/registry.h>
 
 namespace runtime {
     namespace physical { namespace calc {

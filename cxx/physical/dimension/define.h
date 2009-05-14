@@ -47,12 +47,12 @@ namespace physical {
 
   namespace dimension {
 #define PHYSICAL_DIM_W_VAL(D,VAL) \
-    template< typename T > \
+    template< typename T, int U = 0 > \
     struct D { \
       static const Quantity value; \
     }; \
-    template < typename T > \
-    const Quantity D<T>::value = VAL
+    template < typename T, int U > \
+    const Quantity D<T,U>::value = VAL
 
 #define PHYSICAL_DIM(D) \
       PHYSICAL_DIM_W_VAL(D,T::DIMENSION_DOES_NOT_EXIST_FOR_THIS_SYSTEM)
@@ -115,114 +115,114 @@ namespace physical {
 
 
     /** Exponentiates a dimension by an integer power. */
-    template < template <typename> class dim, int power >
+    template < template <typename,int> class dim, int power >
     struct exp_dim {
-      template < typename T >
+      template < typename T, int U >
       struct type {
         static const Quantity value;
       };
     };
 
-    template < template <typename> class dim, int power >
-    template < typename T >
-    const Quantity exp_dim<dim,power>::type<T>::value = pow(dim<T>::value,power);
+    template < template <typename,int> class dim, int power >
+    template < typename T, int U >
+    const Quantity exp_dim<dim,power>::type<T,U>::value = pow(dim<T,U>::value,power);
 
 
     /** Exponentiation specialization for power = -1. */
-    template < template <typename> class dim>
+    template < template <typename,int> class dim>
     struct exp_dim<dim,-1> {
-      template < typename T >
+      template < typename T, int U >
       struct type {
         static const Quantity value;
       };
     };
-    template < template <typename> class dim >
-    template < typename T >
-    const Quantity exp_dim<dim,-1>::type<T>::value = 1./dim<T>::value;
+    template < template <typename,int> class dim >
+    template < typename T, int U >
+    const Quantity exp_dim<dim,-1>::type<T,U>::value = 1./dim<T,U>::value;
 
     /** Exponentiation specialization for power = -2. */
-    template < template <typename> class dim>
+    template < template <typename,int> class dim>
     struct exp_dim<dim,-2> {
-      template < typename T >
+      template < typename T, int U >
       struct type {
         static const Quantity value;
       };
     };
-    template < template <typename> class dim >
-    template < typename T >
-    const Quantity exp_dim<dim,-2>::type<T>::value = 1./SQR(dim<T>::value);
+    template < template <typename,int> class dim >
+    template < typename T, int U >
+    const Quantity exp_dim<dim,-2>::type<T,U>::value = 1./SQR(dim<T,U>::value);
 
     /** Exponentiation specialization for power = -3. */
-    template < template <typename> class dim>
+    template < template <typename,int> class dim>
     struct exp_dim<dim,-3> {
-      template < typename T >
+      template < typename T, int U >
       struct type {
         static const Quantity value;
       };
     };
-    template < template <typename> class dim >
-    template < typename T >
-    const Quantity exp_dim<dim,-3>::type<T>::value = 1./CUBE(dim<T>::value);
+    template < template <typename,int> class dim >
+    template < typename T, int U >
+    const Quantity exp_dim<dim,-3>::type<T,U>::value = 1./CUBE(dim<T,U>::value);
 
     /** Exponentiation specialization for power = -4. */
-    template < template <typename> class dim>
+    template < template <typename,int> class dim>
     struct exp_dim<dim,-4> {
-      template < typename T >
+      template < typename T, int U >
       struct type {
         static const Quantity value;
       };
     };
-    template < template <typename> class dim >
-    template < typename T >
-    const Quantity exp_dim<dim,-4>::type<T>::value = 1./POW4(dim<T>::value);
+    template < template <typename,int> class dim >
+    template < typename T, int U >
+    const Quantity exp_dim<dim,-4>::type<T,U>::value = 1./POW4(dim<T,U>::value);
 
     /** Exponentiation specialization for power =  1. */
-    template < template <typename> class dim>
+    template < template <typename,int> class dim>
     struct exp_dim<dim,1> {
-      template < typename T >
+      template < typename T, int U >
       struct type {
         static const Quantity value;
       };
     };
-    template < template <typename> class dim >
-    template < typename T >
-    const Quantity exp_dim<dim,1>::type<T>::value = dim<T>::value;
+    template < template <typename,int> class dim >
+    template < typename T, int U >
+    const Quantity exp_dim<dim,1>::type<T,U>::value = dim<T,U>::value;
 
     /** Exponentiation specialization for power =  2. */
-    template < template <typename> class dim>
+    template < template <typename,int> class dim>
     struct exp_dim<dim,2> {
-      template < typename T >
+      template < typename T, int U >
       struct type {
         static const Quantity value;
       };
     };
-    template < template <typename> class dim >
-    template < typename T >
-    const Quantity exp_dim<dim,2>::type<T>::value = SQR(dim<T>::value);
+    template < template <typename,int> class dim >
+    template < typename T, int U >
+    const Quantity exp_dim<dim,2>::type<T,U>::value = SQR(dim<T,U>::value);
 
     /** Exponentiation specialization for power =  3. */
-    template < template <typename> class dim>
+    template < template <typename,int> class dim>
     struct exp_dim<dim,3> {
-      template < typename T >
+      template < typename T, int U >
       struct type {
         static const Quantity value;
       };
     };
-    template < template <typename> class dim >
-    template < typename T >
-    const Quantity exp_dim<dim,3>::type<T>::value = CUBE(dim<T>::value);
+    template < template <typename,int> class dim >
+    template < typename T, int U >
+    const Quantity exp_dim<dim,3>::type<T,U>::value = CUBE(dim<T,U>::value);
 
     /** Exponentiation specialization for power =  4. */
-    template < template <typename> class dim>
+    template < template <typename,int> class dim>
     struct exp_dim<dim,4> {
-      template < typename T >
+      template < typename T, int U >
       struct type {
         static const Quantity value;
       };
     };
-    template < template <typename> class dim >
-    template < typename T >
-    const Quantity exp_dim<dim,4>::type<T>::value = POW4(dim<T>::value);
+    template < template <typename,int> class dim >
+    template < typename T, int U >
+    const Quantity exp_dim<dim,4>::type<T,U>::value = POW4(dim<T,U>::value);
 
 
 
@@ -233,47 +233,47 @@ namespace physical {
      * from one unit system to another, local to physical::constant::detail::*
      * we define the aggregate dimension <code>sigma_SB_dims</code> as:<br>
      \verbatim
-       template < typename T >
+       template < typename T, int U >
        struct sigma_SB_dims :
          make_dim<
            dimension::power,
            exp_dim<dimension::length,-2>::type,
            exp_dim<dimension::temperature,-4>::type
-         >::dim<T> {};
+         >::dim<T,U> {};
      \endverbatim
      */
-    template < template <typename> class D0,
-               template <typename> class D1 = unity,
-               template <typename> class D2 = unity,
-               template <typename> class D3 = unity,
-               template <typename> class D4 = unity,
-               template <typename> class D5 = unity,
-               template <typename> class D6 = unity,
-               template <typename> class D7 = unity,
-               template <typename> class D8 = unity,
-               template <typename> class D9 = unity >
+    template < template <typename,int> class D0,
+               template <typename,int> class D1 = unity,
+               template <typename,int> class D2 = unity,
+               template <typename,int> class D3 = unity,
+               template <typename,int> class D4 = unity,
+               template <typename,int> class D5 = unity,
+               template <typename,int> class D6 = unity,
+               template <typename,int> class D7 = unity,
+               template <typename,int> class D8 = unity,
+               template <typename,int> class D9 = unity >
     struct make_dim {
-      template < typename T >
+      template < typename T, int U >
       struct dim {
         static const Quantity value;
       };
     };
 
-    template < template <typename> class D0,
-               template <typename> class D1,
-               template <typename> class D2,
-               template <typename> class D3,
-               template <typename> class D4,
-               template <typename> class D5,
-               template <typename> class D6,
-               template <typename> class D7,
-               template <typename> class D8,
-               template <typename> class D9 >
-    template < typename T >
-    const Quantity make_dim<D0,D1,D2,D3,D4,D5,D6,D7,D8,D9>::dim<T>::value =
-      D0<T>::value * D1<T>::value * D2<T>::value * D3<T>::value *
-      D4<T>::value * D5<T>::value * D6<T>::value * D7<T>::value *
-      D8<T>::value * D9<T>::value;
+    template < template <typename,int> class D0,
+               template <typename,int> class D1,
+               template <typename,int> class D2,
+               template <typename,int> class D3,
+               template <typename,int> class D4,
+               template <typename,int> class D5,
+               template <typename,int> class D6,
+               template <typename,int> class D7,
+               template <typename,int> class D8,
+               template <typename,int> class D9 >
+    template < typename T, int U >
+    const Quantity make_dim<D0,D1,D2,D3,D4,D5,D6,D7,D8,D9>::dim<T,U>::value =
+      D0<T,U>::value * D1<T,U>::value * D2<T,U>::value * D3<T,U>::value *
+      D4<T,U>::value * D5<T,U>::value * D6<T,U>::value * D7<T,U>::value *
+      D8<T,U>::value * D9<T,U>::value;
   }/* namespace physical::dimension */
   
 #undef PHYSICAL_DIM_W_VAL

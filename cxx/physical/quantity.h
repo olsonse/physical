@@ -22,7 +22,9 @@
 #include <physical/detail/print_coeff.h>
 #include <physical/detail/ConvertCoeff.h>
 #include <physical/except.h>
-#include <physical/registry.h>
+#define PHYSICAL_DATA_FOR_RUNTIME
+#  include <physical/registry.h>
+#undef PHYSICAL_DATA_FOR_RUNTIME
 
 
 #include <complex>
