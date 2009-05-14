@@ -10,6 +10,8 @@
 %* including British spelling of various units and so on.  This version is the
 %* unaltered version from E. R. Tisdale.
 %*
+%* Copyright 2005-2008  Spencer E. Olson
+%*
 %* */
 
 %namespace physical {
