@@ -1,0 +1,156 @@
+------------------------------------------------------------------------
+r763 | olsonse | 2009-05-14 12:25:29 -0600 (Thu, 14 May 2009) | 1 line
+
+added author info on octave stuff
+------------------------------------------------------------------------
+r762 | olsonse | 2009-05-14 12:14:54 -0600 (Thu, 14 May 2009) | 1 line
+
+Tweaked template definitions to avoid unit system definitions begin fully defined and resulting in 'multiple definition' link errors
+------------------------------------------------------------------------
+r759 | olsonse | 2009-05-07 16:09:49 -0600 (Thu, 07 May 2009) | 1 line
+
+added cmake files.  I'm not sure how well they will work yet...
+------------------------------------------------------------------------
+r757 | olsonse | 2009-05-07 14:12:53 -0600 (Thu, 07 May 2009) | 1 line
+
+updated documentation a little.
+------------------------------------------------------------------------
+r756 | olsonse | 2009-05-07 14:05:20 -0600 (Thu, 07 May 2009) | 1 line
+
+fixed make_dim and exp_dim template meta functions.  All tests run (and will only a tiny exception pass).  Examples all compile
+------------------------------------------------------------------------
+r755 | olsonse | 2009-05-07 02:34:17 -0600 (Thu, 07 May 2009) | 15 lines
+
+"major update of physical library
+
+1.  unit systems have been implemented better.
+    I currently have si, atomic, cgs, esu, emu, gaussian, heaviside_lorenzt.
+    Both gaussian and heaviside_lorentz are still incomplete as I need to define
+    charge for these two systems.
+    cgs does not have charge defined and should not in the future since plain
+    cgs does not necessarily define the electric/magnetic units.
+2.  templated conversion between systems has been implemented
+3.  "const Quantity" type of constants have been moved to
+    physical::constant::si:: and templated counterparts that do automatic
+    conversion into a desired unit system have been placed in
+    physical::constant:: 
+
+
+------------------------------------------------------------------------
+r754 | olsonse | 2009-05-07 01:05:10 -0600 (Thu, 07 May 2009) | 1 line
+
+added quantity<T>::getCoeff() which returns a constant reference to the coeff. Not sure this is really needed.
+------------------------------------------------------------------------
+r753 | olsonse | 2009-05-07 00:59:16 -0600 (Thu, 07 May 2009) | 1 line
+
+fixed small errors in build includes and added a parameterless quantity<T>::getCoeff<T>() function
+------------------------------------------------------------------------
+r751 | olsonse | 2009-04-30 13:08:58 -0600 (Thu, 30 Apr 2009) | 1 line
+
+changed comparison operations for std::complex to sort by real first and then by imag second.
+------------------------------------------------------------------------
+r748 | olsonse | 2009-04-30 11:38:56 -0600 (Thu, 30 Apr 2009) | 1 line
+
+Fixed portions of lib that were not tested in either unit-tests or examples, but by third-party code.
+------------------------------------------------------------------------
+r747 | olsonse | 2009-04-30 10:08:47 -0600 (Thu, 30 Apr 2009) | 1 line
+
+tweaked print_coeff for output of imaginary components.
+------------------------------------------------------------------------
+r746 | olsonse | 2009-04-30 09:36:05 -0600 (Thu, 30 Apr 2009) | 1 line
+
+tweaked print_coeff for output of imaginary components.
+------------------------------------------------------------------------
+r745 | olsonse | 2009-04-30 07:48:05 -0600 (Thu, 30 Apr 2009) | 1 line
+
+added real(),imag() functions
+------------------------------------------------------------------------
+r744 | olsonse | 2009-04-30 00:06:57 -0600 (Thu, 30 Apr 2009) | 1 line
+
+physical base type can now be float, double, complex<float>, and complex<double> (default).
+------------------------------------------------------------------------
+r712 | olsonse | 2009-03-04 14:12:12 -0700 (Wed, 04 Mar 2009) | 1 line
+
+small fix in call to overloaded std::pow function
+------------------------------------------------------------------------
+r711 | olsonse | 2009-03-04 14:05:31 -0700 (Wed, 04 Mar 2009) | 5 lines
+
+Fixed a printing error for units in the denominator (was not printing
+exponents).
+Added LATEX_PRINT and LATEX_ONELINE_PRINT print modes for units.
+Added different types of units printing in testInteractive units program.
+
+------------------------------------------------------------------------
+r710 | olsonse | 2009-02-28 22:55:24 -0700 (Sat, 28 Feb 2009) | 1 line
+
+physical/cxx/physical/unit_system.h:  added a few templated conversion helpers
+------------------------------------------------------------------------
+r707 | olsonse | 2009-02-28 15:56:53 -0700 (Sat, 28 Feb 2009) | 9 lines
+
+cxx/physical/quantity.h:  small spelling check.
+cxx/physical/unit_system.h:
+    Added macro for auto-creating a struct physical::units::UNITSYSTEM.  This
+    struct has a bunch of static inline functions that return the appropriate
+    values from the physical::unit::system namespace.  
+    For example, physical::units::SI is a structure with inline functions to
+    return values, such as physical::unit::system::SI::length.
+
+
+------------------------------------------------------------------------
+r705 | olsonse | 2009-02-25 16:12:29 -0700 (Wed, 25 Feb 2009) | 1 line
+
+Changed simple c-cast to static_cast in cxx/physical/calc/BaseCalc.h
+------------------------------------------------------------------------
+r698 | olsonse | 2009-02-12 11:01:06 -0700 (Thu, 12 Feb 2009) | 6 lines
+
+Added runtime:: prefix to physical:: for the runtime portion. 
+Now you can include both physical.h for the static physical library and
+quantity.h for the runtime library in the same file without namespace
+collisions.
+
+
+------------------------------------------------------------------------
+r696 | olsonse | 2009-02-12 10:29:34 -0700 (Thu, 12 Feb 2009) | 1 line
+
+fixed some linking problems
+------------------------------------------------------------------------
+r695 | olsonse | 2009-02-09 05:09:07 -0700 (Mon, 09 Feb 2009) | 1 line
+
+add tiny comment
+------------------------------------------------------------------------
+r694 | olsonse | 2009-02-09 04:53:47 -0700 (Mon, 09 Feb 2009) | 1 line
+
+merged new physical package from branch:  new c++ package
+------------------------------------------------------------------------
+r651 | olsonse | 2009-01-07 13:09:12 -0700 (Wed, 07 Jan 2009) | 1 line
+
+restructuring repository
+------------------------------------------------------------------------
+r612 | olsonse | 2008-11-05 23:20:10 -0700 (Wed, 05 Nov 2008) | 1 line
+
+fixed Quantity::unitsMatch function and made it simpler as well
+------------------------------------------------------------------------
+r604 | olsonse | 2008-09-30 17:20:21 -0600 (Tue, 30 Sep 2008) | 5 lines
+
+constant.py:
+    Added names to various constants.
+Quantity.py:
+    Added ability to give names to physical.Quantity instances.
+
+------------------------------------------------------------------------
+r602 | olsonse | 2008-09-30 17:12:09 -0600 (Tue, 30 Sep 2008) | 1 line
+
+importing python physical stuff
+------------------------------------------------------------------------
+r601 | olsonse | 2008-09-30 17:10:41 -0600 (Tue, 30 Sep 2008) | 1 line
+
+importing python physical stuff
+------------------------------------------------------------------------
+r600 | olsonse | 2008-09-30 17:10:19 -0600 (Tue, 30 Sep 2008) | 1 line
+
+importing python physical stuff
+------------------------------------------------------------------------
+r599 | olsonse | 2008-09-30 17:08:00 -0600 (Tue, 30 Sep 2008) | 1 line
+
+importing python physical stuff
+------------------------------------------------------------------------
