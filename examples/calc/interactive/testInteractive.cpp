@@ -8,9 +8,11 @@
  * - 2007-2009 Spencer E. Olson
  * */
 
+/* version info updated 23 june 2009 */
+
 /** Intro message displayed in interactive mode. */
 const char * opening_msg =
-"physical::calculator: $Id$\n"
+"physical::calculator: $Rev$\n"
 "Perhaps it might even rival with GNU units. :-)\n"
 "\n"
 "- 2007-2009 Spencer E. Olson\n"
