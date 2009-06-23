@@ -226,6 +226,7 @@ class InfixCalcEngine : public boost::spirit::grammar<InfixCalcEngine> {
 
             exp_factor
                 = function[  exp_factor.value = arg1]
+                | new_unit[  exp_factor.value = arg1]
                 | group   [  exp_factor.value = arg1]
                 | literal [  exp_factor.value = arg1]
                 | identifier[exp_factor.value = bind(&InfixCalcEngine::lookup_val)(self, arg1)]
@@ -234,6 +235,15 @@ class InfixCalcEngine : public boost::spirit::grammar<InfixCalcEngine> {
             function
                 = identifier[function.name = arg1]
                   >> group[function.value = bind(&InfixCalcEngine::exec_func)(self, function.name,arg1)]
+                ;
+
+            new_unit
+                = (
+                    lexeme_d[ str_p("new_unit") ]
+                    >> '('
+                    >> str[ new_unit.name = arg1 ]
+                    >> ')'
+                  ) [ new_unit.value = bind(&InfixCalcEngine::create_unit)(self, new_unit.name)]
                 ;
            
             // The longest_d directive is built-in to tell the parser to make
@@ -261,7 +271,8 @@ class InfixCalcEngine : public boost::spirit::grammar<InfixCalcEngine> {
         boost::spirit::rule<ScannerT>                                statement,
                                                                      command;
         boost::spirit::rule<ScannerT, assignment_closure::context_t> assignment,
-                                                                     function;
+                                                                     function,
+                                                                     new_unit;
         boost::spirit::rule<ScannerT, string_closure::context_t>     identifier,
                                                                      str;
         boost::spirit::rule<ScannerT, sym_closure::context_t>        sym_command;
@@ -301,6 +312,10 @@ class InfixCalcEngine : public boost::spirit::grammar<InfixCalcEngine> {
                     throw undefined_symbol("???",name);
             }
         }
+    }
+
+    Quantity create_unit( const std::string & name ) const {
+      return Quantity(1, units_pair(name, 1) );
     }
 
     Quantity exec_func(const std::string& name, const Quantity & arg) const {
@@ -374,6 +389,12 @@ class InfixCalcEngine : public boost::spirit::grammar<InfixCalcEngine> {
                      "\t+, -                             : Level 1 precedence\n"
                      "\t*, /, %                          : Level 2 precedence\n"
                      "\t^                                : Level 3 precedence\n"
+                     "\n"
+                     "non-math builtin functions supported:\n"
+                     "\tnew_unit('unit-name')            : Creates a new fundamental unit called 'unit-name.'\n"
+                     "\t                                   This builtin function returns an\n"
+                     "\t                                   expression that can be used like\n"
+                     "\t                                   any other expression.\n"
                      "\n"
                      "Additional information:\n"
                      "\tUnary functions are supported (such as sin, cos, tan, exp, ...)\n"
