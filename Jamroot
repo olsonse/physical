@@ -29,8 +29,8 @@ echo "" ;
 
 constant VERSION : [ MATCH "\\$Revision: *([0-9]*) *\\$" : "$Revision: 636 $" ] ;
 
-lib boost_regex : : <name>boost_regex ;
-lib boost_unit_test_framework : : <name>boost_unit_test_framework <link>static ;
+lib boost_regex : : <name>boost_regex-mt ;
+lib boost_unit_test_framework : : <name>boost_unit_test_framework-mt <link>static ;
 
 project /physical
     : requirements

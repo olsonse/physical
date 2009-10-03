@@ -8,7 +8,7 @@ typedef runtime::physical::calc::symbol sym;
 
 using runtime::physical::calc::symbol;
 
-using physical::system::si;
+using runtime::physical::system::si;
 
 int main(int argc, char *argv[]) {
     try {
