@@ -6,7 +6,7 @@ import testing ; # for unit tests
 project /physical/unit-tests
     : requirements
         <library>/physical//physical
-        <library>/physical//boost_unit_test_framework
+        <library>/boost//unit_test_framework
     # : build-dir build
     ;
 

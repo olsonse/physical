@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
    * the automatic casting does not work. */
   BOOST_AUTO_TEST_CASE( DimQuantity_cast_runtime ) {
     using namespace runtime::physical;
-    using system::si;
+    using runtime::physical::system::si;
     namespace dim = dimension;
 
     DimQuantity<si,dim::velocity> dsivel(Quantity(1.0));

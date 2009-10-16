@@ -11,6 +11,7 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
 
   BOOST_AUTO_TEST_CASE( DimQuantity_cast_double ) {
     using namespace physical;
+    namespace system = physical::system;
     using system::si;
     using system::atomic;
     using system::cgs;
@@ -30,6 +31,7 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
 
   BOOST_AUTO_TEST_CASE( DimQuantity_cast_runtime ) {
     using namespace runtime::physical;
+    namespace system = runtime::physical::system;
     using system::si;
     using system::atomic;
     using system::cgs;
@@ -52,6 +54,7 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
 
   BOOST_AUTO_TEST_CASE( conversion ) {
     using namespace physical;
+    namespace system = physical::system;
     using system::si;
     using system::atomic;
     using system::cgs;
@@ -153,6 +156,7 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
 
   BOOST_AUTO_TEST_CASE( conversion_test ) {
     using namespace runtime::physical;
+    namespace system = runtime::physical::system;
     using system::si;
     using system::atomic;
     using system::cgs;
@@ -181,6 +185,7 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
 
   BOOST_AUTO_TEST_CASE( conversion_w_runtime ) {
     using namespace runtime::physical;
+    namespace system = runtime::physical::system;
     using system::si;
     using system::atomic;
     using system::cgs;
