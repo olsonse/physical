@@ -75,12 +75,15 @@ namespace runtime {
       struct print_coeff< C, LATEX_PRINT> {
         std::string operator() ( const C & coeff ) {
           std::ostringstream out;
-          int decade = int(std::log10(coeff));
-          C sig_figs = coeff / std::pow(static_cast<C>(10),decade);
+          int decade = int( std::log10( std::abs(coeff) ) );
 
-          out << sig_figs;
-          if (decade > 1)
-              out << " \\times 10^{" << decade << "} ";
+          if ( std::abs(decade) >= 3) {
+            C sig_figs = coeff / std::pow(static_cast<C>(10),decade);
+            out << sig_figs;
+            out << " \\times 10^{" << decade << "}";
+          } else {
+            out << coeff;
+          }
           return out.str();
         }
       };

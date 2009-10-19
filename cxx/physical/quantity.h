@@ -800,6 +800,16 @@ namespace runtime {
         return quantity<T>(q.coeff * f, q.units);
     }
 
+    /** Self-multiplication operator between a quantity and a scalar. */
+    template<class T>
+    inline quantity<T> & operator*=(quantity<T> & q, const typename quantity<T>::coeff_type & f) {
+        q.coeff *= f;
+        /* There is no point in trying to keep the name now. */
+        q.name.clear();
+        return q;
+    }
+
+
     /** Division operator between a quantity and a scalar. */
     template<class T>
     inline quantity<T> operator/(const quantity<T> & q, const typename quantity<T>::coeff_type & f) {
@@ -810,6 +820,15 @@ namespace runtime {
     template<class T>
     inline quantity<T> operator/(const typename quantity<T>::coeff_type & f, const quantity<T> & q) {
         return quantity<T>( f / q.coeff, pow(q.units,(int)-1) );
+    }
+
+    /** Self-division operator between a quantity and a scalar. */
+    template<class T>
+    inline quantity<T> & operator/=(quantity<T> & q, const typename quantity<T>::coeff_type & f) {
+        q.coeff /= f;
+        /* There is no point in trying to keep the name now. */
+        q.name.clear();
+        return q;
     }
 
     template < typename T >

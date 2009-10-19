@@ -68,10 +68,10 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
     BOOST_CHECK_EQUAL( constant::c<si>::value,         constant::si::c);
     BOOST_CHECK_EQUAL( constant::c<cgs>::value,        100*constant::si::c);
     BOOST_CHECK_EQUAL( constant::c<atomic>::value,     1./constant::si::alpha);
-    BOOST_CHECK_EQUAL( constant::eV<atomic>::value,    constant::si::eV/constant::si::Hartree);
+    BOOST_CHECK_CLOSE( constant::eV<atomic>::value,    constant::si::eV/constant::si::Hartree, 1e-7);
     BOOST_CHECK_EQUAL( constant::alpha<si>::value,     constant::si::alpha);
     BOOST_CHECK_EQUAL( constant::alpha<atomic>::value, constant::si::alpha);
-    BOOST_CHECK_EQUAL( constant::e<atomic>::value,     1.0);
+    BOOST_CHECK_CLOSE( constant::e<atomic>::value,     1.0, 1e-13);
     BOOST_CHECK_EQUAL( constant::e<esu>::value,        constant::si::e / unit::statCoulomb);
     BOOST_CHECK_EQUAL( constant::epsilon0<si>::value,  constant::si::epsilon0);
     BOOST_CHECK_EQUAL( constant::epsilon0<esu>::value, constant::si::epsilon0 /
@@ -79,8 +79,8 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
                                                         (unit::statVolt *
                                                          unit::cm)));
     BOOST_CHECK_EQUAL( constant::k_E<si>::value,       constant::si::k_E);
-    BOOST_CHECK_EQUAL( constant::k_E<atomic>::value,   1);
-    BOOST_CHECK_EQUAL( constant::k_E<esu>::value,      1);
+    BOOST_CHECK_CLOSE( constant::k_E<atomic>::value,   1, 1e-7);
+    BOOST_CHECK_CLOSE( constant::k_E<esu>::value,      1, 1e-5);
 
     /* check the default implementation of the constants (SHOULD be SI). */
     BOOST_CHECK_EQUAL( constant::c<>::value,           constant::si::c);
@@ -113,13 +113,13 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
                        constant::si::e * constant::si::Hartree /
                        constant::si::h_bar );
     BOOST_CHECK_EQUAL( dim::electric::potential<esu>::value,  unit::statVolt );
-    BOOST_CHECK_EQUAL( dim::electric::potential<atomic>::value,
-                       constant::si::Hartree / constant::si::e );
-    BOOST_CHECK_EQUAL( dim::magnetic::flux<atomic>::value, 
-                       (constant::si::h_bar / constant::si::e) );
-    BOOST_CHECK_EQUAL( dim::magnetic::field<atomic>::value, 
+    BOOST_CHECK_CLOSE( dim::electric::potential<atomic>::value,
+                       constant::si::Hartree / constant::si::e, 1e-7 );
+    BOOST_CHECK_CLOSE( dim::magnetic::flux<atomic>::value, 
+                       (constant::si::h_bar / constant::si::e), 1e-7 );
+    BOOST_CHECK_CLOSE( dim::magnetic::field<atomic>::value, 
                        (constant::si::h_bar / constant::si::e) /
-                       SQR(constant::si::a_0) );
+                       SQR(constant::si::a_0), 1e-7 );
     BOOST_CHECK_EQUAL( dim::magnetic::flux<esu>::value,       unit::statMaxwell );
     BOOST_CHECK_EQUAL( dim::magnetic::field<esu>::value,
                        unit::statMaxwell / SQR(unit::cm) );
@@ -133,15 +133,17 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
 
 
     /* this is what the aggregate dimension conversion should do. */
-    BOOST_CHECK_EQUAL( ( make_convert_ratio<esu,si,dim::electric::capacitance>::value /
+    BOOST_CHECK_CLOSE( ( make_convert_ratio<esu,si,dim::electric::capacitance>::value /
                          make_convert_ratio<esu,si,dim::length>::value
                        ),
-                       1. / ((unit::statCoul / unit::statVolt ) / unit::cm)
+                       1. / ((unit::statCoul / unit::statVolt ) / unit::cm),
+                       1e-13
                      );
 
-    BOOST_CHECK_EQUAL(
+    BOOST_CHECK_CLOSE(
       ( make_convert_ratio<esu,si,constant::detail::capacitance_per_length>::value ),
-      1. / ((unit::statCoul / unit::statVolt ) / unit::cm)
+      1. / ((unit::statCoul / unit::statVolt ) / unit::cm),
+      1e-13
     );
   
     /* This tests the runtime conversion selection function. */
@@ -149,6 +151,11 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
   }
 
 
+
+#if 0
+  THis is commented out right now because it is unclear how this actually helps,
+  although, as indicated in the comment below, I have used this in debugging.  I
+  think there could have been better tests written.  
 
   /* Although I don't think that the conversion stuff is very useful for the
    * runtime component of this library, the following tests have been helpful in
@@ -164,8 +171,9 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
     using system::emu;
     namespace dim = dimension;
 
-    BOOST_CHECK_EQUAL( constant::e<atomic>::value,
-                       constant::e<si>::value / ::physical::constant::si::e );
+    BOOST_CHECK_CLOSE( constant::e<atomic>::value.getCoeff().real(),
+                       (constant::e<si>::value / ::physical::constant::si::e).getCoeff().real(),
+                       1e-13 );
     //BOOST_CHECK_EQUAL( constant::k_E<atomic>::value, unit::A * unit::s );
   
     std::cout << "e<atomic>:  " <<  constant::e<atomic>::value << std::endl;
@@ -283,6 +291,7 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
       1e-5*dim::force<si>::value
     );
   }
+#endif
 
 BOOST_AUTO_TEST_SUITE_END();
 
