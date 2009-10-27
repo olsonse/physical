@@ -4,6 +4,7 @@
 
 #include <complex>
 #include <string>
+#include <cstdlib>
 
 namespace runtime {
   namespace physical {
