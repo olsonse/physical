@@ -110,7 +110,8 @@ alias runtime
     : physical
     : # no build requirements
     : # no default build
-    : <library>/boost//regex/<link>static ;
+    : <library>/boost//regex/<link>static
+    ;
 
 feature phys-type : complex cfloat double float : composite ;
 feature.compose <phys-type>complex : <define>RUNTIME_PHYSICAL_QUANTITY=\"std::complex<double>\" ;

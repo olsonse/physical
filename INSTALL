@@ -1,28 +1,80 @@
 Installation Instructions
 *************************
 
-Because of the change to the Boost.build system, I still need to implement
-installation of some sort.  If you use Boost.build, using the c++ portion is
-easy.  CMake files also accompany the package and make it easier to use in a
-CMake environment.  
+C++:
+  This project uses the Boost.Build system which automatically tracks
+  link, include, and other dependencies among any number of libraries and
+  projects.  Except for using the (unfinished) CMake build configuration, these
+  instructions assume that you have Boost.Build installed on your system.  
 
-Note that the CMake files are a work in progress.
+  General Install:
+    These instructions are for installing this software into a standard layout
+    where libraries are installed to  <prefix>/lib
+    and headers are installed to      <prefix>/include
+    DEFAULT:  <prefix> = /usr/local
 
-For the python implementation, just make sure that the python directory is
-added to your PYTHONPATH (however you choose do this).
-As an example, for bash,  you could add the following line to your
-.bash_profile file:
-export PYTHONPATH=":/PATH/TO/PHYSICAL-PACKAGE/python:"
+    For a simple install, just do:
+    
+        bjam install
+    
+    To change the installation path, use
+    
+        bjam --prefix=/path/to/install/into/ install
+    
+    For help on other options, execute
+    
+        bjam --help
 
 
-The gnuplot 'port' is not the most elegant (i.e. the namespaces are just
-tacked onto the names, such as 'arc_centesimal_minute' instead of
-'arc::centesimal::minute' but it has been handy for me.
+  Boost.Build:
+    If you use Boost.Build, integrating this library into your own project is
+    the most easy.  You simply, include a line like:
+
+        use-project /physical : path/to/physical ;
+
+    where the path/to/physical path can be either relative or absolute.  
+    This library has two sub-libraries that are useful and which will
+    invoke the proper linking to other libraries such as Boost.Regex.
+
+        /physical//physical : does NOT invoke linking to Boost.Regex
+        /physical//runtime  : DOES invoke linking to Boost.Regex
+
+  CMake:
+    CMake files also accompany the package and make it easier to use in a
+    CMake environment.  To use in a CMake environment, just add appropriate
+    lines to your master CMakeLists.txt file, such as
+
+        add_subdirectory(physical)
+
+    You will also have to include the proper line for the include paths, such
+    as:
+        include_directories(
+          ${CMAKE_SOURCE_DIR}/path/to/your/code
+          ${CMAKE_SOURCE_DIR}/physical/cxx
+        )
+
+    NOTE:  the CMake files are a work in progress and may not work yet.
 
 
-For the octave/matlab version, you only have to run the 'physical.m' script
-to get all of the units/contants loaded into memory as variables.  The
-namespaces are loaded as structs, except that the physical::unit(s) and
-physical::constant(s) prefixes are removed (perhaps this should not be the
-case, but oh well).
+
+PYTHON:
+  For the python implementation, just make sure that the python directory is
+  added to your PYTHONPATH (however you choose do this).  As an example, for
+  bash,  you could add the following line to your .bash_profile file:
+
+    export PYTHONPATH=":/PATH/TO/PHYSICAL-PACKAGE/python:"
+
+
+GNUPLOT:
+  The gnuplot 'port' is not the most elegant (i.e. the namespaces are just
+  tacked onto the names, such as 'arc_centesimal_minute' instead of
+  'arc::centesimal::minute' but it has been handy for me. 
+
+
+OCTAVE/MATLAB:
+  For the octave/matlab version, you only have to run the 'physical.m' script to
+  get all of the units/contants loaded into memory as variables.  The namespaces
+  are loaded as structs, except that the physical::unit(s) and
+  physical::constant(s) prefixes are removed (perhaps this should not be the
+  case, but oh well). 
 

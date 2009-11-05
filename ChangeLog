@@ -1,156 +1,342 @@
-------------------------------------------------------------------------
-r763 | olsonse | 2009-05-14 12:25:29 -0600 (Thu, 14 May 2009) | 1 line
+commit 520bae5a638704d50e66078bb9e961f5d3ce21f7
+Author: Spencer E. Olson <olsonse@olsonse-laptop.(none)>
+Date:   Wed Nov 4 14:36:15 2009 -0700
 
-added author info on octave stuff
-------------------------------------------------------------------------
-r762 | olsonse | 2009-05-14 12:14:54 -0600 (Thu, 14 May 2009) | 1 line
+    added installation options
 
-Tweaked template definitions to avoid unit system definitions begin fully defined and resulting in 'multiple definition' link errors
-------------------------------------------------------------------------
-r759 | olsonse | 2009-05-07 16:09:49 -0600 (Thu, 07 May 2009) | 1 line
+commit d63259c502e0a6ef74be20ec131882ab40a531fb
+Author: Spencer E. Olson <olsonse@olsonse-laptop.(none)>
+Date:   Tue Oct 27 13:57:48 2009 -0600
 
-added cmake files.  I'm not sure how well they will work yet...
-------------------------------------------------------------------------
-r757 | olsonse | 2009-05-07 14:12:53 -0600 (Thu, 07 May 2009) | 1 line
+    added missing cstdlib include for std::abs(int)
 
-updated documentation a little.
-------------------------------------------------------------------------
-r756 | olsonse | 2009-05-07 14:05:20 -0600 (Thu, 07 May 2009) | 1 line
+commit 8f4dd1f4a714a99df6d2dbdc1f0e1aad6f176298
+Author: Spencer E. Olson <olsonse@olsonse-laptop.(none)>
+Date:   Sat Oct 24 21:13:10 2009 -0600
 
-fixed make_dim and exp_dim template meta functions.  All tests run (and will only a tiny exception pass).  Examples all compile
-------------------------------------------------------------------------
-r755 | olsonse | 2009-05-07 02:34:17 -0600 (Thu, 07 May 2009) | 15 lines
+    added alias runtime.h header file for when using runtime::physical::*
 
-"major update of physical library
+commit da18f85649fc4310a2d45045b10148033199845e
+Author: U-OW\olsonse <olsonse@ow.(none)>
+Date:   Mon Oct 19 13:17:51 2009 -0700
 
-1.  unit systems have been implemented better.
-    I currently have si, atomic, cgs, esu, emu, gaussian, heaviside_lorenzt.
-    Both gaussian and heaviside_lorentz are still incomplete as I need to define
-    charge for these two systems.
-    cgs does not have charge defined and should not in the future since plain
-    cgs does not necessarily define the electric/magnetic units.
-2.  templated conversion between systems has been implemented
-3.  "const Quantity" type of constants have been moved to
-    physical::constant::si:: and templated counterparts that do automatic
-    conversion into a desired unit system have been placed in
-    physical::constant:: 
+    Fixed LATEX_PRINT and changed many BOOST_CHECK_EQUAL to BOOST_CHECK_CLOSE.
+    
+    I also changed the Jamfile import of /boost//unit_test_framework to be
+    statically linked.  This seemed to be very helpful for using in Cygwin on
+    windows.
+    
+    Some more unit tests for quantity printing were added.
 
+commit da72662bf0733cabc4ec1d270fc231f209325908
+Author: Spencer Olson <olsonse@asok.hpmi.afrl.af.mil>
+Date:   Fri Oct 16 13:31:12 2009 -0600
 
-------------------------------------------------------------------------
-r754 | olsonse | 2009-05-07 01:05:10 -0600 (Thu, 07 May 2009) | 1 line
+    updated jam files to work with boost correctly. other small minor fixes
 
-added quantity<T>::getCoeff() which returns a constant reference to the coeff. Not sure this is really needed.
-------------------------------------------------------------------------
-r753 | olsonse | 2009-05-07 00:59:16 -0600 (Thu, 07 May 2009) | 1 line
+commit 3085a13551bbd8b14c3cef7441fe770018889b82
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Sat Oct 3 10:09:16 2009 +0000
 
-fixed small errors in build includes and added a parameterless quantity<T>::getCoeff<T>() function
-------------------------------------------------------------------------
-r751 | olsonse | 2009-04-30 13:08:58 -0600 (Thu, 30 Apr 2009) | 1 line
+    tweak Jamroot and update usage in testParer.cpp
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@845 e877f351-6dfb-0310-a246-97bd42f90100
 
-changed comparison operations for std::complex to sort by real first and then by imag second.
-------------------------------------------------------------------------
-r748 | olsonse | 2009-04-30 11:38:56 -0600 (Thu, 30 Apr 2009) | 1 line
+commit 63e4ae24f0c7c3e3d85ba3f34cc1228c3918e446
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Tue Jun 23 17:07:27 2009 +0000
 
-Fixed portions of lib that were not tested in either unit-tests or examples, but by third-party code.
-------------------------------------------------------------------------
-r747 | olsonse | 2009-04-30 10:08:47 -0600 (Thu, 30 Apr 2009) | 1 line
+    version info changed for testInteractive
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@774 e877f351-6dfb-0310-a246-97bd42f90100
 
-tweaked print_coeff for output of imaginary components.
-------------------------------------------------------------------------
-r746 | olsonse | 2009-04-30 09:36:05 -0600 (Thu, 30 Apr 2009) | 1 line
+commit 1d45a055ab8900dede7fdb9454f7c54b176ab61a
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Tue Jun 23 17:02:57 2009 +0000
 
-tweaked print_coeff for output of imaginary components.
-------------------------------------------------------------------------
-r745 | olsonse | 2009-04-30 07:48:05 -0600 (Thu, 30 Apr 2009) | 1 line
+    added ability to add units in the boost::spirit grammar calculator
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@773 e877f351-6dfb-0310-a246-97bd42f90100
 
-added real(),imag() functions
-------------------------------------------------------------------------
-r744 | olsonse | 2009-04-30 00:06:57 -0600 (Thu, 30 Apr 2009) | 1 line
+commit 83631b53708f5372b8957d430b61312a7515fdc3
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu May 14 18:31:26 2009 +0000
 
-physical base type can now be float, double, complex<float>, and complex<double> (default).
-------------------------------------------------------------------------
-r712 | olsonse | 2009-03-04 14:12:12 -0700 (Wed, 04 Mar 2009) | 1 line
+    Added changelog
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@764 e877f351-6dfb-0310-a246-97bd42f90100
 
-small fix in call to overloaded std::pow function
-------------------------------------------------------------------------
-r711 | olsonse | 2009-03-04 14:05:31 -0700 (Wed, 04 Mar 2009) | 5 lines
+commit 629ab9d07e7a85715be0f5e7e90afd1c9574b5b6
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu May 14 18:25:29 2009 +0000
 
-Fixed a printing error for units in the denominator (was not printing
-exponents).
-Added LATEX_PRINT and LATEX_ONELINE_PRINT print modes for units.
-Added different types of units printing in testInteractive units program.
+    added author info on octave stuff
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@763 e877f351-6dfb-0310-a246-97bd42f90100
 
-------------------------------------------------------------------------
-r710 | olsonse | 2009-02-28 22:55:24 -0700 (Sat, 28 Feb 2009) | 1 line
+commit f087ac6e9e4ef5d8f56b4e59839c6dd26669750e
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu May 14 18:14:54 2009 +0000
 
-physical/cxx/physical/unit_system.h:  added a few templated conversion helpers
-------------------------------------------------------------------------
-r707 | olsonse | 2009-02-28 15:56:53 -0700 (Sat, 28 Feb 2009) | 9 lines
+    Tweaked template definitions to avoid unit system definitions begin fully defined and resulting in 'multiple definition' link errors
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@762 e877f351-6dfb-0310-a246-97bd42f90100
 
-cxx/physical/quantity.h:  small spelling check.
-cxx/physical/unit_system.h:
-    Added macro for auto-creating a struct physical::units::UNITSYSTEM.  This
-    struct has a bunch of static inline functions that return the appropriate
-    values from the physical::unit::system namespace.  
-    For example, physical::units::SI is a structure with inline functions to
-    return values, such as physical::unit::system::SI::length.
+commit 22ba1630b1a3a7b64f9ee72f703ffe756af7061d
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu May 7 22:09:49 2009 +0000
 
+    added cmake files.  I'm not sure how well they will work yet...
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@759 e877f351-6dfb-0310-a246-97bd42f90100
 
-------------------------------------------------------------------------
-r705 | olsonse | 2009-02-25 16:12:29 -0700 (Wed, 25 Feb 2009) | 1 line
+commit b8e1ed66b58c6030c6a9a651d62d0b428aa3ca3e
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu May 7 20:12:53 2009 +0000
 
-Changed simple c-cast to static_cast in cxx/physical/calc/BaseCalc.h
-------------------------------------------------------------------------
-r698 | olsonse | 2009-02-12 11:01:06 -0700 (Thu, 12 Feb 2009) | 6 lines
+    updated documentation a little.
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@757 e877f351-6dfb-0310-a246-97bd42f90100
 
-Added runtime:: prefix to physical:: for the runtime portion. 
-Now you can include both physical.h for the static physical library and
-quantity.h for the runtime library in the same file without namespace
-collisions.
+commit e4fb69404883038137f2299d9ad2aba93752550a
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu May 7 20:05:20 2009 +0000
 
+    fixed make_dim and exp_dim template meta functions.  All tests run (and will only a tiny exception pass).  Examples all compile
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@756 e877f351-6dfb-0310-a246-97bd42f90100
 
-------------------------------------------------------------------------
-r696 | olsonse | 2009-02-12 10:29:34 -0700 (Thu, 12 Feb 2009) | 1 line
+commit 5b2caaa0637f1b7f5cba77bdbce6b3815a06c0fc
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu May 7 08:34:17 2009 +0000
 
-fixed some linking problems
-------------------------------------------------------------------------
-r695 | olsonse | 2009-02-09 05:09:07 -0700 (Mon, 09 Feb 2009) | 1 line
+    "major update of physical library
+    
+    1.  unit systems have been implemented better.
+        I currently have si, atomic, cgs, esu, emu, gaussian, heaviside_lorenzt.
+        Both gaussian and heaviside_lorentz are still incomplete as I need to define
+        charge for these two systems.
+        cgs does not have charge defined and should not in the future since plain
+        cgs does not necessarily define the electric/magnetic units.
+    2.  templated conversion between systems has been implemented
+    3.  "const Quantity" type of constants have been moved to
+        physical::constant::si:: and templated counterparts that do automatic
+        conversion into a desired unit system have been placed in
+        physical::constant::
+    
+    
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@755 e877f351-6dfb-0310-a246-97bd42f90100
 
-add tiny comment
-------------------------------------------------------------------------
-r694 | olsonse | 2009-02-09 04:53:47 -0700 (Mon, 09 Feb 2009) | 1 line
+commit 83815ec0350ef44c1aa599d7836d719899b69142
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu May 7 07:05:10 2009 +0000
 
-merged new physical package from branch:  new c++ package
-------------------------------------------------------------------------
-r651 | olsonse | 2009-01-07 13:09:12 -0700 (Wed, 07 Jan 2009) | 1 line
+    added quantity<T>::getCoeff() which returns a constant reference to the coeff. Not sure this is really needed.
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@754 e877f351-6dfb-0310-a246-97bd42f90100
 
-restructuring repository
-------------------------------------------------------------------------
-r612 | olsonse | 2008-11-05 23:20:10 -0700 (Wed, 05 Nov 2008) | 1 line
+commit 8dff9ef12a950eb307bac1c041c3dd617905eac0
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu May 7 06:59:16 2009 +0000
 
-fixed Quantity::unitsMatch function and made it simpler as well
-------------------------------------------------------------------------
-r604 | olsonse | 2008-09-30 17:20:21 -0600 (Tue, 30 Sep 2008) | 5 lines
+    fixed small errors in build includes and added a parameterless quantity<T>::getCoeff<T>() function
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@753 e877f351-6dfb-0310-a246-97bd42f90100
 
-constant.py:
-    Added names to various constants.
-Quantity.py:
-    Added ability to give names to physical.Quantity instances.
+commit 0eade33bd944469677651efebe2dd50b10b46239
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu Apr 30 19:08:58 2009 +0000
 
-------------------------------------------------------------------------
-r602 | olsonse | 2008-09-30 17:12:09 -0600 (Tue, 30 Sep 2008) | 1 line
+    changed comparison operations for std::complex to sort by real first and then by imag second.
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@751 e877f351-6dfb-0310-a246-97bd42f90100
 
-importing python physical stuff
-------------------------------------------------------------------------
-r601 | olsonse | 2008-09-30 17:10:41 -0600 (Tue, 30 Sep 2008) | 1 line
+commit 1468e3e0d187741b454b93e95782b93b02d77376
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu Apr 30 17:38:56 2009 +0000
 
-importing python physical stuff
-------------------------------------------------------------------------
-r600 | olsonse | 2008-09-30 17:10:19 -0600 (Tue, 30 Sep 2008) | 1 line
+    Fixed portions of lib that were not tested in either unit-tests or examples, but by third-party code.
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@748 e877f351-6dfb-0310-a246-97bd42f90100
 
-importing python physical stuff
-------------------------------------------------------------------------
-r599 | olsonse | 2008-09-30 17:08:00 -0600 (Tue, 30 Sep 2008) | 1 line
+commit 0dbe1019dd3db2ff23e3233619a78e3d0ef3b4ef
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu Apr 30 16:08:47 2009 +0000
 
-importing python physical stuff
-------------------------------------------------------------------------
+    tweaked print_coeff for output of imaginary components.
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@747 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit 383e1691bdebe8edd0e2c90f2763458abcb52e2a
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu Apr 30 15:36:05 2009 +0000
+
+    tweaked print_coeff for output of imaginary components.
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@746 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit c7136f605072038c21271365807301523bc1c42a
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu Apr 30 13:48:05 2009 +0000
+
+    added real(),imag() functions
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@745 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit 2bbe5fbc51376a7b4c1bd9ffd98547bc9cf01680
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu Apr 30 06:06:57 2009 +0000
+
+    physical base type can now be float, double, complex<float>, and complex<double> (default).
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@744 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit 46809aa12da95c9735042c43a6e5fbf1eb623d74
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Wed Mar 4 21:12:12 2009 +0000
+
+    small fix in call to overloaded std::pow function
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@712 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit 1166080429c0682ea4d19e35c2eb48180fc09490
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Wed Mar 4 21:05:31 2009 +0000
+
+    Fixed a printing error for units in the denominator (was not printing
+    exponents).
+    Added LATEX_PRINT and LATEX_ONELINE_PRINT print modes for units.
+    Added different types of units printing in testInteractive units program.
+    
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@711 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit 49bcd89e12d414cd0aff14770d1c8445663591e5
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Sun Mar 1 05:55:24 2009 +0000
+
+    physical/cxx/physical/unit_system.h:  added a few templated conversion helpers
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@710 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit 6cb5fbb577e2c32087f9253a781e31638a77b0b9
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Sat Feb 28 22:56:53 2009 +0000
+
+    cxx/physical/quantity.h:  small spelling check.
+    cxx/physical/unit_system.h:
+        Added macro for auto-creating a struct physical::units::UNITSYSTEM.  This
+        struct has a bunch of static inline functions that return the appropriate
+        values from the physical::unit::system namespace.
+        For example, physical::units::SI is a structure with inline functions to
+        return values, such as physical::unit::system::SI::length.
+    
+    
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@707 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit 16c2628e2f0a4eb06536222a74d758bf8cc61487
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Wed Feb 25 23:12:29 2009 +0000
+
+    Changed simple c-cast to static_cast in cxx/physical/calc/BaseCalc.h
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@705 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit add8a003e688bd573da857de26689ae1436aa885
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu Feb 12 18:01:06 2009 +0000
+
+    Added runtime:: prefix to physical:: for the runtime portion.
+    Now you can include both physical.h for the static physical library and
+    quantity.h for the runtime library in the same file without namespace
+    collisions.
+    
+    
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@698 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit 29248b930f9be3cce21c5c19cb3ea8e8ae04e84d
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu Feb 12 17:29:34 2009 +0000
+
+    fixed some linking problems
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@696 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit cd93dcbda45700f78de98caf737cb32c2c60d352
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Mon Feb 9 12:09:07 2009 +0000
+
+    add tiny comment
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@695 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit 97c87cb053fffe2c2ebc104260f9907e97593147
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Mon Feb 9 11:53:47 2009 +0000
+
+    merged new physical package from branch:  new c++ package
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@694 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit 74726271a597f15c682f3e6e25d0c8410322a045
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Wed Jan 7 20:09:12 2009 +0000
+
+    restructuring repository
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/trunk/physical@651 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit dfdfaeb0b0d398b5a5d29b8171c445cde7057dfb
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Thu Nov 6 06:20:10 2008 +0000
+
+    fixed Quantity::unitsMatch function and made it simpler as well
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/physical/trunk@612 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit 0f8dc1b7ccbbd53c44d24cb92551d9963b4ff7b1
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Tue Sep 30 23:20:21 2008 +0000
+
+    constant.py:
+        Added names to various constants.
+    Quantity.py:
+        Added ability to give names to physical.Quantity instances.
+    
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/physical/trunk@604 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit 9257e559ee14f544e67a18c0bce3a366a4f32d11
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Tue Sep 30 23:12:09 2008 +0000
+
+    importing python physical stuff
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/physical/trunk@602 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit 69523413d2063c644722d0f022bd544df3dff3c8
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Tue Sep 30 23:10:41 2008 +0000
+
+    importing python physical stuff
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/physical/trunk@601 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit 4e0763260e184de7df0fe7d02e2050db7d0a1a69
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Tue Sep 30 23:10:19 2008 +0000
+
+    importing python physical stuff
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/physical/trunk@600 e877f351-6dfb-0310-a246-97bd42f90100
+
+commit 21e5d122873ee597336876ea21cd00aefe0ac386
+Author: olsonse <olsonse@e877f351-6dfb-0310-a246-97bd42f90100>
+Date:   Tue Sep 30 23:08:00 2008 +0000
+
+    importing python physical stuff
+    
+    git-svn-id: svn+ssh://sftp.itd.umich.edu/afs/umich.edu/user/o/l/olsonse/src/svn-repository/physical/trunk@599 e877f351-6dfb-0310-a246-97bd42f90100
