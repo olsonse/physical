@@ -140,6 +140,9 @@ class Quantity:
         # now loop through each of the units and try to divide/multiply the
         # power by the 'exponent'.  Throw an exception of this is not
         # possible. 
+        if exponent == 0:
+            return 1
+
         u = self.units.copy()
         fexp = float(abs(exponent))
         for k in u.keys():
