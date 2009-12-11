@@ -260,15 +260,29 @@ class unit(const):
         self.A = self.Ampere;
         self.Biot = 10.0*self.Amperes;
         self.Biots = self.Biot;
+        self.abAmpere = self.Biot
+        self.abAmperes = self.abAmpere
+        self.abAmp = self.abAmpere
+        self.aA = self.abAmpere
+        self.statAmpere = self.Biot * 3.335641e-11 # == Biot * (cm/s)/c
+        self.statAmperes = self.statAmpere
+        self.statAmp = self.statAmpere
+        self.statA = self.statAmpere
 
         # electrical potential
         self.Volt = self.Watt/self.Ampere;
         self.Volts = self.Volt;
         self.V = self.Volt;
+        self.statVolt = self.erg / (self.statAmp * self.s)
+        self.statVolts = self.statVolt
+        self.statV = self.statVolt
+        self.abVolt = (self.dyne * self.cm) / (self.abAmp * self.s)
 
         # electrical resistance
         self.Ohm = self.Volt/self.Ampere;
         self.Ohms = self.Ohm;
+        self.statOhm = self.statVolt/self.statAmpere
+        self.abOhm = self.abVolt/self.abAmpere
 
         # electrical conductance
         self.mho = 1.0/self.Ohm;
@@ -280,7 +294,14 @@ class unit(const):
         self.Coulomb = self.Ampere*self.second;
         self.Coulombs = self.Coulomb;
         self.C = self.Coulomb;
-        self.Franklin = 3.33564e-10*self.Coulombs;
+        self.statCoulomb = self.statAmpere * self.second
+        self.statCoulombs = self.statCoulomb
+        self.statCoul = self.statCoulomb
+        self.statC = self.statCoulomb
+        self.abCoulomb = self.abAmpere * self.second
+        self.abCoulombs = self.abCoulomb
+        self.abCoul = self.abCoulomb
+        self.Franklin = self.statCoulombs;
         self.Franklins = self.Franklin;
 
         # electrical capacity
@@ -295,14 +316,18 @@ class unit(const):
         self.Maxwell = self.Weber/100000000.0;
         self.Maxwells = self.Maxwell;
         self.M = self.Maxwell;
+        self.statMaxwell = self.statVolt * self.second
+        self.statMaxwells = self.statMaxwell
+        self.statM = self.statMaxwell
         # magnetic field B
         self.Tesla = self.Weber/(self.meter*self.meter);
         self.Teslas = self.Tesla;
         self.T = self.Tesla;
-        self.Gauss = self.Tesla/10000.0;
+        #self.Gauss = self.Tesla/10000.0;
+        self.Gauss = self.abVolt * self.second / self.cm**2
         self.gamma = self.Tesla/1000000000.0;
         # magnetic field H
-        self.Oerstedt = 79.57747*self.Ampere/self.meter;
+        self.Oerstedt = 79.57747*self.Ampere/self.meter; # = Gauss/mu0
         self.Oerstedts = self.Oerstedt;
         self.Oe = self.Oerstedt;
         # magnetic inductance
