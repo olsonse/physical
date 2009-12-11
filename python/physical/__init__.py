@@ -6,6 +6,9 @@ import units; # dummy module to overwrite for 'from units import' statements
 import constant;
 import constants;
 
+import element;
+import elements;
+
 import sys
 import Quantity
 
@@ -44,6 +47,9 @@ class _physical(const):
         self.constant = constant.constant('physical.', self.units)
         self.constants = self.constant
 
+        self.element = element.element('physical.', self.constants, self.units)
+        self.elements = self.element
+
 
         # do some trickery to get modules set to instantiated classes
         self.unit.__name__ = unit.__name__
@@ -53,6 +59,10 @@ class _physical(const):
         self.constant.__name__ = constant.__name__
         sys.modules[constant.__name__]=self.constant
         sys.modules[constants.__name__]=self.constant
+
+        self.element.__name__ = element.__name__
+        sys.modules[element.__name__]=self.element
+        sys.modules[elements.__name__]=self.element
 
         # add in the license file
         self.license = license
