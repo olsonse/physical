@@ -6,6 +6,7 @@
 
 
         <h3>Technical Reference</h3>
+    - \f$\copyright\f$ 2005-2009 Spencer E. Olson<br>
     - This is the beginning documentation for the Physical package.
 
 
