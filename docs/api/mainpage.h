@@ -10,45 +10,45 @@
 
 
   For reference, please also see the following sections:
-  - \subpage license
-  - \subpage readme
-  - \subpage install
-  - \subpage changelog
-  - \subpage authors
+  - \subpage physical_license
+  - \subpage physical_readme
+  - \subpage physical_install
+  - \subpage physical_changelog
+  - \subpage physical_authors
 */
 
 
 
 //-----------------------------------------------------------
-/** \page license Licence
+/** \page physical_license Licence
     \verbinclude COPYING
 */
 
 
 
 //-----------------------------------------------------------
-/** \page readme README
+/** \page physical_readme README
     \verbinclude README
 */
 
 
 
 //-----------------------------------------------------------
-/** \page install INSTALL
+/** \page physical_install INSTALL
     \verbinclude INSTALL
 */
 
 
 
 //-----------------------------------------------------------
-/** \page changelog ChangeLog
+/** \page physical_changelog ChangeLog
     \verbinclude ChangeLog
 */
 
 
 
 //-----------------------------------------------------------
-/** \page authors AUTHORS
+/** \page physical_authors AUTHORS
     \verbinclude AUTHORS
 */
 
