@@ -31,9 +31,6 @@ namespace physical {
 #include <physical/constant/detail/derived-dimensions.h>
 
 #   define _TQUANTITYn(v,dims) \
-    /* convert_v_from_si class exists because I can't pass commas to macros.*/ \
-    template < typename T >  \
-    struct convert_##v##_from_si : make_convert_ratio<T,system::si,dims> {}; \
     /* definition of where the value is stored. */ \
     template< typename T = system::si > \
     struct v { \
@@ -44,7 +41,7 @@ namespace physical {
     const Quantity v<T>::value = \
       PHYSICAL_QUANTITY_INITn( \
         T::name + "::" + #v, \
-        constant::si::v * convert_##v##_from_si<T>::value, \
+        (constant::si::v * make_convert_ratio<T,system::si,dims>::value), \
         constant::si::v.name + '(' + T::name + " units)" )
 
     _TQUANTITYn(pi,                 dimension::unity);

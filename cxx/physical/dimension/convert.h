@@ -36,11 +36,11 @@ namespace physical {
 
   template< typename To, typename From, template <typename,int> class Dim >
   struct make_convert_ratio {
-    static Quantity value;
+    static const Quantity value;
   };
 
   template< typename To, typename From, template <typename,int> class Dim >
-  Quantity make_convert_ratio<To,From,Dim>::value = Dim<From,0>::value / Dim<To,0>::value;
+  const Quantity make_convert_ratio<To,From,Dim>::value = Dim<From,0>::value / Dim<To,0>::value;
   
   template< typename From, template <typename,int> class Dim >
   inline Quantity convert_ratio( const system::id::SYSTEM toId ) {
