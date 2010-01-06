@@ -30,7 +30,7 @@ echo "" ;
 #
 #   bjam [options] [properties] [install|stage]
 #
-#   Builds and installs Boost.
+#   Builds and installs physical.
 #
 # Targets and Related Options:
 #
@@ -38,7 +38,7 @@ echo "" ;
 #   =======                 configured locations (below).
 #
 #   --prefix=<PREFIX>       Install architecture independent files here.
-#                           Default; C:\Boost on Win32
+#                           Default; C:\physical on Win32
 #                           Default; /usr/local on Unix. Linux, etc.
 #
 #   --exec-prefix=<EPREFIX> Install architecture dependent files here.
@@ -128,7 +128,7 @@ install-properties =
     ;
 
 if [ modules.peek : NT ] {
-    install-properties += <install-default-prefix>C:/Boost ;
+    install-properties += <install-default-prefix>C:/physical ;
 } else if [ modules.peek : UNIX ] {
     install-properties += <install-default-prefix>/usr/local ;
 }
