@@ -10,16 +10,28 @@
 
 /* version info updated 23 june 2009 */
 
+#ifndef PHYSICAL_VERSION
+#  define PHYSICAL_VERSION ""
+#endif
+
 /** Intro message displayed in interactive mode. */
 const char * opening_msg =
-"physical::calculator: $Rev$\n"
+"physical::calculator: " PHYSICAL_VERSION " compiled on " __DATE__ "\n"
 "Perhaps it might even rival with GNU units. :-)\n"
 "\n"
 "- 2007-2009 Spencer E. Olson\n"
 "  type 'help' for usage information.\n\n";
 
 #include <physical/calc/infix.h>
+
+
+#include <string>
+#include <vector>
+#include <sstream>
 #include <set>
+#include <fstream>
+#include <cstdlib>
+
 #include <unistd.h>
 
 #ifdef HAVE_LIBREADLINE
@@ -58,6 +70,7 @@ char * readline(const std::string & prompt) {
 extern void add_history ();
 extern int write_history ();
 extern int read_history ();
+extern void stifle_history ();
 #  endif /* defined(HAVE_READLINE_HISTORY_H) */
   /* no history */
 #endif /* HAVE_READLINE_HISTORY */
@@ -139,7 +152,100 @@ char * get_line(const bool & interactive) {
     }
 }
 
-int main() {
+
+/** Implementation of string.split(delim) in c++. */
+std::vector<std::string> &split( const std::string &s, char delim,
+                                 std::vector<std::string> &elems ) {
+  std::stringstream ss(s);
+  std::string item;
+  while( std::getline(ss, item, delim) ) {
+    elems.push_back(item);
+  }
+  return elems;
+}
+
+/** Implementation of string.split(delim) in c++. */
+std::vector<std::string> split(const std::string &s, char delim) {
+  std::vector<std::string> elems;
+  return split(s, delim, elems);
+}
+
+/** Execute all lines from a stream */
+template < typename Functor >
+void foreach_line( std::istream & in, Functor & f ) {
+  std::string line;
+  while( std::getline(in, line, '\n') ) {
+    f(line);
+  }
+}
+
+
+struct Executor {
+  typedef runtime::physical::calc::InfixCalc InfixCalc;
+  typedef runtime::physical::Quantity        Quantity;
+
+  InfixCalc & calc;
+  std::ostream & out;
+
+  Executor( InfixCalc & calc, std::ostream & out ) : calc(calc), out(out) { }
+
+  void operator() ( std::string & line ) {
+    this->operator() ( line.begin(), line.end() );
+  }
+
+  void operator() ( const std::string::iterator & begin,
+                    const std::string::iterator & end ) {
+    // Read one line of text and parse it. If the parser does not consume
+    // the entire string, keep parsing the same string until an error occurs
+    // or the string is consumed. Then go back and read another string.
+    std::string::iterator first = begin;
+    bool finished = false;
+    bool result_set = false;
+    do {
+        try {
+            Quantity result
+              = calc.parse_statement(first, end, finished, result_set);
+
+            if (result_set)
+                out << result << std::endl;
+        } catch (runtime::physical::calc::symbol_error & e) {
+            out << e.what() << std::endl;
+            break;
+        } catch (runtime::physical::calc::syntax_error & e) {
+            // Display a caret that points to the position where the error
+            // was detected.
+            std::cerr << std::setw(e.stop - begin + 3) << " " << "^ error\n";
+            break;
+        } catch (runtime::physical::exception & e) {
+            out << e.what() << std::endl;
+            break;
+        }
+    } while(!finished);
+  }
+};
+
+
+
+int main( int argc, char * argv[] ) {
+    calc.addMathLib();
+    calc.addPhysicalUnits();
+    Executor executor( calc, std::cout );
+
+    std::string HOME( getenv("HOME") ? getenv("HOME") : "/tmp/" );
+    std::string PROG( * split(argv[0], '/').rbegin() );
+    { /* try and read initial commands saved by the user. */
+      std::ifstream frc( (HOME + "/." + PROG + "rc").c_str() );
+      foreach_line( frc, executor );
+    }
+
+#ifdef HAVE_READLINE_HISTORY
+    std::string history_file = HOME + "/." + PROG + "_history";
+
+    read_history(history_file.c_str());
+
+    stifle_history(1000); // we'll only allow up to 1000 lines of history
+#endif
+
 #ifdef HAVE_LIBREADLINE
     rl_completion_entry_function = variable_completer;
 #endif
@@ -147,9 +253,6 @@ int main() {
     bool interactive = true;
     if (!isatty(0) || !isatty(1))
         interactive = false;
-
-    calc.addMathLib();
-    calc.addPhysicalUnits();
 
     if (interactive)
         /* spit out a tiny little message. */
@@ -163,32 +266,13 @@ int main() {
 #ifdef HAVE_READLINE_HISTORY
         add_history(line.c_str());
 #endif
-
-        // Read one line of text and parse it. If the parser does not consume
-        // the entire string, keep parsing the same string until an error occurs
-        // or the string is consumed. Then go back and read another string.
-        std::string::iterator first = line.begin();
-        bool finished = false;
-        bool result_set = false;
-        do {
-            try {
-                runtime::physical::Quantity result = calc.parse_statement(first, line.end(), finished, result_set);
-                if (result_set)
-                    std::cout << result << std::endl;
-            } catch (runtime::physical::calc::symbol_error & e) {
-                std::cout << e.what() << std::endl;
-                break;
-            } catch (runtime::physical::calc::syntax_error & e) {
-                // Display a caret that points to the position where the error
-                // was detected.
-                std::cerr << std::setw(e.stop - line.begin() + 3) << " " << "^ error\n";
-                break;
-            } catch (runtime::physical::exception & e) {
-                std::cout << e.what() << std::endl;
-                break;
-            }
-        } while(!finished);
+        executor( line );
     }
+
+#ifdef HAVE_READLINE_HISTORY
+    write_history(history_file.c_str());
+#endif
+
     return 0;
 }
 

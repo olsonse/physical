@@ -82,7 +82,8 @@ import package ; # used for installing whole package (provides --prefix related
 
 path-constant TOP : . ;
 
-constant VERSION : [ MATCH "\\$Revision: *([0-9]*) *\\$" : "$Revision: 636 $" ] ;
+#constant VERSION : [ MATCH "\\$Revision: *([0-9]*) *\\$" : "$Revision: 636 $" ] ;
+constant VERSION : [ SHELL "printf `git describe 2> /dev/null` || printf physical-0.1.0 " ] ;
 
 use-project /boost : ../boost ;
 
@@ -90,10 +91,11 @@ project /physical
     : requirements
         <include>cxx
         <library>/boost//headers
+        <define>PHYSICAL_VERSION=\\\"$(VERSION)\\\"
     : usage-requirements
         <include>cxx
         <library>/boost//headers
-        
+        <define>PHYSICAL_VERSION=\\\"$(VERSION)\\\"
     # : build-dir build
     ;
 
