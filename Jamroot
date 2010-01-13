@@ -83,7 +83,7 @@ import package ; # used for installing whole package (provides --prefix related
 path-constant TOP : . ;
 
 #constant VERSION : [ MATCH "\\$Revision: *([0-9]*) *\\$" : "$Revision: 636 $" ] ;
-constant VERSION : [ SHELL "printf `git describe 2> /dev/null` || printf physical-0.1.0 " ] ;
+constant VERSION : [ SHELL "printf `cd $(TOP); git describe 2> /dev/null` || printf physical-0.1.0 " ] ;
 
 use-project /boost : ../boost ;
 
