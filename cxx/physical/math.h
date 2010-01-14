@@ -1,7 +1,7 @@
 #ifndef physical_math_h
 #define physical_math_h
 
-#include <physical/quantity.h>
+#include <physical/runtime.h>
 
 /* FIXME:  the following should be removed if the new standard is used.
  * For now we use boost to implement the inverse trig functions for

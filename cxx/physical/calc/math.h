@@ -1,7 +1,7 @@
 #ifndef PHYSICAL_CALC_MATH_H
 #define PHYSICAL_CALC_MATH_H
 
-#include <physical/quantity.h>
+#include <physical/runtime.h>
 #include <physical/math.h>
 #include <physical/calc/symbol.h>
 

@@ -56,20 +56,27 @@ namespace runtime {
 #  define PHYSICAL_QUANTITY_INITn(name,c,n)    PHYSICAL_QUANTITY_CLASS(c,n,#name)
 #  define PHYSICAL_QUANTITY_INITun(name,c,u,n) PHYSICAL_QUANTITY_CLASS(c,u,n,#name)
 
-   /** Sets only the coefficient of the physical::quantity. */
-#  define _QUANTITY(name,c)       const Quantity name = PHYSICAL_QUANTITY_INIT(name,c)
-   /** Sets the value of the coefficient and the units of the physical::quantity
-    * (if using the runtime library of course).
-    */
-#  define _QUANTITYu(name,c,u)    const Quantity name = PHYSICAL_QUANTITY_INITu(name,c,u)
-   /** Sets the value of the coefficient and the name of the physical::quantity
-    * (if using the runtime library of course).
-    */
-#  define _QUANTITYn(name,c,n)    const Quantity name = PHYSICAL_QUANTITY_INITn(name,c,n)
-   /** Sets the value of the coefficient, the units, and the name of the
-    * physical::quantity (if using the runtime library of course). 
-    */
-#  define _QUANTITYun(name,c,u,n) const Quantity name = PHYSICAL_QUANTITY_INITun(name,c,u,n)
+#  ifdef PHYSICAL_QUANTITY_EXTERN_DECL
+#   define _QUANTITY(name,c)       extern const Quantity name
+#   define _QUANTITYu(name,c,u)    extern const Quantity name
+#   define _QUANTITYn(name,c,n)    extern const Quantity name
+#   define _QUANTITYun(name,c,u,n) extern const Quantity name
+#  else
+    /** Sets only the coefficient of the physical::quantity. */
+#   define _QUANTITY(name,c)       extern const Quantity name = PHYSICAL_QUANTITY_INIT(name,c)
+    /** Sets the value of the coefficient and the units of the physical::quantity
+     * (if using the runtime library of course).
+     */
+#   define _QUANTITYu(name,c,u)    extern const Quantity name = PHYSICAL_QUANTITY_INITu(name,c,u)
+    /** Sets the value of the coefficient and the name of the physical::quantity
+     * (if using the runtime library of course).
+     */
+#   define _QUANTITYn(name,c,n)    extern const Quantity name = PHYSICAL_QUANTITY_INITn(name,c,n)
+    /** Sets the value of the coefficient, the units, and the name of the
+     * physical::quantity (if using the runtime library of course). 
+     */
+#   define _QUANTITYun(name,c,u,n) extern const Quantity name = PHYSICAL_QUANTITY_INITun(name,c,u,n)
+#  endif
 #endif
 
 #ifndef _OPEN_NAMESPACE

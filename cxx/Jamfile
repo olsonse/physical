@@ -12,5 +12,4 @@ project /physical/unit-tests
 
 use-project /physical : ../ ;
 
-build-project physical/test ;
-# build-project physical/calc/test ;
+build-project physical ;

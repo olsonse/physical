@@ -1,6 +1,6 @@
 #define BOOST_TEST_MODULE  quantity
 
-#include <physical/quantity.h>
+#include <physical/runtime.h>
 #include <physical/math.h>
 
 #include <boost/test/unit_test.hpp>

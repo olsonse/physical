@@ -2,7 +2,7 @@
 #ifndef PHYSICAL_CALC_INFIX_H
 #define PHYSICAL_CALC_INFIX_H
 
-#include <physical/quantity.h>
+#include <physical/runtime.h>
 #include <physical/calc/symbol.h>
 #include <physical/calc/BaseCalc.h>
 

@@ -28,7 +28,7 @@
 
 /** Just a useful set of tools to help with the registry problem. */
 namespace monkeywrench {
-    static std::vector<std::string> namespace_stack;
+    extern std::vector<std::string> namespace_stack;
 
     inline int push_namespace(const std::string & id) {
         namespace_stack.push_back(id);
@@ -91,7 +91,7 @@ namespace physical {
             importer() {}
             template <class table>
             void operator()(table & tab,
-                            const std::string & base,
+                            std::string base,
                             const std::string & regex,
                             const std::string & new_ns = "") {
                 bool import_all = regex == "*";
@@ -102,6 +102,10 @@ namespace physical {
                      * removed. */
                     return;
 
+                if ( base.length() < 3 ||
+                     base.substr(base.length()-2,2) != "::" )
+                  base += "::";
+
                 std::string to = (new_ns == "") ? "" : new_ns + "::";
                 table scratch;
                 typename table::const_iterator i = tab.lower_bound(base),
@@ -109,8 +113,6 @@ namespace physical {
                 for (; i != f; i++) {
                     std::string newkey = i->first.substr(base.length());
                     if(newkey.length() < 1) continue;
-                    if(newkey.length() > 2 && newkey.substr(0,2) == "::")
-                        newkey = newkey.substr(2);
 
                     /* test the regex */
                     if (!import_all && !matcher.matches(newkey))

@@ -8,7 +8,7 @@
 
 
 #include <iostream>
-#include <physical/quantity.h>
+#include <physical/runtime.h>
 
 int main() {
     namespace rphysical = runtime::physical; /* strip the runtime:: prefix on runtime::physical::* */

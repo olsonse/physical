@@ -53,22 +53,6 @@
 #define PHYSICAL_QUANTITY_CLASS quantity<PHYSICAL_QUANTITY_COEFF_TYPE>
 
 
-#define _OPEN_NAMESPACE(i,id)   namespace id { const int init_ ## i = monkeywrench::push_namespace(#id); } namespace id
-#define  _CLOSE_NAMESPACE(i)    const int uninit_ ## i =  monkeywrench::pop_namespace();
-#define _ALIAS_NAMESPACE(alias,ns) \
-    const int I_ ## alias ## _ ## ns = \
-        Quantity::registry().import(monkeywrench::get_prefix() + #ns, "*", \
-                                    monkeywrench::get_prefix() + #alias); \
-    namespace alias = ns
-
-/** Imports namespace only in registry. */
-#define _IMPORT_NAMESPACE(ns) \
-    const int I_ ## using ## _ ## ns = \
-        Quantity::registry().import(monkeywrench::get_prefix() + #ns, "*", \
-                                    monkeywrench::get_namespace() )
-
-/** Imports namespace both in actual namespace and in registry. */
-#define _USING_NAMESPACE(ns)  _IMPORT_NAMESPACE(ns); using namespace ns
 
 
 
@@ -859,11 +843,5 @@ namespace runtime {
   }
 
 } /* namespace runtime */
-
-/* now finally, load the data. */
-#define PHYSICAL_DATA_FOR_RUNTIME
-#include <physical/physical.h>
-#undef PHYSICAL_DATA_FOR_RUNTIME
-
 
 #endif // PHYSICAL_QUANTITY_H
