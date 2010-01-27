@@ -4,14 +4,14 @@ echo " Physical constants library:  " ;
 echo "---------------" ;
 echo " In bjam, there are two ways to import/use this library." ;
 echo " 1.  /physical//physical" ;
-echo "     This provides includes for the header only library." ;
-echo " 2.  /physical//runtime" ;
-echo "     This provides includes for the header only library and" ;
-echo "     it also provides a library dependency on boost_regex and" ;
+echo "     This provides includes for only the headers of this library." ;
+echo " 2.  /physical//calc" ;
+echo "     This provides includes for the headers, linkage to the bison/flex" ;
+echo "     based calculator library, dependency on boost_regex, and" ;
 echo "     a header-library dependency on boost_math (used to " ;
 echo "     define some trig functions on std::complex<> that are" ;
 echo "     going to be included in the new standard, but are not" ;
-echo "     yet available" ;
+echo "     yet available)" ;
 echo "---------------" ;
 echo "            Possible compile/feature options" ;
 echo "              <phys-type>" ;
@@ -78,6 +78,7 @@ import feature : feature ;
 import path ; # for getting a better glob
 import package ; # used for installing whole package (provides --prefix related
                  # options )
+import common : find-tool ;
 
 
 path-constant TOP : . ;
@@ -99,6 +100,30 @@ project /physical
     # : build-dir build
     ;
 
+
+# FIXME:  get this to check the version of bison and flex too.
+local found_bison = [ find-tool "bison" ] ;
+local found_lex   = [ find-tool "flex" ] ;
+
+local YY ;
+if $(found_bison) {
+    import bison ;
+    YY = "yy" ;
+} else {
+    echo "Compatible version of GNU bison not found.  Using pre-generated parser" ;
+    YY = "cpp" ;
+}
+
+local LL ;
+if $(found_lex) {
+    import lex ;
+    LL = "ll" ;
+} else {
+    echo "Compatible version of GNU flex not found.  Using pre-generated lexer" ;
+    LL = "cpp" ;
+}
+
+
 lib physical
     : # sources
       [ glob cxx/physical/*.cpp ]
@@ -108,9 +133,12 @@ lib physical
     : # no default build
     : <include>cxx ;
 
-alias runtime
+alias calc
     : physical
-    : # no build requirements
+      cxx/physical/calc/detail/Driver.cpp
+      cxx/physical/calc/detail/Parser.$(YY)
+      cxx/physical/calc/detail/Scanner.$(LL)
+    : <link>static
     : # no default build
     : <library>/boost//regex/<link>static
     ;

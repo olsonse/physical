@@ -302,7 +302,7 @@ class InfixCalcEngine : public boost::spirit::grammar<InfixCalcEngine> {
             switch(sym.type) {
                 case symbol::VARIABLE:
                 case symbol::CONSTANT:
-                    return sym.value.dval;;
+                    return sym.evaluate();
 
                 case symbol::FUNCTION:
                     throw undefined_variable(name);
@@ -431,6 +431,48 @@ class InfixCalcEngine : public boost::spirit::grammar<InfixCalcEngine> {
 
     bool & result_setRef;
 };
+
+/** Base class to be inherited (before BaseCalc) by boost::spirit
+ * based grammar/parsers. */
+template <class Engin>
+struct BaseBoostCalc {
+    Engin & engine;
+
+    BaseBoostCalc(Engin & engine) : engine(engine) {}
+
+    /** Parse a single statement contained within a iterator 'stream'.
+     * */
+    Quantity parse_statement( std::string::iterator & first,
+                    const std::string::iterator last,
+                    bool & finished,
+                    bool & result_set) throw (physical::exception) {
+        using boost::spirit::parse;
+        using boost::spirit::space_p;
+        using boost::spirit::parse_info;
+
+        engine.reset_result_set();
+
+        parse_info<std::string::iterator> info;
+        info = parse(first, last, engine, space_p);
+
+        if (!info.hit)
+            throw syntax_error(info.stop);
+        if (!info.full) {
+            // Keep track of where to start
+            // parsing the next statement.
+            first = info.stop;
+            finished = false;
+        } else
+            finished = true;
+
+        result_set = engine.result_set();
+        if (!result_set)
+            return Quantity();
+        else
+            return engine.result();
+    }
+};
+
 
 struct InfixCalc : BaseBoostCalc<InfixCalcEngine>, BaseCalc<InfixCalc> {
     typedef BaseBoostCalc<InfixCalcEngine>      base_boost_calc;

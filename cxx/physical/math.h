@@ -300,6 +300,28 @@ namespace runtime {
             return quantity<T>(std::abs(q.coeff), q.units);
         };
 
+        /** Compute the maximum value of two quantities--units must match. */
+        template<class T>
+        inline quantity<T> max( const quantity<T> & q0,
+                                const quantity<T> & q1 ) {
+          (void)q0.assertMatch( q1 );
+          return quantity<T>(std::max(q0.coeff, q1.coeff), q0.units);
+        };
+
+        /** Compute the minimum value of two quantities--units must match. */
+        template<class T>
+        inline quantity<T> min( const quantity<T> & q0,
+                                const quantity<T> & q1 ) {
+          (void)q0.assertMatch( q1 );
+          return quantity<T>(std::min(q0.coeff, q1.coeff), q0.units);
+        };
+
+        /** Helper function to make it really easy to define a new unit. */
+        template<class T>
+        inline quantity<T> new_unit( const std::string & name ) {
+          return quantity<T>(T(1), units_pair(name, 1) );
+        }
+
     } /* namespace math. */
 
     /* ****   END QUANTITY OPERATORS **** */

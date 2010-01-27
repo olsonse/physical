@@ -34,6 +34,10 @@ static void addPhysicalUnits(symbol::table & symbols) {
         symbols[i->first] = *(i->second);
     }
 
+// FIXME:  Do we really need these imports now with our new importing code in
+// the header file?  I'm going to try and comment this out for a bit to see the
+// effect.  ( Chimp requires these, so we should notice it.. )
+#if 0
     symbol::import(symbols, "physical::element::hydrogen",  "*", "physical::element::H" );
     symbol::import(symbols, "physical::element::helium",    "*", "physical::element::He");
     symbol::import(symbols, "physical::element::lithium",   "*", "physical::element::Li");
@@ -55,6 +59,7 @@ static void addPhysicalUnits(symbol::table & symbols) {
     symbol::import(symbols, "physical::element::cesium",    "*", "physical::element::Cs");
     symbol::import(symbols, "physical::element::mercury",   "*", "physical::element::Hg");
     symbol::import(symbols, "physical::element::francium",  "*", "physical::element::Fr");
+#endif
 
     /* add the "other" symbols last to make sure that these have precedence. */
     detail::AddOtherSymbols<Quantity::coeff_type>()(symbols);

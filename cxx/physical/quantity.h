@@ -683,11 +683,12 @@ namespace runtime {
         /** The power operator. */
         template<class ExpT>
         inline quantity & savePow(const ExpT & exponent) {
-            coeff = std::pow(coeff, exponent);
-            units = pow(units, exponent);
-            /* There is no point in trying to keep the name now. */
-            name.clear();
-            return *this;
+          using std::pow;
+          coeff = pow(coeff, exponent);
+          units = pow(units, exponent);
+          /* There is no point in trying to keep the name now. */
+          name.clear();
+          return *this;
         }
  
         inline quantity & savePow(const quantity<T> & e) {
@@ -840,8 +841,14 @@ namespace runtime {
       return q;
     }
 
-  }
+    /** The power operator. */
+    template < typename T, typename ExpT >
+    inline quantity<T> pow( const quantity<T> & q, const ExpT & exponent ) {
+      using std::pow;
+      return quantity<T>( pow(q.coeff, exponent), pow(q.units, exponent) );
+    }
 
-} /* namespace runtime */
+  }/* namespace runtime::physical */
+}/* namespace runtime */
 
 #endif // PHYSICAL_QUANTITY_H

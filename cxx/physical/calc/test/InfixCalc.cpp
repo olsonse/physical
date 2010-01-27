@@ -1,6 +1,6 @@
-#define BOOST_TEST_MODULE  infix
+#define BOOST_TEST_MODULE  boost_infix
 
-#include <physical/calc/infix.h>
+#include <physical/calc/boost_infix.h>
 
 #include <boost/test/unit_test.hpp>
 
@@ -30,7 +30,7 @@ namespace {
 }
 
 
-BOOST_AUTO_TEST_SUITE( InFixCalc );//{
+BOOST_AUTO_TEST_SUITE( InfixCalc );//{
 
   BOOST_AUTO_TEST_CASE( simple_parse ) {
     prepareCalculator();
