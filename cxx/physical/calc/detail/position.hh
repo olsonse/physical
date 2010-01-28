@@ -33,7 +33,7 @@
 
 /**
  ** \file position.hh
- ** Define the physical::calc::detail::position class.
+ ** Define the runtime::physical::calc::detail::position class.
  */
 
 #ifndef BISON_POSITION_HH
@@ -46,7 +46,7 @@
 
 /* Line 38 of location.cc  */
 #line 52 "Parser.yy"
-namespace physical { namespace calc { namespace detail {
+namespace runtime { namespace physical { namespace calc { namespace detail {
 
 /* Line 38 of location.cc  */
 #line 53 "position.hh"
@@ -158,7 +158,7 @@ namespace physical { namespace calc { namespace detail {
 
 /* Line 144 of location.cc  */
 #line 52 "Parser.yy"
-} } } // physical::calc::detail
+} } } } // runtime::physical::calc::detail
 
 /* Line 144 of location.cc  */
 #line 165 "position.hh"

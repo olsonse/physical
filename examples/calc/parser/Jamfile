@@ -1,1 +1,1 @@
-exe testParser : testParser.cpp /physical//runtime ;
+exe testParser : testParser.cpp /physical//calc ;

@@ -7,4 +7,4 @@ lib readline :
       <define>HAVE_READLINE_HISTORY
     ;
 
-exe testInteractive : testInteractive.cpp /physical//runtime readline ;
+exe testInteractive : testInteractive.cpp /physical//calc readline ;

@@ -4,8 +4,8 @@
 %{ /*** C/C++ Declarations ***/
 
 #include <physical/runtime.h>
-#include <physical/calc/InfixCalc.h>
-#include <physical/calc/detail/expression/Constant.h>
+#include <physical/calc/Driver.h>
+#include <physical/calc/detail/expression/Literal.h>
 #include <physical/calc/detail/expression/Function.h>
 #include <physical/calc/detail/expression/StringFunction.h>
 #include <physical/calc/detail/expression/Power.h>
@@ -22,11 +22,11 @@
 #include <string>
 #include <vector>
 
-namespace physical { namespace calc { namespace detail {
+namespace runtime { namespace physical { namespace calc { namespace detail {
   void bison_parser_help();
 
   inline std::string sstrip( const std::string & s );
-} } }
+} } } }
 
 %}
 
@@ -49,7 +49,7 @@ namespace physical { namespace calc { namespace detail {
 %skeleton "lalr1.cc"
 
 /* namespace to enclose parser in */
-%define "namespace" "physical::calc::detail"
+%define "namespace" "runtime::physical::calc::detail"
 
 /* set the parser's class identifier */
 %define "parser_class_name" "Parser"
@@ -72,11 +72,13 @@ namespace physical { namespace calc { namespace detail {
 %code requires {
 #include <vector>
 
-namespace physical {
-  namespace calc {
-    namespace detail {
-      namespace expression {
-        class Node;
+namespace runtime {
+  namespace physical {
+    namespace calc {
+      namespace detail {
+        namespace expression {
+          class Node;
+        }
       }
     }
   }
@@ -128,7 +130,6 @@ namespace physical {
 
 %{
 
-#include <physical/calc/detail/Driver.h>
 #include <physical/calc/detail/Scanner.h>
 
 /* this "connects" the bison parser in the driver to the flex scanner class
@@ -145,12 +146,12 @@ namespace physical {
 
 literal : DOUBLE
       {
-        $$ = new expression::Constant($1);
+        $$ = new expression::Literal($1);
       }
 
 variable : IDENTIFIER
       {
-        $$ = new expression::VariableLookup(driver, *$1);
+        $$ = new expression::VariableLookup(driver.symbols, *$1);
         delete $1;
       }
 
@@ -180,18 +181,18 @@ string_list : STRING
 
 function : IDENTIFIER '(' ')'
       {
-        $$ = new expression::Function(*$1);
+        $$ = new expression::Function(driver.symbols, *$1);
         delete $1;
       }
     | IDENTIFIER '(' expr_list ')'
       {
-        $$ = new expression::Function(*$1, *$3);
+        $$ = new expression::Function(driver.symbols, *$1, *$3);
         delete $1;
         delete $3;
       }
     | IDENTIFIER '(' string_list ')'
       {
-        $$ = new expression::StringFunction(*$1, *$3);
+        $$ = new expression::StringFunction(driver.symbols, *$1, *$3);
         delete $1;
         delete $3;
       }
@@ -267,12 +268,12 @@ expr : term
 
 assignment : IDENTIFIER '=' expr
       {
-        $$ = new expression::Assign(driver, *$1, $3);
+        $$ = new expression::Assign(driver.symbols, *$1, $3);
         delete $1;
       }
     | IDENTIFIER '=' assignment /* for chained assignments. */
       {
-        $$ = new expression::Assign(driver, *$1, $3);
+        $$ = new expression::Assign(driver.symbols, *$1, $3);
         delete $1;
       }
 
@@ -452,18 +453,18 @@ start : /* empty */
     | start command eoa
     | start assignment eoa
       {
-        driver.calc.expressions.push_back($2);
+        driver.expressions.push_back($2);
       }
     | start expr eoa
       {
-        driver.calc.expressions.push_back($2);
+        driver.expressions.push_back($2);
       }
 
 /*** EN D EXAMPLE - Change the example grammar rules above ***/
 
 %% /*** Additional Code ***/
 
-namespace physical { namespace calc { namespace detail {
+namespace runtime { namespace physical { namespace calc { namespace detail {
   void Parser::error( const Parser::location_type& l,
                                const std::string& m ) {
     driver.error(l, m);
@@ -519,5 +520,5 @@ namespace physical { namespace calc { namespace detail {
     return s.substr(1, s.size()-2);
   }
 
-} } }
+} } } }
 

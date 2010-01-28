@@ -12,69 +12,87 @@
 #include <string>
 #include <sstream>
 
-namespace physical {
-  namespace calc {
-    namespace detail {
-      namespace expression {
+namespace runtime {
+  namespace physical {
+    namespace calc {
+      namespace detail {
+        namespace expression {
 
-        /** Calculation node raising one operand to the power of the second. */
-        class Function : public Node {
-          /* TYPEDEFS */
-          typedef std::vector< Node * > ArgList;
+          /** Calculation node raising one operand to the power of the second. */
+          class Function : public Node {
+            /* TYPEDEFS */
+            typedef std::vector< Node * > ArgList;
 
-          /// left calculation operand
-          std::string funcname;
+            /** Reference to the symbol table. */
+            const symbol::table & symbols;
 
-          /// right calculation operand
-          ArgList args;
-          
-        public:
-          explicit Function( const std::string & funcname )
-            : Node(), funcname(funcname), args() { }
+            /// left calculation operand
+            std::string funcname;
 
-          explicit Function( const std::string & funcname,
-                             const ArgList & args )
-            : Node(), funcname(funcname), args(args) { }
+            /// right calculation operand
+            ArgList args;
+            
+          public:
+            explicit Function( const symbol::table & symbols,
+                               const std::string & funcname )
+              : Node(), symbols(symbols), funcname(funcname), args() { }
 
-          virtual ~Function() {
-            while ( !args.empty() ) {
-              delete args.back();
-              args.pop_back();
-            }
-          }
+            explicit Function( const symbol::table & symbols,
+                               const std::string & funcname,
+                               const ArgList & args )
+              : Node(), symbols(symbols), funcname(funcname), args(args) { }
 
-          virtual Quantity evaluate() const {
-            symbol::table::iterator it = symbols.find(funcname);
-            if (it == symbols.end())
-              throw undefined_function(funcname);
-            else if (it->second.type != symbol::FUNCTION)
-              throw undefined_function(funcname);
-
-            int args_accepted = it->second.numberOfArguments();
-            if ( args_accepted >= 0 && args_accepted != args.size() ) {
-              std::ostringstream outs;
-              outs << "incorrect number of arguments "
-                      "(" << args.size() << ")"
-                      " for function '" << funcname << "'"
-                      " which accepts " << args_accepted << " arguments";
-              throw symbol_error( outs.str() );
+            virtual ~Function() {
+              while ( !args.empty() ) {
+                delete args.back();
+                args.pop_back();
+              }
             }
 
-            return it->second.evaluate( args );
-          }
+            virtual Quantity evaluate() const {
+              symbol::table::const_iterator it = symbols.find(funcname);
+              if (it == symbols.end())
+                throw undefined_function(funcname);
+              else if (it->second.type != symbol::FUNCTION)
+                throw undefined_function(funcname);
 
-          virtual void print(std::ostream &os, unsigned int depth) const {
-            os << indent(depth) << funcname << "()" << std::endl;
-            const ArgList::const_iterator end = args.end();
-            for ( ArgList::const_iterator i = args.begin(); i != end; ++i ) {
-              (*i)->print(os, depth+1);
+              int args_accepted = it->second.numberOfArguments();
+              if ( args_accepted >= 0 &&
+                   static_cast<unsigned int>(args_accepted) != args.size() ) {
+                std::ostringstream outs;
+                outs << "incorrect number of arguments "
+                        "(" << args.size() << ")"
+                        " for function '" << funcname << "'"
+                        " which accepts " << args_accepted << " arguments";
+                throw symbol_error( outs.str() );
+              }
+
+              /* we first need to build a list of the evaluation of each of the
+               * arguements. */
+              std::vector<Quantity> eargs;
+              {
+                const ArgList::const_iterator end = args.end();
+                for ( ArgList::const_iterator i = args.begin(); i != end; ++i )
+                  eargs.push_back( (*i)->evaluate() );
+              }
+
+              return it->second.evaluate( eargs );
             }
-          }
-        };
 
-      } /* namespace physical::calc::detail::expression */
-    } /* namespace physical::calc::detail */
-  } /* namespace physical::calc */
-} /* namespace physical */
+            virtual std::ostream & print(std::ostream &os, unsigned int depth) const {
+              os << indent(depth) << funcname << "()" << std::endl;
+              const ArgList::const_iterator end = args.end();
+              for ( ArgList::const_iterator i = args.begin(); i != end; ++i ) {
+                (*i)->print(os, depth+1);
+              }
+              return os;
+            }
+          };
+
+        } /* namespace physical::calc::detail::expression */
+      } /* namespace physical::calc::detail */
+    } /* namespace physical::calc */
+  } /* namespace runtime::physical */
+} /* namespace runtime */
 
 #endif // physical_calc_detail_expression_Function_h

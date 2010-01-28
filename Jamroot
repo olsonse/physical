@@ -97,7 +97,6 @@ project /physical
         <include>cxx
         <library>/boost//headers
         <define>PHYSICAL_VERSION=\\\"$(VERSION)\\\"
-    # : build-dir build
     ;
 
 
@@ -131,17 +130,33 @@ lib physical
       [ glob cxx/physical/calc/*.h ]
     : <link>static
     : # no default build
-    : <include>cxx ;
+    : # no includes
+    ;
 
-alias calc
+lib calc
     : physical
-      cxx/physical/calc/detail/Driver.cpp
-      cxx/physical/calc/detail/Parser.$(YY)
-      cxx/physical/calc/detail/Scanner.$(LL)
+      Driver
+      Parser
+      Scanner
     : <link>static
     : # no default build
     : <library>/boost//regex/<link>static
+      <include>$(project).build-dir
     ;
+
+# the driver, scanner, and parser have a particular dependency graph
+obj Driver
+    : 
+      cxx/physical/calc/Driver.cpp
+      Scanner
+      Parser
+    ;
+
+obj Scanner
+    : Parser
+      cxx/physical/calc/detail/Scanner.$(LL) 
+    ;
+obj Parser : cxx/physical/calc/detail/Parser.$(YY) ;
 
 feature phys-type : complex cfloat double float : composite ;
 feature.compose <phys-type>complex : <define>RUNTIME_PHYSICAL_QUANTITY=\"std::complex<double>\" ;

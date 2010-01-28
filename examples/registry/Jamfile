@@ -1,1 +1,1 @@
-exe testregistry : testregistry.cpp /physical//runtime ;
+exe testregistry : testregistry.cpp /physical//physical ;

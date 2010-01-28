@@ -10,8 +10,8 @@
 
 
 /* import the parser's token type into a local typedef */
-typedef physical::calc::detail::Parser::token token;
-typedef physical::calc::detail::Parser::token_type token_type;
+typedef runtime::physical::calc::detail::Parser::token token;
+typedef runtime::physical::calc::detail::Parser::token_type token_type;
 
 /* By default yylex returns int, we use token_type. Unfortunately yyterminate
  * by default returns 0, which is not of token_type. */
@@ -90,7 +90,7 @@ typedef physical::calc::detail::Parser::token_type token_type;
   return token::KEYWORD_CLEAR;
 }
 
-(([0-9]+)|([0-9]*"."[0-9]+)|([0-9]+"."[0-9]*))("e""-"?[0-9]+)? {
+(([0-9]+)|([0-9]*"."[0-9]+)|([0-9]+"."[0-9]*))(("e"|"E")"-"?[0-9]+)? {
   yylval->doubleVal = atof(yytext);
   return token::DOUBLE;
 }
@@ -125,22 +125,24 @@ typedef physical::calc::detail::Parser::token_type token_type;
 
 %% /*** Additional Code ***/
 
-namespace physical {
-  namespace calc {
-    namespace detail {
+namespace runtime {
+  namespace physical {
+    namespace calc {
+      namespace detail {
 
-      Scanner::Scanner( std::istream* in, std::ostream* out )
-        : PhysicalFlexLexer(in, out) { }
+        Scanner::Scanner( std::istream* in, std::ostream* out )
+          : PhysicalFlexLexer(in, out) { }
 
-      Scanner::~Scanner() { }
+        Scanner::~Scanner() { }
 
-      void Scanner::set_debug( bool b ) {
-          yy_flex_debug = b;
-      }
+        void Scanner::set_debug( bool b ) {
+            yy_flex_debug = b;
+        }
 
-    } /* namespace physical::calc::detail */
-  } /* namespace physical::calc */
-} /* namespace physical */
+      } /* namespace physical::calc::detail */
+    } /* namespace physical::calc */
+  } /* namespace runtime::physical */
+} /* namespace runtime */
 
 /* This implementation of PhysicalFlexLexer::yylex() is required to fill the
  * vtable of the class PhysicalFlexLexer. We define the scanner's main yylex

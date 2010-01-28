@@ -8,37 +8,40 @@
 
 #include <ostream>
 
-namespace physical {
-  namespace calc {
-    namespace detail {
-      namespace expression {
+namespace runtime {
+  namespace physical {
+    namespace calc {
+      namespace detail {
+        namespace expression {
 
-        /** Calculation node negating the value of the operand subtree. */
-        class Negate : public Node {
-          /// calculation subtree
-          Node* node;
+          /** Calculation node negating the value of the operand subtree. */
+          class Negate : public Node {
+            /// calculation subtree
+            Node* node;
 
-        public:
-          explicit Negate(Node* _node)
-            : Node(), node(_node) { }
+          public:
+            explicit Negate(Node* _node)
+              : Node(), node(_node) { }
 
-          virtual ~Negate() {
-            delete node;
-          }
+            virtual ~Negate() {
+              delete node;
+            }
 
-          virtual Quantity evaluate() const {
-            return - node->evaluate();
-          }
+            virtual Quantity evaluate() const {
+              return - node->evaluate();
+            }
 
-          virtual void print( std::ostream &os, unsigned int depth ) const {
-            os << indent(depth) << "- negate" << std::endl;
-            node->print(os, depth+1);
-          }
-        };
+            virtual std::ostream & print( std::ostream &os, unsigned int depth ) const {
+              os << indent(depth) << "- negate" << std::endl;
+              node->print(os, depth+1);
+              return os;
+            }
+          };
 
-      } /* namespace physical::calc::detail::expression */
-    } /* namespace physical::calc::detail */
-  } /* namespace physical::calc */
-} /* namespace physical */
+        } /* namespace physical::calc::detail::expression */
+      } /* namespace physical::calc::detail */
+    } /* namespace physical::calc */
+  } /* namespace runtime::physical */
+} /* namespace runtime */
 
 #endif // physical_calc_detail_expression_Negate_h

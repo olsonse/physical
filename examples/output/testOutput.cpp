@@ -4,7 +4,6 @@
 
 using namespace runtime::physical;
 using runtime::physical::system::si;
-using namespace runtime::physical::math;
 
 int main() {
     Quantity a = 2 * units::m;

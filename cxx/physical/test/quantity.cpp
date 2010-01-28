@@ -176,7 +176,6 @@ BOOST_AUTO_TEST_SUITE( quantity );//{
   BOOST_AUTO_TEST_CASE( quantity_pow ) {
     typedef runtime::physical::quantity< std::complex<double> > Quantity;
     using runtime::physical::units_pair;
-    using namespace runtime::physical::math;
 
     Quantity a = Quantity(std::complex<double>(2.,2.), units_pair("kg",1));
 

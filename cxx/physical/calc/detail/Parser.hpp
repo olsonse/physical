@@ -44,11 +44,13 @@
 
 #include <vector>
 
-namespace physical {
-  namespace calc {
-    namespace detail {
-      namespace expression {
-        class Node;
+namespace runtime {
+  namespace physical {
+    namespace calc {
+      namespace detail {
+        namespace expression {
+          class Node;
+        }
       }
     }
   }
@@ -57,7 +59,7 @@ namespace physical {
 
 
 /* Line 35 of lalr1.cc  */
-#line 61 "Parser.hpp"
+#line 63 "Parser.hpp"
 
 
 #include <string>
@@ -67,19 +69,19 @@ namespace physical {
 
 /* Line 35 of lalr1.cc  */
 #line 52 "Parser.yy"
-namespace physical { namespace calc { namespace detail {
+namespace runtime { namespace physical { namespace calc { namespace detail {
 
 /* Line 35 of lalr1.cc  */
-#line 74 "Parser.hpp"
+#line 76 "Parser.hpp"
   class position;
   class location;
 
 /* Line 35 of lalr1.cc  */
 #line 52 "Parser.yy"
-} } } // physical::calc::detail
+} } } } // runtime::physical::calc::detail
 
 /* Line 35 of lalr1.cc  */
-#line 83 "Parser.hpp"
+#line 85 "Parser.hpp"
 
 #include "location.hh"
 
@@ -123,10 +125,10 @@ do {							\
 
 /* Line 35 of lalr1.cc  */
 #line 52 "Parser.yy"
-namespace physical { namespace calc { namespace detail {
+namespace runtime { namespace physical { namespace calc { namespace detail {
 
 /* Line 35 of lalr1.cc  */
-#line 130 "Parser.hpp"
+#line 132 "Parser.hpp"
 
   /// A Bison parser.
   class Parser
@@ -138,7 +140,7 @@ namespace physical { namespace calc { namespace detail {
     {
 
 /* Line 35 of lalr1.cc  */
-#line 88 "Parser.yy"
+#line 90 "Parser.yy"
 
   int                                     integerVal;
   double                                  doubleVal;
@@ -150,7 +152,7 @@ namespace physical { namespace calc { namespace detail {
 
 
 /* Line 35 of lalr1.cc  */
-#line 154 "Parser.hpp"
+#line 156 "Parser.hpp"
     };
 #else
     typedef YYSTYPE semantic_type;
@@ -345,10 +347,10 @@ namespace physical { namespace calc { namespace detail {
 
 /* Line 35 of lalr1.cc  */
 #line 52 "Parser.yy"
-} } } // physical::calc::detail
+} } } } // runtime::physical::calc::detail
 
 /* Line 35 of lalr1.cc  */
-#line 352 "Parser.hpp"
+#line 354 "Parser.hpp"
 
 
 

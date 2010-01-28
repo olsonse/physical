@@ -841,12 +841,12 @@ namespace runtime {
       return q;
     }
 
-    /** The power operator. */
-    template < typename T, typename ExpT >
-    inline quantity<T> pow( const quantity<T> & q, const ExpT & exponent ) {
-      using std::pow;
-      return quantity<T>( pow(q.coeff, exponent), pow(q.units, exponent) );
+    /** Negation operation. */
+    template < typename T >
+    inline quantity<T> operator- (const quantity<T> & q) {
+      return quantity<T>(-q.coeff, q.units);
     }
+
 
   }/* namespace runtime::physical */
 }/* namespace runtime */

@@ -8,42 +8,45 @@
 
 #include <ostream>
 
-namespace physical {
-  namespace calc {
-    namespace detail {
-      namespace expression {
+namespace runtime {
+  namespace physical {
+    namespace calc {
+      namespace detail {
+        namespace expression {
 
-        /** Calculation node multiplying two operand nodes. */
-        class Multiply : public Node {
-          /// left calculation operand
-          Node* left;
+          /** Calculation node multiplying two operand nodes. */
+          class Multiply : public Node {
+            /// left calculation operand
+            Node* left;
 
-          /// right calculation operand
-          Node* right;
-          
-        public:
-          explicit Multiply(Node* _left, Node* _right)
-            : Node(), left(_left), right(_right) { }
+            /// right calculation operand
+            Node* right;
+            
+          public:
+            explicit Multiply(Node* _left, Node* _right)
+              : Node(), left(_left), right(_right) { }
 
-          virtual ~Multiply() {
-            delete left;
-            delete right;
-          }
+            virtual ~Multiply() {
+              delete left;
+              delete right;
+            }
 
-          virtual Quantity evaluate() const {
-            return left->evaluate() * right->evaluate();
-          }
+            virtual Quantity evaluate() const {
+              return left->evaluate() * right->evaluate();
+            }
 
-          virtual void print(std::ostream &os, unsigned int depth) const {
-            os << indent(depth) << "* multiply" << std::endl;
-            left->print(os, depth+1);
-            right->print(os, depth+1);
-          }
-        };
+            virtual std::ostream & print(std::ostream &os, unsigned int depth) const {
+              os << indent(depth) << "* multiply" << std::endl;
+              left->print(os, depth+1);
+              right->print(os, depth+1);
+              return os;
+            }
+          };
 
-      } /* namespace physical::calc::detail::expression */
-    } /* namespace physical::calc::detail */
-  } /* namespace physical::calc */
-} /* namespace physical */
+        } /* namespace physical::calc::detail::expression */
+      } /* namespace physical::calc::detail */
+    } /* namespace physical::calc */
+  } /* namespace runtime::physical */
+} /* namespace runtime */
 
 #endif // physical_calc_detail_expression_Multiply_h

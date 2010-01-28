@@ -40,8 +40,8 @@
  /*** C/C++ Declarations ***/
 
 #include <physical/runtime.h>
-#include <physical/calc/InfixCalc.h>
-#include <physical/calc/detail/expression/Constant.h>
+#include <physical/calc/Driver.h>
+#include <physical/calc/detail/expression/Literal.h>
 #include <physical/calc/detail/expression/Function.h>
 #include <physical/calc/detail/expression/StringFunction.h>
 #include <physical/calc/detail/expression/Power.h>
@@ -58,11 +58,11 @@
 #include <string>
 #include <vector>
 
-namespace physical { namespace calc { namespace detail {
+namespace runtime { namespace physical { namespace calc { namespace detail {
   void bison_parser_help();
 
   inline std::string sstrip( const std::string & s );
-} } }
+} } } }
 
 
 
@@ -75,10 +75,9 @@ namespace physical { namespace calc { namespace detail {
 /* User implementation prologue.  */
 
 /* Line 317 of lalr1.cc  */
-#line 129 "Parser.yy"
+#line 131 "Parser.yy"
 
 
-#include <physical/calc/detail/Driver.h>
 #include <physical/calc/detail/Scanner.h>
 
 /* this "connects" the bison parser in the driver to the flex scanner class
@@ -90,7 +89,7 @@ namespace physical { namespace calc { namespace detail {
 
 
 /* Line 317 of lalr1.cc  */
-#line 94 "Parser.cpp"
+#line 93 "Parser.cpp"
 
 #ifndef YY_
 # if YYENABLE_NLS
@@ -155,10 +154,10 @@ do {					\
 
 /* Line 380 of lalr1.cc  */
 #line 52 "Parser.yy"
-namespace physical { namespace calc { namespace detail {
+namespace runtime { namespace physical { namespace calc { namespace detail {
 
 /* Line 380 of lalr1.cc  */
-#line 162 "Parser.cpp"
+#line 161 "Parser.cpp"
 #if YYERROR_VERBOSE
 
   /* Return YYSTR after stripping away unnecessary quotes and
@@ -261,43 +260,43 @@ namespace physical { namespace calc { namespace detail {
         case 5: /* "\"string\"" */
 
 /* Line 480 of lalr1.cc  */
-#line 114 "Parser.yy"
+#line 116 "Parser.yy"
 	{ delete (yyvaluep->stringVal); };
 
 /* Line 480 of lalr1.cc  */
-#line 269 "Parser.cpp"
+#line 268 "Parser.cpp"
 	break;
       case 6: /* "\"identifier\"" */
 
 /* Line 480 of lalr1.cc  */
-#line 114 "Parser.yy"
+#line 116 "Parser.yy"
 	{ delete (yyvaluep->stringVal); };
 
 /* Line 480 of lalr1.cc  */
-#line 278 "Parser.cpp"
+#line 277 "Parser.cpp"
 	break;
       case 25: /* "literal" */
 
 /* Line 480 of lalr1.cc  */
-#line 115 "Parser.yy"
+#line 117 "Parser.yy"
 	{ delete (yyvaluep->calcnode); };
 
 /* Line 480 of lalr1.cc  */
-#line 287 "Parser.cpp"
+#line 286 "Parser.cpp"
 	break;
       case 26: /* "variable" */
 
 /* Line 480 of lalr1.cc  */
-#line 115 "Parser.yy"
+#line 117 "Parser.yy"
 	{ delete (yyvaluep->calcnode); };
 
 /* Line 480 of lalr1.cc  */
-#line 296 "Parser.cpp"
+#line 295 "Parser.cpp"
 	break;
       case 27: /* "expr_list" */
 
 /* Line 480 of lalr1.cc  */
-#line 118 "Parser.yy"
+#line 120 "Parser.yy"
 	{
   while ( !(yyvaluep->nodeVector)->empty() ) {
     delete (yyvaluep->nodeVector)->back();
@@ -308,79 +307,79 @@ namespace physical { namespace calc { namespace detail {
 };
 
 /* Line 480 of lalr1.cc  */
-#line 312 "Parser.cpp"
+#line 311 "Parser.cpp"
 	break;
       case 28: /* "string_list" */
 
 /* Line 480 of lalr1.cc  */
-#line 117 "Parser.yy"
+#line 119 "Parser.yy"
 	{ delete (yyvaluep->stringVector); };
 
 /* Line 480 of lalr1.cc  */
-#line 321 "Parser.cpp"
+#line 320 "Parser.cpp"
 	break;
       case 29: /* "function" */
 
 /* Line 480 of lalr1.cc  */
-#line 116 "Parser.yy"
+#line 118 "Parser.yy"
 	{ delete (yyvaluep->calcnode); };
 
 /* Line 480 of lalr1.cc  */
-#line 330 "Parser.cpp"
+#line 329 "Parser.cpp"
 	break;
       case 30: /* "atomexpr" */
 
 /* Line 480 of lalr1.cc  */
-#line 116 "Parser.yy"
+#line 118 "Parser.yy"
 	{ delete (yyvaluep->calcnode); };
 
 /* Line 480 of lalr1.cc  */
-#line 339 "Parser.cpp"
+#line 338 "Parser.cpp"
 	break;
       case 31: /* "powexpr" */
 
 /* Line 480 of lalr1.cc  */
-#line 116 "Parser.yy"
+#line 118 "Parser.yy"
 	{ delete (yyvaluep->calcnode); };
 
 /* Line 480 of lalr1.cc  */
-#line 348 "Parser.cpp"
+#line 347 "Parser.cpp"
 	break;
       case 32: /* "factor" */
 
 /* Line 480 of lalr1.cc  */
-#line 116 "Parser.yy"
+#line 118 "Parser.yy"
 	{ delete (yyvaluep->calcnode); };
 
 /* Line 480 of lalr1.cc  */
-#line 357 "Parser.cpp"
+#line 356 "Parser.cpp"
 	break;
       case 33: /* "term" */
 
 /* Line 480 of lalr1.cc  */
-#line 116 "Parser.yy"
+#line 118 "Parser.yy"
 	{ delete (yyvaluep->calcnode); };
 
 /* Line 480 of lalr1.cc  */
-#line 366 "Parser.cpp"
+#line 365 "Parser.cpp"
 	break;
       case 34: /* "expr" */
 
 /* Line 480 of lalr1.cc  */
-#line 116 "Parser.yy"
+#line 118 "Parser.yy"
 	{ delete (yyvaluep->calcnode); };
 
 /* Line 480 of lalr1.cc  */
-#line 375 "Parser.cpp"
+#line 374 "Parser.cpp"
 	break;
       case 35: /* "assignment" */
 
 /* Line 480 of lalr1.cc  */
-#line 116 "Parser.yy"
+#line 118 "Parser.yy"
 	{ delete (yyvaluep->calcnode); };
 
 /* Line 480 of lalr1.cc  */
-#line 384 "Parser.cpp"
+#line 383 "Parser.cpp"
 	break;
 
 	default:
@@ -466,7 +465,7 @@ namespace physical { namespace calc { namespace detail {
 }
 
 /* Line 553 of lalr1.cc  */
-#line 470 "Parser.cpp"
+#line 469 "Parser.cpp"
 
     /* Initialize the stacks.  The initial state will be pushed in
        yynewstate, since the latter expects the semantical and the
@@ -585,18 +584,18 @@ namespace physical { namespace calc { namespace detail {
 	  case 2:
 
 /* Line 678 of lalr1.cc  */
-#line 147 "Parser.yy"
+#line 148 "Parser.yy"
     {
-        (yyval.calcnode) = new expression::Constant((yysemantic_stack_[(1) - (1)].doubleVal));
+        (yyval.calcnode) = new expression::Literal((yysemantic_stack_[(1) - (1)].doubleVal));
       }
     break;
 
   case 3:
 
 /* Line 678 of lalr1.cc  */
-#line 152 "Parser.yy"
+#line 153 "Parser.yy"
     {
-        (yyval.calcnode) = new expression::VariableLookup(driver, *(yysemantic_stack_[(1) - (1)].stringVal));
+        (yyval.calcnode) = new expression::VariableLookup(driver.symbols, *(yysemantic_stack_[(1) - (1)].stringVal));
         delete (yysemantic_stack_[(1) - (1)].stringVal);
       }
     break;
@@ -604,7 +603,7 @@ namespace physical { namespace calc { namespace detail {
   case 4:
 
 /* Line 678 of lalr1.cc  */
-#line 158 "Parser.yy"
+#line 159 "Parser.yy"
     {
         (yyval.nodeVector) = new std::vector< expression::Node * >();
         (yyval.nodeVector)->push_back( (yysemantic_stack_[(1) - (1)].calcnode) );
@@ -614,7 +613,7 @@ namespace physical { namespace calc { namespace detail {
   case 5:
 
 /* Line 678 of lalr1.cc  */
-#line 163 "Parser.yy"
+#line 164 "Parser.yy"
     {
         (yyval.nodeVector) = (yysemantic_stack_[(3) - (1)].nodeVector);
         (yyval.nodeVector)->push_back( (yysemantic_stack_[(3) - (3)].calcnode) );
@@ -624,7 +623,7 @@ namespace physical { namespace calc { namespace detail {
   case 6:
 
 /* Line 678 of lalr1.cc  */
-#line 169 "Parser.yy"
+#line 170 "Parser.yy"
     {
         (yyval.stringVector) = new std::vector< std::string >();
         (yyval.stringVector)->push_back( sstrip(*(yysemantic_stack_[(1) - (1)].stringVal)) );
@@ -635,7 +634,7 @@ namespace physical { namespace calc { namespace detail {
   case 7:
 
 /* Line 678 of lalr1.cc  */
-#line 175 "Parser.yy"
+#line 176 "Parser.yy"
     {
         (yyval.stringVector) = (yysemantic_stack_[(3) - (1)].stringVector);
         (yyval.stringVector)->push_back( sstrip(*(yysemantic_stack_[(3) - (3)].stringVal)) );
@@ -646,9 +645,9 @@ namespace physical { namespace calc { namespace detail {
   case 8:
 
 /* Line 678 of lalr1.cc  */
-#line 182 "Parser.yy"
+#line 183 "Parser.yy"
     {
-        (yyval.calcnode) = new expression::Function(*(yysemantic_stack_[(3) - (1)].stringVal));
+        (yyval.calcnode) = new expression::Function(driver.symbols, *(yysemantic_stack_[(3) - (1)].stringVal));
         delete (yysemantic_stack_[(3) - (1)].stringVal);
       }
     break;
@@ -656,9 +655,9 @@ namespace physical { namespace calc { namespace detail {
   case 9:
 
 /* Line 678 of lalr1.cc  */
-#line 187 "Parser.yy"
+#line 188 "Parser.yy"
     {
-        (yyval.calcnode) = new expression::Function(*(yysemantic_stack_[(4) - (1)].stringVal), *(yysemantic_stack_[(4) - (3)].nodeVector));
+        (yyval.calcnode) = new expression::Function(driver.symbols, *(yysemantic_stack_[(4) - (1)].stringVal), *(yysemantic_stack_[(4) - (3)].nodeVector));
         delete (yysemantic_stack_[(4) - (1)].stringVal);
         delete (yysemantic_stack_[(4) - (3)].nodeVector);
       }
@@ -667,9 +666,9 @@ namespace physical { namespace calc { namespace detail {
   case 10:
 
 /* Line 678 of lalr1.cc  */
-#line 193 "Parser.yy"
+#line 194 "Parser.yy"
     {
-        (yyval.calcnode) = new expression::StringFunction(*(yysemantic_stack_[(4) - (1)].stringVal), *(yysemantic_stack_[(4) - (3)].stringVector));
+        (yyval.calcnode) = new expression::StringFunction(driver.symbols, *(yysemantic_stack_[(4) - (1)].stringVal), *(yysemantic_stack_[(4) - (3)].stringVector));
         delete (yysemantic_stack_[(4) - (1)].stringVal);
         delete (yysemantic_stack_[(4) - (3)].stringVector);
       }
@@ -678,7 +677,7 @@ namespace physical { namespace calc { namespace detail {
   case 11:
 
 /* Line 678 of lalr1.cc  */
-#line 200 "Parser.yy"
+#line 201 "Parser.yy"
     {
         (yyval.calcnode) = (yysemantic_stack_[(1) - (1)].calcnode);
       }
@@ -687,7 +686,7 @@ namespace physical { namespace calc { namespace detail {
   case 12:
 
 /* Line 678 of lalr1.cc  */
-#line 204 "Parser.yy"
+#line 205 "Parser.yy"
     {
         (yyval.calcnode) = (yysemantic_stack_[(1) - (1)].calcnode);
       }
@@ -696,7 +695,7 @@ namespace physical { namespace calc { namespace detail {
   case 13:
 
 /* Line 678 of lalr1.cc  */
-#line 208 "Parser.yy"
+#line 209 "Parser.yy"
     {
         (yyval.calcnode) = (yysemantic_stack_[(3) - (2)].calcnode);
       }
@@ -705,7 +704,7 @@ namespace physical { namespace calc { namespace detail {
   case 14:
 
 /* Line 678 of lalr1.cc  */
-#line 212 "Parser.yy"
+#line 213 "Parser.yy"
     {
         (yyval.calcnode) = (yysemantic_stack_[(1) - (1)].calcnode);
       }
@@ -714,7 +713,7 @@ namespace physical { namespace calc { namespace detail {
   case 15:
 
 /* Line 678 of lalr1.cc  */
-#line 217 "Parser.yy"
+#line 218 "Parser.yy"
     {
         (yyval.calcnode) = (yysemantic_stack_[(1) - (1)].calcnode);
       }
@@ -723,7 +722,7 @@ namespace physical { namespace calc { namespace detail {
   case 16:
 
 /* Line 678 of lalr1.cc  */
-#line 221 "Parser.yy"
+#line 222 "Parser.yy"
     {
         (yyval.calcnode) = new expression::Power((yysemantic_stack_[(3) - (1)].calcnode), (yysemantic_stack_[(3) - (3)].calcnode));
       }
@@ -732,7 +731,7 @@ namespace physical { namespace calc { namespace detail {
   case 17:
 
 /* Line 678 of lalr1.cc  */
-#line 226 "Parser.yy"
+#line 227 "Parser.yy"
     {
         (yyval.calcnode) = (yysemantic_stack_[(1) - (1)].calcnode);
       }
@@ -741,7 +740,7 @@ namespace physical { namespace calc { namespace detail {
   case 18:
 
 /* Line 678 of lalr1.cc  */
-#line 230 "Parser.yy"
+#line 231 "Parser.yy"
     {
         (yyval.calcnode) = (yysemantic_stack_[(2) - (2)].calcnode);
       }
@@ -750,7 +749,7 @@ namespace physical { namespace calc { namespace detail {
   case 19:
 
 /* Line 678 of lalr1.cc  */
-#line 234 "Parser.yy"
+#line 235 "Parser.yy"
     {
         (yyval.calcnode) = new expression::Negate((yysemantic_stack_[(2) - (2)].calcnode));
       }
@@ -759,7 +758,7 @@ namespace physical { namespace calc { namespace detail {
   case 20:
 
 /* Line 678 of lalr1.cc  */
-#line 239 "Parser.yy"
+#line 240 "Parser.yy"
     {
         (yyval.calcnode) = (yysemantic_stack_[(1) - (1)].calcnode);
       }
@@ -768,7 +767,7 @@ namespace physical { namespace calc { namespace detail {
   case 21:
 
 /* Line 678 of lalr1.cc  */
-#line 243 "Parser.yy"
+#line 244 "Parser.yy"
     {
         (yyval.calcnode) = new expression::Multiply((yysemantic_stack_[(3) - (1)].calcnode), (yysemantic_stack_[(3) - (3)].calcnode));
       }
@@ -777,7 +776,7 @@ namespace physical { namespace calc { namespace detail {
   case 22:
 
 /* Line 678 of lalr1.cc  */
-#line 247 "Parser.yy"
+#line 248 "Parser.yy"
     {
         (yyval.calcnode) = new expression::Divide((yysemantic_stack_[(3) - (1)].calcnode), (yysemantic_stack_[(3) - (3)].calcnode));
       }
@@ -786,7 +785,7 @@ namespace physical { namespace calc { namespace detail {
   case 23:
 
 /* Line 678 of lalr1.cc  */
-#line 251 "Parser.yy"
+#line 252 "Parser.yy"
     {
         (yyval.calcnode) = new expression::Modulo((yysemantic_stack_[(3) - (1)].calcnode), (yysemantic_stack_[(3) - (3)].calcnode));
       }
@@ -795,7 +794,7 @@ namespace physical { namespace calc { namespace detail {
   case 24:
 
 /* Line 678 of lalr1.cc  */
-#line 256 "Parser.yy"
+#line 257 "Parser.yy"
     {
         (yyval.calcnode) = (yysemantic_stack_[(1) - (1)].calcnode);
       }
@@ -804,7 +803,7 @@ namespace physical { namespace calc { namespace detail {
   case 25:
 
 /* Line 678 of lalr1.cc  */
-#line 260 "Parser.yy"
+#line 261 "Parser.yy"
     {
         (yyval.calcnode) = new expression::Add((yysemantic_stack_[(3) - (1)].calcnode), (yysemantic_stack_[(3) - (3)].calcnode));
       }
@@ -813,7 +812,7 @@ namespace physical { namespace calc { namespace detail {
   case 26:
 
 /* Line 678 of lalr1.cc  */
-#line 264 "Parser.yy"
+#line 265 "Parser.yy"
     {
         (yyval.calcnode) = new expression::Subtract((yysemantic_stack_[(3) - (1)].calcnode), (yysemantic_stack_[(3) - (3)].calcnode));
       }
@@ -822,9 +821,9 @@ namespace physical { namespace calc { namespace detail {
   case 27:
 
 /* Line 678 of lalr1.cc  */
-#line 269 "Parser.yy"
+#line 270 "Parser.yy"
     {
-        (yyval.calcnode) = new expression::Assign(driver, *(yysemantic_stack_[(3) - (1)].stringVal), (yysemantic_stack_[(3) - (3)].calcnode));
+        (yyval.calcnode) = new expression::Assign(driver.symbols, *(yysemantic_stack_[(3) - (1)].stringVal), (yysemantic_stack_[(3) - (3)].calcnode));
         delete (yysemantic_stack_[(3) - (1)].stringVal);
       }
     break;
@@ -832,9 +831,9 @@ namespace physical { namespace calc { namespace detail {
   case 28:
 
 /* Line 678 of lalr1.cc  */
-#line 274 "Parser.yy"
+#line 275 "Parser.yy"
     {
-        (yyval.calcnode) = new expression::Assign(driver, *(yysemantic_stack_[(3) - (1)].stringVal), (yysemantic_stack_[(3) - (3)].calcnode));
+        (yyval.calcnode) = new expression::Assign(driver.symbols, *(yysemantic_stack_[(3) - (1)].stringVal), (yysemantic_stack_[(3) - (3)].calcnode));
         delete (yysemantic_stack_[(3) - (1)].stringVal);
       }
     break;
@@ -842,7 +841,7 @@ namespace physical { namespace calc { namespace detail {
   case 29:
 
 /* Line 678 of lalr1.cc  */
-#line 280 "Parser.yy"
+#line 281 "Parser.yy"
     {
         driver.dump( std::cout );
         delete (yysemantic_stack_[(1) - (1)].stringVal);
@@ -852,7 +851,7 @@ namespace physical { namespace calc { namespace detail {
   case 30:
 
 /* Line 678 of lalr1.cc  */
-#line 285 "Parser.yy"
+#line 286 "Parser.yy"
     { /* e.g. dump constants */
         enum symbol::TYPE sym_type = symbol::UNDEFINED;
         if      ( (*(yysemantic_stack_[(2) - (2)].stringVal)) == "constants" )
@@ -872,7 +871,7 @@ namespace physical { namespace calc { namespace detail {
   case 31:
 
 /* Line 678 of lalr1.cc  */
-#line 301 "Parser.yy"
+#line 302 "Parser.yy"
     { /* e.g.  set output pretty */
         bool success = false;
         if (*(yysemantic_stack_[(3) - (2)].stringVal) == "output") {
@@ -905,7 +904,7 @@ namespace physical { namespace calc { namespace detail {
   case 32:
 
 /* Line 678 of lalr1.cc  */
-#line 330 "Parser.yy"
+#line 331 "Parser.yy"
     { /* e.g.  from physical::unit import * */
         bool success = true;
         if ( *(yysemantic_stack_[(4) - (3)].stringVal) == "import" )
@@ -929,7 +928,7 @@ namespace physical { namespace calc { namespace detail {
   case 33:
 
 /* Line 678 of lalr1.cc  */
-#line 349 "Parser.yy"
+#line 350 "Parser.yy"
     { /* e.g.  from physical::unit import * to myunits */
         bool success = true;
         if ( *(yysemantic_stack_[(6) - (3)].stringVal) == "import" && *(yysemantic_stack_[(6) - (5)].stringVal) == "to" )
@@ -953,7 +952,7 @@ namespace physical { namespace calc { namespace detail {
   case 34:
 
 /* Line 678 of lalr1.cc  */
-#line 368 "Parser.yy"
+#line 369 "Parser.yy"
     { /* e.g.  from physical import 'element::.*' */
         bool success = true;
         if ( *(yysemantic_stack_[(4) - (3)].stringVal) == "import" )
@@ -978,7 +977,7 @@ namespace physical { namespace calc { namespace detail {
   case 35:
 
 /* Line 678 of lalr1.cc  */
-#line 388 "Parser.yy"
+#line 389 "Parser.yy"
     { /* e.g.  from physical::unit import 'element::.*' to myelements */
         bool success = true;
         if ( *(yysemantic_stack_[(6) - (3)].stringVal) == "import" && *(yysemantic_stack_[(6) - (5)].stringVal) == "to" )
@@ -1003,7 +1002,7 @@ namespace physical { namespace calc { namespace detail {
   case 36:
 
 /* Line 678 of lalr1.cc  */
-#line 409 "Parser.yy"
+#line 410 "Parser.yy"
     { /* e.g. clear * */
         symbol::clear( driver.symbols, "", "*" );
         delete (yysemantic_stack_[(2) - (1)].stringVal);
@@ -1013,7 +1012,7 @@ namespace physical { namespace calc { namespace detail {
   case 37:
 
 /* Line 678 of lalr1.cc  */
-#line 414 "Parser.yy"
+#line 415 "Parser.yy"
     { /* e.g. clear physcal::unit::m */
         symbol::clear( driver.symbols, *(yysemantic_stack_[(2) - (2)].stringVal), "" );
         delete (yysemantic_stack_[(2) - (1)].stringVal);
@@ -1024,7 +1023,7 @@ namespace physical { namespace calc { namespace detail {
   case 38:
 
 /* Line 678 of lalr1.cc  */
-#line 420 "Parser.yy"
+#line 421 "Parser.yy"
     { /* e.g. clear 'physical::element::.*' */
         symbol::clear( driver.symbols, "", sstrip(*(yysemantic_stack_[(2) - (2)].stringVal)) );
         delete (yysemantic_stack_[(2) - (1)].stringVal);
@@ -1035,7 +1034,7 @@ namespace physical { namespace calc { namespace detail {
   case 39:
 
 /* Line 678 of lalr1.cc  */
-#line 427 "Parser.yy"
+#line 428 "Parser.yy"
     {
         std::cerr << "just hit CTL-C!" << std::endl;
         delete (yysemantic_stack_[(1) - (1)].stringVal);
@@ -1046,7 +1045,7 @@ namespace physical { namespace calc { namespace detail {
   case 42:
 
 /* Line 678 of lalr1.cc  */
-#line 435 "Parser.yy"
+#line 436 "Parser.yy"
     {
         bison_parser_help();
         delete (yysemantic_stack_[(1) - (1)].stringVal);
@@ -1056,25 +1055,25 @@ namespace physical { namespace calc { namespace detail {
   case 52:
 
 /* Line 678 of lalr1.cc  */
-#line 454 "Parser.yy"
+#line 455 "Parser.yy"
     {
-        driver.calc.expressions.push_back((yysemantic_stack_[(3) - (2)].calcnode));
+        driver.expressions.push_back((yysemantic_stack_[(3) - (2)].calcnode));
       }
     break;
 
   case 53:
 
 /* Line 678 of lalr1.cc  */
-#line 458 "Parser.yy"
+#line 459 "Parser.yy"
     {
-        driver.calc.expressions.push_back((yysemantic_stack_[(3) - (2)].calcnode));
+        driver.expressions.push_back((yysemantic_stack_[(3) - (2)].calcnode));
       }
     break;
 
 
 
 /* Line 678 of lalr1.cc  */
-#line 1078 "Parser.cpp"
+#line 1077 "Parser.cpp"
 	default:
           break;
       }
@@ -1471,12 +1470,12 @@ namespace physical { namespace calc { namespace detail {
   const unsigned short int
   Parser::yyrline_[] =
   {
-         0,   146,   146,   151,   157,   162,   168,   174,   181,   186,
-     192,   199,   203,   207,   211,   216,   220,   225,   229,   233,
-     238,   242,   246,   250,   255,   259,   263,   268,   273,   279,
-     284,   300,   329,   348,   367,   387,   408,   413,   419,   426,
-     432,   433,   434,   439,   440,   443,   444,   447,   448,   450,
-     451,   452,   453,   457
+         0,   147,   147,   152,   158,   163,   169,   175,   182,   187,
+     193,   200,   204,   208,   212,   217,   221,   226,   230,   234,
+     239,   243,   247,   251,   256,   260,   264,   269,   274,   280,
+     285,   301,   330,   349,   368,   388,   409,   414,   420,   427,
+     433,   434,   435,   440,   441,   444,   445,   448,   449,   451,
+     452,   453,   454,   458
   };
 
   // Print the state stack on the debug stream.
@@ -1565,17 +1564,17 @@ namespace physical { namespace calc { namespace detail {
 
 /* Line 1054 of lalr1.cc  */
 #line 52 "Parser.yy"
-} } } // physical::calc::detail
+} } } } // runtime::physical::calc::detail
 
 /* Line 1054 of lalr1.cc  */
-#line 1572 "Parser.cpp"
+#line 1571 "Parser.cpp"
 
 
 /* Line 1056 of lalr1.cc  */
-#line 464 "Parser.yy"
+#line 465 "Parser.yy"
  /*** Additional Code ***/
 
-namespace physical { namespace calc { namespace detail {
+namespace runtime { namespace physical { namespace calc { namespace detail {
   void Parser::error( const Parser::location_type& l,
                                const std::string& m ) {
     driver.error(l, m);
@@ -1631,6 +1630,6 @@ namespace physical { namespace calc { namespace detail {
     return s.substr(1, s.size()-2);
   }
 
-} } }
+} } } }
 
 

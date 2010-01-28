@@ -1,6 +1,6 @@
-#define BOOST_TEST_MODULE  boost_infix
+#define BOOST_TEST_MODULE  physical_calc_Driver
 
-#include <physical/calc/boost_infix.h>
+#include <physical/calc/Driver.h>
 
 #include <boost/test/unit_test.hpp>
 
@@ -9,12 +9,11 @@
 
 namespace {
   using runtime::physical::Quantity;
-  using runtime::physical::calc::InfixCalc;
+  using runtime::physical::calc::Driver;
 
   void prepareCalculator() {
     /* prepare infix units calculator. */
-    using runtime::physical::calc::symbol;
-    InfixCalc::base_calc & calc = InfixCalc::instance();
+    Driver & calc = Driver::instance();
   
     /* clear the old symbols out */
     calc.symbols.clear();
@@ -30,13 +29,13 @@ namespace {
 }
 
 
-BOOST_AUTO_TEST_SUITE( InfixCalc );//{
+BOOST_AUTO_TEST_SUITE( CalculatorDriver );//{
 
   BOOST_AUTO_TEST_CASE( simple_parse ) {
     prepareCalculator();
 
     BOOST_CHECK_CLOSE(
-      InfixCalc::instance().parse( "pi*(0.417*nm)^2").getCoeff<double>(),
+      Driver::instance().eval( "pi*(0.417*nm)^2").getCoeff<double>(),
       5.4628840494007563e-19,
       1e-10
     );
