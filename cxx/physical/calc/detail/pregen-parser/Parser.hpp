@@ -59,7 +59,7 @@ namespace runtime {
 
 
 /* Line 35 of lalr1.cc  */
-#line 63 "Parser.hpp"
+#line 63 "pregen-parser/Parser.hpp"
 
 
 #include <string>
@@ -72,7 +72,7 @@ namespace runtime {
 namespace runtime { namespace physical { namespace calc { namespace detail {
 
 /* Line 35 of lalr1.cc  */
-#line 76 "Parser.hpp"
+#line 76 "pregen-parser/Parser.hpp"
   class position;
   class location;
 
@@ -81,7 +81,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
 } } } } // runtime::physical::calc::detail
 
 /* Line 35 of lalr1.cc  */
-#line 85 "Parser.hpp"
+#line 85 "pregen-parser/Parser.hpp"
 
 #include "location.hh"
 
@@ -128,7 +128,7 @@ do {							\
 namespace runtime { namespace physical { namespace calc { namespace detail {
 
 /* Line 35 of lalr1.cc  */
-#line 132 "Parser.hpp"
+#line 132 "pregen-parser/Parser.hpp"
 
   /// A Bison parser.
   class Parser
@@ -152,7 +152,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
 
 
 /* Line 35 of lalr1.cc  */
-#line 156 "Parser.hpp"
+#line 156 "pregen-parser/Parser.hpp"
     };
 #else
     typedef YYSTYPE semantic_type;
@@ -350,7 +350,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
 } } } } // runtime::physical::calc::detail
 
 /* Line 35 of lalr1.cc  */
-#line 354 "Parser.hpp"
+#line 354 "pregen-parser/Parser.hpp"
 
 
 

@@ -43,7 +43,7 @@
 namespace runtime { namespace physical { namespace calc { namespace detail {
 
 /* Line 1067 of lalr1.cc  */
-#line 47 "stack.hh"
+#line 47 "pregen-parser/stack.hh"
   template <class T, class S = std::deque<T> >
   class stack
   {
@@ -135,7 +135,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
 } } } } // runtime::physical::calc::detail
 
 /* Line 1153 of lalr1.cc  */
-#line 139 "stack.hh"
+#line 139 "pregen-parser/stack.hh"
 
 #endif // not BISON_STACK_HH[]dnl
 

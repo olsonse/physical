@@ -1,6 +1,6 @@
-#line 2 "Scanner.cpp"
+#line 2 "pregen-scanner/Scanner.cpp"
 
-#line 4 "Scanner.cpp"
+#line 4 "pregen-scanner/Scanner.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -570,7 +570,7 @@ typedef runtime::physical::calc::detail::Parser::token_type token_type;
  * yylex is invoked, the begin position is moved onto the end position. */
 #line 50 "Scanner.ll"
 #define YY_USER_ACTION  yylloc->columns(yyleng);
-#line 574 "Scanner.cpp"
+#line 574 "pregen-scanner/Scanner.cpp"
 
 #define INITIAL 0
 
@@ -743,7 +743,7 @@ YY_DECL
 
  /*** BEGIN EXAMPLE - Change the example lexer rules below ***/
 
-#line 747 "Scanner.cpp"
+#line 747 "pregen-scanner/Scanner.cpp"
 
 	if ( !(yy_init) )
 		{
@@ -957,7 +957,7 @@ YY_RULE_SETUP
 #line 126 "Scanner.ll"
 ECHO;
 	YY_BREAK
-#line 961 "Scanner.cpp"
+#line 961 "pregen-scanner/Scanner.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 

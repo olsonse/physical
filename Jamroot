@@ -84,7 +84,7 @@ import common : find-tool ;
 path-constant TOP : . ;
 
 #constant VERSION : [ MATCH "\\$Revision: *([0-9]*) *\\$" : "$Revision: 636 $" ] ;
-constant VERSION : [ SHELL "printf `cd $(TOP); git describe 2> /dev/null` || printf physical-0.1.0 " ] ;
+constant VERSION : [ SHELL "printf `cd $(TOP); git describe 2> /dev/null` || printf physical-0.1.2 " ] ;
 
 use-project /boost : ../boost ;
 
@@ -100,26 +100,47 @@ project /physical
     ;
 
 
-# FIXME:  get this to check the version of bison and flex too.
-local found_bison = [ find-tool "bison" ] ;
-local found_lex   = [ find-tool "flex" ] ;
-
-local YY ;
-if $(found_bison) {
-    import bison ;
-    YY = "yy" ;
-} else {
-    echo "Compatible version of GNU bison not found.  Using pre-generated parser" ;
-    YY = "cpp" ;
+# a rule for checking the version of a particular tool
+# minimum-version  : e.g. "2.4.2"  (double quotese appear to be required
+# additional-paths : other places to search for the tool (besides $PATH)
+# path-last        : search $PATH after $(additional-paths) [Default false]
+rule check-version ( name : minimum-version : version-opt ? :
+                     additional-paths * : path-last ? ) {
+    local tool = [ find-tool $(name) $(additional-paths) $(path-last) ] ;
+    local vopt ;
+    if $(version-opt) {
+        vopt = $(version-opt) ;
+    } else {
+        vopt = "--version" ;
+    }
+    if $(tool) {
+        local tversion = [ MATCH "([0-9.]+)" : [ SHELL "$(tool) $(vopt)" ] ] ;
+        if $(tversion) >= $(minimum-version) {
+            return $(tversion) ;
+        }
+    }
 }
 
-local LL ;
-if $(found_lex) {
+local ParserYY ;
+local YY_include ;
+if [ check-version "bison" : "2.4" ] {
+    import bison ;
+    ParserYY = cxx/physical/calc/detail/Parser.yy ;
+} else {
+    echo "Compatible version of GNU bison not found.  Using pre-generated parser" ;
+    ParserYY = cxx/physical/calc/detail/pregen-parser/Parser.cpp ;
+    YY_include = <include>cxx/physical/calc/detail/pregen-parser ;
+}
+
+local ScannerLL ;
+local LL_include ;
+if [ check-version "flex" : "2.5.35" ] {
     import lex ;
-    LL = "ll" ;
+    ScannerLL = cxx/physical/calc/detail/Scanner.ll ;
 } else {
     echo "Compatible version of GNU flex not found.  Using pre-generated lexer" ;
-    LL = "cpp" ;
+    ScannerLL = cxx/physical/calc/detail/pregen-scanner/Scanner.cpp ;
+    LL_include = <include>cxx/physical/calc/detail/pregen-scanner ;
 }
 
 
@@ -146,18 +167,27 @@ lib calc
 
 # the driver, scanner, and parser have a particular dependency graph
 obj Driver
-    : 
-      cxx/physical/calc/Driver.cpp
-      Scanner
-      Parser
+    : cxx/physical/calc/Driver.cpp
+    : <implicit-dependency>Scanner
+      <implicit-dependency>Parser
     ;
 
 obj Scanner
-    : Parser
-      cxx/physical/calc/detail/Scanner.$(LL) 
-    : <include>cxx/physical/calc/detail
+    : $(ScannerLL)
+    : $(LL_include)
+      <implicit-dependency>Parser
+    : # no default build
+    : # usage requirements
+      $(LL_include)
     ;
-obj Parser : cxx/physical/calc/detail/Parser.$(YY) ;
+
+obj Parser
+    : $(ParserYY)
+    : $(YY_include)
+    : # no default build
+    : # usage requirements
+      $(YY_include)
+    ;
 
 feature phys-type : complex cfloat double float : composite ;
 feature.compose <phys-type>complex : <define>RUNTIME_PHYSICAL_QUANTITY=\"std::complex<double>\" ;

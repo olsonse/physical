@@ -49,7 +49,7 @@
 namespace runtime { namespace physical { namespace calc { namespace detail {
 
 /* Line 162 of location.cc  */
-#line 53 "location.hh"
+#line 53 "pregen-parser/location.hh"
 
   /// Abstract a location.
   class location
@@ -164,6 +164,6 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
 } } } } // runtime::physical::calc::detail
 
 /* Line 271 of location.cc  */
-#line 168 "location.hh"
+#line 168 "pregen-parser/location.hh"
 
 #endif // not BISON_LOCATION_HH

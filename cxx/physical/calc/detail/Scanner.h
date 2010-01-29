@@ -18,11 +18,11 @@
 
 #ifndef __FLEX_LEXER_H
 #define yyFlexLexer PhysicalFlexLexer
-#include "FlexLexer.h"
+#include <FlexLexer.h>
 #undef yyFlexLexer
 #endif
 
-#include "Parser.hpp"
+#include <Parser.hpp>
 
 namespace runtime {
   namespace physical {
