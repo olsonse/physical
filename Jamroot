@@ -155,6 +155,7 @@ obj Driver
 obj Scanner
     : Parser
       cxx/physical/calc/detail/Scanner.$(LL) 
+    : <include>cxx/physical/calc/detail
     ;
 obj Parser : cxx/physical/calc/detail/Parser.$(YY) ;
 
