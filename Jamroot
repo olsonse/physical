@@ -203,6 +203,7 @@ obj Scanner
 obj Parser
     : $(ParserYY)
     : $(YY_include)
+      $(LL_include)
     : # no default build
     : # usage requirements
       $(YY_include)
