@@ -186,5 +186,38 @@ BOOST_AUTO_TEST_SUITE( quantity );//{
     BOOST_CHECK_EQUAL( a.toString(), "(-16,16) * {(kg : 3), }");
   }
 
+  BOOST_AUTO_TEST_CASE( assertMatch ) {
+    typedef runtime::physical::quantity< std::complex<double> > Quantity;
+    using runtime::physical::units_pair;
+
+    Quantity a = Quantity(std::complex<double>(2.,2.), units_pair("kg",1));
+    Quantity b = Quantity(std::complex<double>(2.,2.), units_pair());
+
+    a = pow(a, 5.0);
+    b = pow(b, 5.0);
+
+    Quantity::setPrintMode(Quantity::UGLY_PRINT);
+    BOOST_CHECK_EQUAL( a.toString(), "(-128,-128) * {(kg : 5), }");
+    BOOST_CHECK_EQUAL( b.toString(), "(-128,-128) * {}");
+
+    BOOST_CHECK_NO_THROW(
+      a.assertMatch(Quantity(std::complex<double>(1.,1.), units_pair("kg",5)))
+    );
+    BOOST_CHECK_NO_THROW(
+      b.assertMatch(Quantity(std::complex<double>(1.,1.), units_pair()))
+    );
+    BOOST_CHECK_NO_THROW( b.assertUnitless() );
+
+    BOOST_CHECK_THROW(
+      a.assertMatch(Quantity(std::complex<double>(1.,1.), units_pair("kg",1))),
+      std::runtime_error
+    );
+    BOOST_CHECK_THROW(
+      b.assertMatch(Quantity(std::complex<double>(1.,1.), units_pair("kg",1))),
+      std::runtime_error
+    );
+    BOOST_CHECK_THROW( a.assertUnitless(), std::runtime_error );
+  }
+
 BOOST_AUTO_TEST_SUITE_END();//}
 
