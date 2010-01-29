@@ -32,8 +32,8 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
 
 /*** yacc/bison Declarations ***/
 
-/* Require bison 2.3 or later */
-%require "2.3"
+/* Require bison 2.4 or later */
+%require "2.4"
 
 /* add debug output code to generated parser. disable this for release
  * versions. */
