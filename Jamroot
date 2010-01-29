@@ -79,6 +79,7 @@ import path ; # for getting a better glob
 import package ; # used for installing whole package (provides --prefix related
                  # options )
 import common : find-tool ;
+import numbers : less ;
 
 
 path-constant TOP : . ;
@@ -115,7 +116,25 @@ rule check-version ( name : minimum-version : version-opt ? :
     }
     if $(tool) {
         local tversion = [ MATCH "([0-9.]+)" : [ SHELL "$(tool) $(vopt)" ] ] ;
-        if $(tversion) >= $(minimum-version) {
+        local tmajor = [ MATCH "([0-9]+)" : "$(tversion)" ] ;
+        local tminor = [ MATCH "[0-9]+\.([0-9]+)" : "$(tversion)" ] ;
+        local tpatch = [ MATCH "[0-9]+\.[0-9]+\.([0-9]+)" : "$(tversion)" ] ;
+        tmajor ?= "" ;
+        tminor ?= "" ;
+        tpatch ?= "" ;
+
+        local mmajor = [ MATCH "([0-9]+)" : "$(minimum-version)" ] ;
+        local mminor = [ MATCH "[0-9]+\.([0-9]+)" : "$(minimum-version)" ] ;
+        local mpatch = [ MATCH "[0-9]+\.[0-9]+\.([0-9]+)" : "$(minimum-version)" ] ;
+        mmajor ?= "" ;
+        mminor ?= "" ;
+        mpatch ?= "" ;
+
+        if ( $(tversion) = $(minimum-version)  ||
+             [ less $(mmajor) $(tmajor) ] ||
+             ( $(mmajor) = $(tmajor) && [ less $(mminor) $(tminor) ] ) ||
+             ( $(mmajor) = $(tmajor) && $(mminor) = $(tminor) &&
+               [ less $(mpatch) $(tpatch) ] ) ) {
             return $(tversion) ;
         }
     }
