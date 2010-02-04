@@ -174,13 +174,15 @@ lib physical
     ;
 
 lib calc
-    : physical
-      Driver
+    : Driver
       Parser
       Scanner
     : <link>static
+      <use>physical
+      <use>/boost//regex/<link>static
     : # no default build
-    : <library>/boost//regex/<link>static
+    : <library>physical
+      <library>/boost//regex/<link>static
       <include>$(project).build-dir
     ;
 
