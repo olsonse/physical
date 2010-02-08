@@ -1,3 +1,5 @@
 unit-test quantity : quantity.cpp /physical//physical ;
 unit-test conversion : conversion.cpp /physical//physical ;
 compile-fail no-compile-conversion0.cpp /physical//physical : : no-compile-conversion0 ;
+unit-test include-guards-0 : include-guards-0.cpp /physical//physical ;
+unit-test include-guards-1 : include-guards-1.cpp /physical//physical ;
