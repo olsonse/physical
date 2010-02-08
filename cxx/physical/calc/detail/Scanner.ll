@@ -90,7 +90,7 @@ typedef runtime::physical::calc::detail::Parser::token_type token_type;
   return token::KEYWORD_CLEAR;
 }
 
-(([0-9]+)|([0-9]*"."[0-9]+)|([0-9]+"."[0-9]*))(("e"|"E")"-"?[0-9]+)? {
+(([0-9]+)|([0-9]*"."[0-9]+)|([0-9]+"."[0-9]*))(("e"|"E")("-"|"+")?[0-9]+)? {
   yylval->doubleVal = atof(yytext);
   return token::DOUBLE;
 }

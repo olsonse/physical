@@ -113,6 +113,10 @@ namespace runtime {
 %type <stringVector>    string_list
 %type <nodeVector>      expr_list
 
+%left '-' '+'
+%left '*' '/'
+%right '^'
+
 %destructor { delete $$; } STRING IDENTIFIER
 %destructor { delete $$; } literal variable
 %destructor { delete $$; } atomexpr function powexpr factor term expr assignment
@@ -218,7 +222,7 @@ powexpr :  atomexpr
       {
         $$ = $1;
       }
-    | atomexpr '^' atomexpr
+    | atomexpr '^' factor
       {
         $$ = new expression::Power($1, $3);
       }
@@ -257,11 +261,11 @@ expr : term
       {
         $$ = $1;
       }
-    | term '+' expr
+    | expr '+' expr
       {
         $$ = new expression::Add($1, $3);
       }
-    | term '-' expr
+    | expr '-' expr
       {
         $$ = new expression::Subtract($1, $3);
       }

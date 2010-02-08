@@ -9,29 +9,34 @@ namespace runtime {
   namespace physical {
     namespace detail {
 
-      template < typename T, typename T2 >
-      struct ConvertCoeff {
-        T2 operator()( const T & coeff ) {
-          return static_cast<T2>(coeff);
+      template < typename Tdst >
+      struct ConvertHelp {
+        template < typename Tsrc >
+        Tdst operator()( const Tsrc & coeff ) {
+          return static_cast<Tdst>(coeff);
         }
-      };
 
-      template < typename T, typename T2 >
-      struct ConvertCoeff< std::complex<T>, std::complex<T2> > {
-        T2 operator()( const std::complex<T> & coeff ) {
-          return static_cast< std::complex<T2> >(coeff);
-        }
-      };
-
-      template < typename T, typename T2 >
-      struct ConvertCoeff< std::complex<T>, T2 > {
-        T2 operator()( const std::complex<T> & coeff ) {
+        template < typename Tcsrc >
+        Tdst operator()( const std::complex<Tcsrc> & coeff ) {
           if (coeff.imag() != 0.0)
             throw exception(ComplexNotSupported);
           else
-            return static_cast< T2 >(coeff.real());
+            return static_cast< Tdst >(coeff.real());
         }
       };
+
+      template < typename Tdst>
+      struct ConvertHelp< std::complex<Tdst> > {
+        template < typename Tcsrc >
+        std::complex<Tdst> operator()( const std::complex<Tcsrc> & coeff ) {
+          return static_cast< std::complex<Tdst> >(coeff);
+        }
+      };
+
+      template < typename Tdst, typename Tsrc >
+      Tdst ConvertCoeff( const Tsrc & coeff ) {
+        return ConvertHelp<Tdst>()(coeff);
+      }
 
     }/* namespace runtime::physical::detail */
   }/* namespace runtime::physical */

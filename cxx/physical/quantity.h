@@ -713,12 +713,12 @@ namespace runtime {
 
         template < typename T2 >
         void getCoeff( T2 & t2 ) const {
-          t2 = detail::ConvertCoeff<T,T2>()(coeff);
+          t2 = detail::ConvertCoeff<T2>(coeff);
         }
 
         template < typename T2 >
         T2 getCoeff() const {
-          return detail::ConvertCoeff<T,T2>()(coeff);
+          return detail::ConvertCoeff<T2>(coeff);
         }
 
         const T & getCoeff() const {
