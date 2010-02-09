@@ -168,6 +168,7 @@ namespace runtime {
     template < typename T, typename ExpT >
     inline quantity<T> pow( const quantity<T> & q, const ExpT & exponent ) {
       using std::pow;
+      using physical::pow;
       return quantity<T>( pow(q.coeff, exponent), pow(q.units,exponent) );
     }
 

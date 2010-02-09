@@ -35,6 +35,7 @@ namespace runtime {
 
             virtual Quantity evaluate() const {
               using std::pow;
+              using physical::pow;
               return pow(left->evaluate(), right->evaluate());
             }
 
