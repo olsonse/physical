@@ -63,9 +63,9 @@ namespace runtime {
         /* single argument string functions */
         symbols["new_unit"]=physical_SF1(new_unit);
 
-        #undef physical_F1(f)
-        #undef physical_F2(f)
-        #undef physical_SF1(f)
+        #undef physical_F1
+        #undef physical_F2
+        #undef physical_SF1
       }
     }
   }

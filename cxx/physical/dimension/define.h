@@ -57,6 +57,13 @@ namespace physical {
 #define PHYSICAL_DIM(D) \
       PHYSICAL_DIM_W_VAL(D,T::DIMENSION_DOES_NOT_EXIST_FOR_THIS_SYSTEM)
 
+/** This is only to help pass the comma between T,U below through the
+ * PHYSICAL_DIM_W_VAL macro function. */
+#ifdef PTU
+#  error PTU was already defined.  Need to pick another name for this macro!
+#endif
+#define PTU   T,U
+
     /* fundamental dimensions must be specified per system. */ 
     PHYSICAL_DIM(length);
     PHYSICAL_DIM(mass);
@@ -71,43 +78,50 @@ namespace physical {
      * 2.  you can not use the make_dim<> and exp_dim<> classes to get what you
      *     need local to your code.
      */
-    PHYSICAL_DIM_W_VAL(frequency,     1. / time<T>::value );
-    PHYSICAL_DIM_W_VAL(charge_to_mass, charge<T>::value / mass<T>::value );
-    PHYSICAL_DIM_W_VAL(inverse_length,1. / length<T>::value );
-    PHYSICAL_DIM_W_VAL(area,          1. / SQR(length<T>::value) );
-    PHYSICAL_DIM_W_VAL(volume,        CUBE(length<T>::value) );
-    PHYSICAL_DIM_W_VAL(number_density,1. / volume<T>::value );
-    PHYSICAL_DIM_W_VAL(density,       mass<T>::value * number_density<T>::value );
-    PHYSICAL_DIM_W_VAL(velocity,      length<T>::value / time<T>::value );
-    PHYSICAL_DIM_W_VAL(acceleration,  velocity<T>::value / time<T>::value );
-    PHYSICAL_DIM_W_VAL(force,         mass<T>::value * acceleration<T>::value );
-    PHYSICAL_DIM_W_VAL(energy,        force<T>::value * length<T>::value );
-    PHYSICAL_DIM_W_VAL(power,         energy<T>::value / time<T>::value );
-    PHYSICAL_DIM_W_VAL(temperature,   energy<T>::value / constant::si::K_B );
-    PHYSICAL_DIM_W_VAL(pressure,      force<T>::value / SQR(length<T>::value) );
-    PHYSICAL_DIM_W_VAL(momentum,      velocity<T>::value * mass<T>::value );
-    PHYSICAL_DIM_W_VAL(angular_momentum, momentum<T>::value * length<T>::value );
-    PHYSICAL_DIM_W_VAL(viscosity,     force<T>::value * time<T>::value
-                                    / area<T>::value );
-    PHYSICAL_DIM_W_VAL(kinematic_viscosity,     viscosity<T>::value
-                                              / density<T>::value );
+    /* FIXME:  The following code uses the U template parameter via the PTU
+     * macro (since we can't pass commas through the PHYSICAL_DIM_W_VAL macro
+     * function) explicitly since the IBM Visual Age compiler does NOT handle
+     * default template parameters correctly.  In the event that they fix their
+     * compiler, we ought to remove the explicit use of the dummy template
+     * parameter 'U', thus making the code slightly easier to read. 
+     */
+    PHYSICAL_DIM_W_VAL(frequency,     1. / time<PTU>::value );
+    PHYSICAL_DIM_W_VAL(charge_to_mass, charge<PTU>::value / mass<PTU>::value );
+    PHYSICAL_DIM_W_VAL(inverse_length,1. / length<PTU>::value );
+    PHYSICAL_DIM_W_VAL(area,          1. / SQR(length<PTU>::value) );
+    PHYSICAL_DIM_W_VAL(volume,        CUBE(length<PTU>::value) );
+    PHYSICAL_DIM_W_VAL(number_density,1. / volume<PTU>::value );
+    PHYSICAL_DIM_W_VAL(density,       mass<PTU>::value * number_density<PTU>::value );
+    PHYSICAL_DIM_W_VAL(velocity,      length<PTU>::value / time<PTU>::value );
+    PHYSICAL_DIM_W_VAL(acceleration,  velocity<PTU>::value / time<PTU>::value );
+    PHYSICAL_DIM_W_VAL(force,         mass<PTU>::value * acceleration<PTU>::value );
+    PHYSICAL_DIM_W_VAL(energy,        force<PTU>::value * length<PTU>::value );
+    PHYSICAL_DIM_W_VAL(power,         energy<PTU>::value / time<PTU>::value );
+    PHYSICAL_DIM_W_VAL(temperature,   energy<PTU>::value / constant::si::K_B );
+    PHYSICAL_DIM_W_VAL(pressure,      force<PTU>::value / SQR(length<PTU>::value) );
+    PHYSICAL_DIM_W_VAL(momentum,      velocity<PTU>::value * mass<PTU>::value );
+    PHYSICAL_DIM_W_VAL(angular_momentum, momentum<PTU>::value * length<PTU>::value );
+    PHYSICAL_DIM_W_VAL(viscosity,     force<PTU>::value * time<PTU>::value
+                                    / area<PTU>::value );
+    PHYSICAL_DIM_W_VAL(kinematic_viscosity,     viscosity<PTU>::value
+                                              / density<PTU>::value );
     namespace electric {
-      PHYSICAL_DIM_W_VAL(potential,   energy<T>::value / charge<T>::value );
-      PHYSICAL_DIM_W_VAL(field,       potential<T>::value / length<T>::value );
-      PHYSICAL_DIM_W_VAL(current,     charge<T>::value / time<T>::value );
-      PHYSICAL_DIM_W_VAL(resistance,  potential<T>::value / current<T>::value );
-      PHYSICAL_DIM_W_VAL(conductance, 1. / resistance<T>::value );
-      PHYSICAL_DIM_W_VAL(resistivity, resistance<T>::value * length<T>::value );
-      PHYSICAL_DIM_W_VAL(conductivity,1. / resistivity<T>::value );
-      PHYSICAL_DIM_W_VAL(capacitance, charge<T>::value / potential<T>::value );
+      PHYSICAL_DIM_W_VAL(potential,   energy<PTU>::value / charge<PTU>::value );
+      PHYSICAL_DIM_W_VAL(field,       potential<PTU>::value / length<PTU>::value );
+      PHYSICAL_DIM_W_VAL(current,     charge<PTU>::value / time<PTU>::value );
+      PHYSICAL_DIM_W_VAL(resistance,  potential<PTU>::value / current<PTU>::value );
+      PHYSICAL_DIM_W_VAL(conductance, 1. / resistance<PTU>::value );
+      PHYSICAL_DIM_W_VAL(resistivity, resistance<PTU>::value * length<PTU>::value );
+      PHYSICAL_DIM_W_VAL(conductivity,1. / resistivity<PTU>::value );
+      PHYSICAL_DIM_W_VAL(capacitance, charge<PTU>::value / potential<PTU>::value );
     } /* electric */
     namespace magnetic {
-      PHYSICAL_DIM_W_VAL(flux, electric::potential<T>::value * time<T>::value );
-      PHYSICAL_DIM_W_VAL(flux_density, flux<T>::value / SQR(length<T>::value) );
-      PHYSICAL_DIM_W_VAL(field, flux_density<T>::value );
-      PHYSICAL_DIM_W_VAL(inductance,   flux<T>::value / electric::current<T>::value );
-      PHYSICAL_DIM_W_VAL(permeability, inductance<T>::value / length<T>::value );
-      PHYSICAL_DIM_W_VAL(moment, energy<T>::value / flux_density<T>::value );
+      PHYSICAL_DIM_W_VAL(flux, electric::potential<PTU>::value * time<PTU>::value );
+      PHYSICAL_DIM_W_VAL(flux_density, flux<PTU>::value / SQR(length<PTU>::value) );
+      PHYSICAL_DIM_W_VAL(field, flux_density<PTU>::value );
+      PHYSICAL_DIM_W_VAL(inductance,   flux<PTU>::value / electric::current<PTU>::value );
+      PHYSICAL_DIM_W_VAL(permeability, inductance<PTU>::value / length<PTU>::value );
+      PHYSICAL_DIM_W_VAL(moment, energy<PTU>::value / flux_density<PTU>::value );
     } /* magnetic */
 
     PHYSICAL_DIM_W_VAL(unity, Quantity(1.0));
@@ -278,6 +292,7 @@ namespace physical {
   
 #undef PHYSICAL_DIM_W_VAL
 #undef PHYSICAL_DIM
+#undef PTU
 }
 
 
