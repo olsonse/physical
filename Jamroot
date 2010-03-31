@@ -165,12 +165,19 @@ if [ check-version "flex" : "2.5.35" ] {
 
 lib physical
     : # sources
-      [ glob cxx/physical/*.cpp ]
+      cxx/physical/registry.cpp
+      cxx/physical/system.cpp
+      physical_runtime_constants
       [ glob cxx/physical/*.h ]
       [ glob cxx/physical/calc/*.h ]
     : <link>static
     : # no default build
     : # no includes
+    ;
+
+obj physical_runtime_constants
+    : cxx/physical/runtime.cpp
+    : <target-os>cygwin:<optimization>off
     ;
 
 lib calc
