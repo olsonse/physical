@@ -181,6 +181,10 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
     BOOST_CHECK_CLOSE( constant::k_E<atomic>::value,   1, 1e-7);
     BOOST_CHECK_CLOSE( constant::k_E<esu>::value,      1, 1e-5);
 
+    BOOST_CHECK_CLOSE( constant::z0<si>::value,       constant::si::c *
+                                                      constant::si::mu0, 1e-5 );
+    BOOST_CHECK_CLOSE( constant::z0<esu>::value,      4.191690164586e-10, 1e-5);
+
     /* check the default implementation of the constants (SHOULD be SI). */
     BOOST_CHECK_EQUAL( constant::c<>::value,           constant::si::c);
     BOOST_CHECK_EQUAL( constant::eV<>::value,          constant::si::eV);

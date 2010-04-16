@@ -84,8 +84,7 @@ import numbers : less ;
 
 path-constant TOP : . ;
 
-#constant VERSION : [ MATCH "\\$Revision: *([0-9]*) *\\$" : "$Revision: 636 $" ] ;
-constant VERSION : [ SHELL "printf `cd $(TOP); git describe 2> /dev/null` || printf physical-0.1.2 " ] ;
+constant VERSION : [ SHELL "printf `cd $(TOP); git describe 2> /dev/null` || printf physical-0.1.3 " ] ;
 
 use-project /boost : ../boost ;
 

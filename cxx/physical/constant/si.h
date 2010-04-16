@@ -82,6 +82,7 @@ _OPEN_NAMESPACE(constant_si,physical) {
                                       / (  unit::m * unit::m
                                          * unit::K * unit::K
                                          * unit::K * unit::K ),    "Stefan-Boltzmann constant");
+        _QUANTITYn(z0,                c*mu0,                       "impedance of free space");
       _END_NAMESPACE}
     _CLOSE_NAMESPACE(constant_si)}
 _CLOSE_NAMESPACE(constant_si)}

@@ -12,8 +12,9 @@
 BOOST_AUTO_TEST_SUITE( quantity );//{
 
   BOOST_AUTO_TEST_CASE( getCoeff ) {
-    runtime::physical::Quantity a = std::complex<double>(1.0);
-    runtime::physical::quantity<double> b = 1.0;
+    using runtime::physical::quantity;
+    quantity< std::complex<double> > a = std::complex<double>(1.0);
+    quantity<double> b = 1.0;
     //std::cout << "a<complex>:  " << a << std::endl;
     /* default (GNU/Units like) printing */
     BOOST_CHECK_EQUAL( a.toString(), "<1>");
