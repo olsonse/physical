@@ -8,3 +8,4 @@ lib readline :
     ;
 
 exe testInteractive : testInteractive.cpp /physical//calc readline ;
+install convenient-copy : testInteractive : <location>. ;

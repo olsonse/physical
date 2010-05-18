@@ -1,1 +1,2 @@
 exe testDataOnly : testDataOnly.cpp /physical//physical ;
+install convenient-copy : testDataOnly : <location>. ;

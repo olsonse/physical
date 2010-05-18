@@ -1,1 +1,2 @@
 exe testregistry : testregistry.cpp /physical//physical ;
+install convenient-copy : testregistry : <location>. ;

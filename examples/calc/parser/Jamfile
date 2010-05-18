@@ -1,1 +1,2 @@
 exe testParser : testParser.cpp /physical//calc ;
+install convenient-copy : testParser : <location>. ;

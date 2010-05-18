@@ -1,1 +1,2 @@
 exe testOutput : testOutput.cpp /physical//physical ;
+install convenient-copy : testOutput : <location>. ;
