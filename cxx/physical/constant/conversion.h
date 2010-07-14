@@ -90,6 +90,7 @@ namespace physical {
     _TQUANTITYn(stdtemp,            dimension::temperature);
     _TQUANTITYn(R,                  dimension::unity);
     _TQUANTITYn(V_molar,            dimension::volume);
+    _TQUANTITYn(n_0,                dimension::number_density);
     _TQUANTITYn(sigma_SB,           detail::sigma_SB_dims);
     _TQUANTITYn(z0,                 dimension::electric::resistance);
   }/* ****   END UNIT SYSTEM CONSTANTS **** */

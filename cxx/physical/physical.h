@@ -313,6 +313,8 @@ _BEGIN_NAMESPACE(physical) {
         _QUANTITY(Pascal,               Newton/(meter*meter));
         _QUANTITY(Pascals,              Pascal);
         _QUANTITY(Pa,                   Pascal);
+        _QUANTITY(kiloPascal,           1000.0*Pascal);
+        _QUANTITY(kPa,                  kiloPascal);
         _QUANTITY(Barie,                Pascal/10.0);
         _QUANTITY(Baries,               Barie);
         _QUANTITY(Barye,                Barie);

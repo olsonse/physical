@@ -75,8 +75,8 @@ _OPEN_NAMESPACE(constant_si,physical) {
                                       * unit::J / unit::K,         "Boltzmann constant");
         _QUANTITYn(stdtemp,           273.15 * unit::K,            "standard temperature");
         _QUANTITYn(R,                 K_B * N_A,                   "universal gas constant");
-        _QUANTITYn(V_molar,           unit::mol * R * stdtemp
-                                      / unit::atm,                 "molar volume, ideal gas at standard temperature and pressure");
+        _QUANTITYn(V_molar,           R * stdtemp / unit::atm,     "molar volume, ideal gas, 273.15 K, 101.325 kPa");
+        _QUANTITYn(n_0,               N_A / V_molar,               "Loschmidt constant, ideal gas, 273.15 K, 101.325 kPa");
         _QUANTITYn(sigma_SB,          5.670400e-8
                                       * unit::W
                                       / (  unit::m * unit::m
