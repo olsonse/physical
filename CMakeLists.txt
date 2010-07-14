@@ -6,7 +6,7 @@ cmake_minimum_required( VERSION 2.6 )
 
 project( physical )
 
-set( VERSION physical-0.1.3-5-g8af41c6 )
+set( VERSION physical-0.1.3-8-g6080bf7 )
 
 # Allow the developer to select what native type to use for
 # runtime::physical::quantity<TYPE>
