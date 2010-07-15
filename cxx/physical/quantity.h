@@ -37,7 +37,8 @@
 
 
 
-#ifndef RUNTIME_PHYSICAL_QUANTITY
+#if !defined(RUNTIME_PHYSICAL_QUANTITY) && \
+    !defined(RUNTIME_PHYSICAL_QUANTITY_INCLUDE)
     /** The type of the coefficient in the physical::quantity<T> template and
      * throughout the units/constants library in general.
      *
@@ -45,9 +46,18 @@
      * of the functions within the quantity<> portion of the library may not
      * be able to instantiate.
      * */
-#  define PHYSICAL_QUANTITY_COEFF_TYPE physical::quantity<>::coeff_type
+  #define PHYSICAL_QUANTITY_COEFF_TYPE physical::quantity<>::coeff_type
 #else
-#  define PHYSICAL_QUANTITY_COEFF_TYPE RUNTIME_PHYSICAL_QUANTITY
+  #ifdef RUNTIME_PHYSICAL_QUANTITY_INCLUDE
+    #include RUNTIME_PHYSICAL_QUANTITY_INCLUDE
+
+    #ifndef RUNTIME_PHYSICAL_QUANTITY
+      #error Expected definition of RUNTIME_PHYSICAL_QUANTITY \
+             in RUNTIME_PHYSICAL_QUANTITY_INCLUDE
+    #endif
+  #endif
+
+  #define PHYSICAL_QUANTITY_COEFF_TYPE RUNTIME_PHYSICAL_QUANTITY
 #endif
 
 #define PHYSICAL_QUANTITY_CLASS quantity<PHYSICAL_QUANTITY_COEFF_TYPE>

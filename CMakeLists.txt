@@ -8,19 +8,29 @@ project( physical )
 
 set( VERSION physical-0.1.3-8-g6080bf7 )
 
+include( CTest )
+
+
 # Allow the developer to select what native type to use for
 # runtime::physical::quantity<TYPE>
 set( RUNTIME_PHYSICAL_QUANTITY "std::complex<double>"  CACHE STRING
-     "Storage class for runtime::physical::Quantity"
+    "Storage class for runtime::physical::Quantity"
 )
+mark_as_advanced( RUNTIME_PHYSICAL_QUANTITY )
 
-
-include( CTest )
+MESSAGE(STATUS "Creating RUNTIME_PHYSICAL_QUANTITY include file")
+FILE(WRITE
+    ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/rpq.hpp 
+    "#ifndef CMAKE_AUTO_RUNTIME_PHYSICAL_QUANTITY_INCLUDE\n"
+    "#define CMAKE_AUTO_RUNTIME_PHYSICAL_QUANTITY_INCLUDE\n"
+    "#define RUNTIME_PHYSICAL_QUANTITY ${RUNTIME_PHYSICAL_QUANTITY}\n"
+    "#endif // CMAKE_AUTO_RUNTIME_PHYSICAL_QUANTITY_INCLUDE\n"
+)
 
 
 add_definitions(
     -DPHYSICAL_VERSION=\"${VERSION}\"
-    -DRUNTIME_PHYSICAL_QUANTITY=${RUNTIME_PHYSICAL_QUANTITY}
+    -DRUNTIME_PHYSICAL_QUANTITY_INCLUDE=\"${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/rpq.hpp\"
 )
 
 
@@ -49,6 +59,9 @@ set( ${PROJECT_NAME}_SOURCES
     cxx/physical/runtime.cpp
     cxx/physical/system.cpp
 )
+
+# runtime.cpp doesn't need optimization
+set_source_files_properties( cxx/physical/runtime.cpp COMPILE_FLAGS -O0 )
 
 add_library( ${PROJECT_NAME} 
     ${${PROJECT_NAME}_HEADERS}
