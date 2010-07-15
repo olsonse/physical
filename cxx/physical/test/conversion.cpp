@@ -178,8 +178,8 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
                                                         (unit::statVolt *
                                                          unit::cm)));
     BOOST_CHECK_EQUAL( constant::k_E<si>::value,       constant::si::k_E);
-    BOOST_CHECK_CLOSE( constant::k_E<atomic>::value,   1, 1e-7);
-    BOOST_CHECK_CLOSE( constant::k_E<esu>::value,      1, 1e-5);
+    BOOST_CHECK_CLOSE( constant::k_E<atomic>::value,   1., 1e-7);
+    BOOST_CHECK_CLOSE( constant::k_E<esu>::value,      1., 1e-5);
 
     BOOST_CHECK_CLOSE( constant::z0<si>::value,       constant::si::c *
                                                       constant::si::mu0, 1e-5 );

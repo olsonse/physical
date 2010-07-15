@@ -3,16 +3,18 @@
 
 #include <physical/runtime.h>
 
+#ifndef BOOST_MATH_NOT_FOUND
 /* FIXME:  the following should be removed if the new standard is used.
  * For now we use boost to implement the inverse trig functions for
  * std::complex.
  */
-#include <boost/math/complex/acos.hpp>
-#include <boost/math/complex/asin.hpp>
-#include <boost/math/complex/atan.hpp>
-#include <boost/math/complex/acosh.hpp>
-#include <boost/math/complex/asinh.hpp>
-#include <boost/math/complex/atanh.hpp>
+  #include <boost/math/complex/acos.hpp>
+  #include <boost/math/complex/asin.hpp>
+  #include <boost/math/complex/atan.hpp>
+  #include <boost/math/complex/acosh.hpp>
+  #include <boost/math/complex/asinh.hpp>
+  #include <boost/math/complex/atanh.hpp>
+#endif
 
 #include <complex>
 #include <cmath>
@@ -22,12 +24,28 @@ namespace std {
   using ::asinh;
   using ::atanh;
 
+#ifndef BOOST_MATH_NOT_FOUND
   using boost::math::acos;
   using boost::math::asin;
   using boost::math::atan;
   using boost::math::acosh;
   using boost::math::asinh;
   using boost::math::atanh;
+#else
+  #define MISSING_FUNC(fun) \
+  template <typename T> \
+  static inline std::complex<T> fun ( const std::complex<T> & t ) { \
+    using runtime::physical::exception; \
+    throw exception(#fun ":  MISSING COMPLEX FUNCTION, no boost::math?"); \
+  }
+
+  MISSING_FUNC(acos)
+  MISSING_FUNC(asin)
+  MISSING_FUNC(atan)
+  MISSING_FUNC(acosh)
+  MISSING_FUNC(asinh)
+  MISSING_FUNC(atanh)
+#endif
 }
 
 namespace runtime {

@@ -157,6 +157,23 @@ if( Boost_REGEX_FOUND )
 endif()
 
 
+if( Boost_FOUND )
+    # boost::math is header only, so we have to search for it
+
+    set( Boost_MATH_DIR "Boost_MATH_DIR-NOTFOUND" CACHE FILEPATH "" FORCE )
+    mark_as_advanced( Boost_MATH_DIR )
+    find_file( Boost_MATH_DIR
+        boost/math
+        HINTS ${Boost_INCLUDE_DIRS}
+        NO_DEFAULT_PATH
+    )
+
+    if( NOT Boost_MATH_DIR )
+        add_definitions( -DBOOST_MATH_NOT_FOUND )
+    endif()
+endif()
+
+
 
 # include the current directory for framework style includes
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/cxx )
@@ -177,7 +194,7 @@ macro( physical_unit_test test_name )
 endmacro()
 
 macro( physical_calc_unit_test test_name )
-    if( Boost_regex_FOUND )
+    if( Boost_REGEX_FOUND )
         set(BOOST_USE_STATIC_LIBS_TMP ${Boost_USE_STATIC_LIBS})
         set(Boost_USE_STATIC_LIBS ON)
         find_package( Boost REQUIRED COMPONENTS unit_test_framework )
@@ -186,7 +203,8 @@ macro( physical_calc_unit_test test_name )
         add_executable( physical_calc.${test_name}.test ${ARGN} )
         target_link_libraries( physical_calc.${test_name}.test
             ${PROJECT_NAME}_calc
-            ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
+            ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+            ${Boost_REGEX_LIBRARY} )
         add_test( physical_calc.${test_name} physical_calc.${test_name}.test )
     endif()
 endmacro()
