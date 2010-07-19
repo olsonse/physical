@@ -70,7 +70,7 @@ namespace physical {
     namespace registry {
 
         template <class table>
-        static inline typename table::const_iterator
+        inline typename table::const_iterator
         next_lower_bound(const table & tab, const std::string & txt) {
             std::string txtp1 = txt;
             txtp1[txt.length()-1] = ((char)*(txt.end()-1)) + (char)1;
@@ -127,7 +127,7 @@ namespace physical {
         };
 
         template <class Container, class Iter>
-        static inline void erase_items(Container & c, Iter i, const Iter f) {
+        inline void erase_items(Container & c, Iter i, const Iter f) {
             for (; i!=f; c.erase(*i), i++);
         }
         
