@@ -6,7 +6,7 @@ cmake_minimum_required( VERSION 2.6 )
 
 project( physical )
 
-set( VERSION physical-0.1.3-8-g6080bf7 )
+set( VERSION physical-0.1.4-2-ge5f3027 )
 
 include( CTest )
 
