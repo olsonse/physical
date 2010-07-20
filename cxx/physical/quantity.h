@@ -482,7 +482,8 @@ namespace runtime {
             units_map num, den;
             splitNumeratorAndDenominator(num, den);
 
-            out << '<' << detail::print_coeff<coeff_type,detail::PRETTY_PRINT>()(coeff);
+            detail::print_coeff<coeff_type,detail::PRETTY_PRINT> print_coeff;
+            out << '<' << print_coeff(coeff, out.precision());
             
             if (!num.empty() || !den.empty())
                 out << ' ' << num;
@@ -507,7 +508,8 @@ namespace runtime {
             units_map num, den;
             splitNumeratorAndDenominator(num, den);
 
-            out << '(' << detail::print_coeff<coeff_type,detail::MATH_PRINT>()(coeff);
+            detail::print_coeff<coeff_type,detail::MATH_PRINT> print_coeff;
+            out << '(' << print_coeff(coeff, out.precision());
 
             if (!num.empty())
                 math_print(out << " * ", num);
@@ -530,7 +532,8 @@ namespace runtime {
             units_map num, den;
             splitNumeratorAndDenominator(num, den);
 
-            out << detail::print_coeff<coeff_type,detail::LATEX_PRINT>()(coeff);
+            detail::print_coeff<coeff_type,detail::LATEX_PRINT> print_coeff;
+            out << print_coeff(coeff, out.precision());
 
             if (!num.empty() || !den.empty())
                 out << '~'; // spacing between coeff and units

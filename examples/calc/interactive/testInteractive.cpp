@@ -92,6 +92,18 @@ typedef runtime::physical::calc::symbol sym;
 Calc calc;
 
 
+using runtime::physical::Quantity;
+/** Simple user command to specify precision on std::cout. */
+Quantity setPrecision( const Quantity & p) {
+  return Quantity(std::cout.precision( p.getCoeff<int>() ));
+}
+
+/** Simple user command to specify precision on std::cout. */
+Quantity getPrecision() {
+  return Quantity(std::cout.precision());
+}
+
+
 template <class T>
 void fill_completion_container( const std::string & text,
                                 T & matches,
@@ -212,6 +224,10 @@ int main( int argc, char * argv[] ) {
   /* set up the symbol table. */
   calc.addMathLib();
   calc.addPhysicalUnits();
+
+  /* Add stream precision commands... */
+  calc.symbols["setPrecision"] = setPrecision;
+  calc.symbols["getPrecision"] = getPrecision;
 
   bool print_tree = false; // whether to print expression tree
 

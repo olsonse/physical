@@ -27,8 +27,10 @@ namespace runtime {
 
       template < typename C, enum PRINT_TYPE >
       struct print_coeff {
-        std::string operator() ( const C & coeff ) {
+        std::string operator() ( const C & coeff,
+                                 const std::streamsize & prec ) {
           std::ostringstream out;
+          out.precision(prec);
           if (coeff == 0.0)
             out << '0';
           else
@@ -39,25 +41,28 @@ namespace runtime {
 
       template < typename C, enum PRINT_TYPE pT >
       struct print_coeff< std::complex<C>, pT > {
-        std::string operator() ( const std::complex<C> & coeff ) {
+        std::string operator() ( const std::complex<C> & coeff,
+                                 const std::streamsize & prec ) {
           std::ostringstream out;
           if (coeff.imag() != 0.0) {
             char sign = coeff.imag() < 0 ? '-' : '+';
             out << '('
-                << print_coeff<C,pT>()(coeff.real())
+                << print_coeff<C,pT>()(coeff.real(), prec)
                 << ' ' << sign << " i*"
-                << print_coeff<C,pT>()(std::abs(coeff.imag()))
+                << print_coeff<C,pT>()(std::abs(coeff.imag()), prec)
                 << ')';
           } else
-            out << print_coeff<C,pT>()(coeff.real());
+            out << print_coeff<C,pT>()(coeff.real(), prec);
           return out.str();
         }
       };
 
       template < typename C >
       struct print_coeff< std::complex<C>, PRETTY_PRINT > {
-        std::string operator() ( const std::complex<C> & coeff ) {
+        std::string operator() ( const std::complex<C> & coeff,
+                                 const std::streamsize & prec ) {
           std::ostringstream out;
+          out.precision(prec);
 
           if (coeff.real() == 0.0)
             out << '0';
@@ -74,8 +79,10 @@ namespace runtime {
 
       template < typename C >
       struct print_coeff< C, LATEX_PRINT> {
-        std::string operator() ( const C & coeff ) {
+        std::string operator() ( const C & coeff,
+                                 const std::streamsize & prec ) {
           std::ostringstream out;
+          out.precision(prec);
           int decade = int( std::log10( std::abs(coeff) ) );
 
           if ( std::abs(decade) >= 3) {
@@ -91,7 +98,8 @@ namespace runtime {
 
       template < typename C >
       struct print_coeff< std::complex<C>, LATEX_PRINT > {
-        std::string operator() ( const std::complex<C> & coeff ) {
+        std::string operator() ( const std::complex<C> & coeff,
+                                 const std::streamsize & prec ) {
           std::ostringstream out;
 
           if (coeff.real() == 0.0 && coeff.imag() == 0.0)
@@ -101,7 +109,7 @@ namespace runtime {
             if (coeff.imag() != 0.0)
               out << '(';
 
-            out << print_coeff<C,LATEX_PRINT>()(coeff.real());
+            out << print_coeff<C,LATEX_PRINT>()(coeff.real(), prec);
           }
 
           if (coeff.imag() != 0.0) {
@@ -112,7 +120,8 @@ namespace runtime {
             else if (sign == '-')
               out << sign;
 
-            out << "i" << print_coeff<C,LATEX_PRINT>()(std::abs(coeff.imag()));
+            out << "i"
+                << print_coeff<C,LATEX_PRINT>()(std::abs(coeff.imag()), prec);
             if (coeff.real() != 0.0)
               out << ')';
           }
