@@ -62,6 +62,7 @@ namespace physical {
 #ifdef PTU
 #  error PTU was already defined.  Need to pick another name for this macro!
 #endif
+/** The stupid IBM compiler doesn't respect default parameters correctly. */
 #define PTU   T,U
 
     /* fundamental dimensions must be specified per system. */ 

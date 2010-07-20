@@ -39,8 +39,20 @@ namespace physical {
     static const Quantity value;
   };
 
+  namespace detail {
+    /** The stupid IBM compiler has trouble handling template parameters
+     * correctly, especially also has problems with default template parameters.
+     * We go through this intermediate template function to accommodate for the
+     * IBM compilers incorrect c++ implementation. */
+    template< template <typename,int> class Dim, typename To, typename From, int i >
+    Quantity get_ratio() {
+      return Dim<From,i>::value / Dim<To,i>::value;
+    }
+  }
+
   template< typename To, typename From, template <typename,int> class Dim >
-  const Quantity make_convert_ratio<To,From,Dim>::value = Dim<From,0>::value / Dim<To,0>::value;
+  const Quantity make_convert_ratio<To,From,Dim>::value =
+    detail::get_ratio<Dim, To, From, 0>();
   
   template< typename From, template <typename,int> class Dim >
   inline Quantity convert_ratio( const system::id::SYSTEM toId ) {
