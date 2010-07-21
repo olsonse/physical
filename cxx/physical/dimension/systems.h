@@ -30,17 +30,14 @@ namespace physical {
   /* **** BEGIN UNIT SYSTEM CONSTANTS **** */
   namespace dimension {
 #define PHYSICAL_TCQ(dim,SYS,val) \
-    template < int U > \
-    struct dim<SYS,U> { \
-      static const Quantity value; \
-    }; \
-    template<int U> const Quantity dim<SYS,U>::value = val;
+    template<> \
+    struct dim<SYS> { \
+      static const Quantity & value() { \
+        static const Quantity _value = val; \
+        return _value; \
+      } \
+    };
 
-#ifdef PTU
-#  error PTU was already defined.  Need to pick another name for this macro!
-#endif
-/** The stupid IBM compiler doesn't respect default parameters correctly. */
-#define PTU(SYS)  SYS,U
 
     /* {****** BEGIN SI UNIT SYSTEM ****** */
     using namespace system;
@@ -70,40 +67,39 @@ namespace physical {
 
 
     /* {****** BEGIN esu UNIT SYSTEM ****** */
-    PHYSICAL_TCQ(length, esu, length<PTU(cgs)>::value);
-    PHYSICAL_TCQ(mass  , esu, mass<PTU(cgs)>::value);
-    PHYSICAL_TCQ(time  , esu, time<PTU(cgs)>::value);
+    PHYSICAL_TCQ(length, esu, length<cgs>::value());
+    PHYSICAL_TCQ(mass  , esu, mass<cgs>::value());
+    PHYSICAL_TCQ(time  , esu, time<cgs>::value());
     PHYSICAL_TCQ(charge, esu, unit::statCoulomb);
     /* }******   END esu UNIT SYSTEM ****** */
 
 
     /* {****** BEGIN emu UNIT SYSTEM ****** */
-    PHYSICAL_TCQ(length, emu, length<PTU(cgs)>::value);
-    PHYSICAL_TCQ(mass  , emu, mass<PTU(cgs)>::value);
-    PHYSICAL_TCQ(time  , emu, time<PTU(cgs)>::value);
+    PHYSICAL_TCQ(length, emu, length<cgs>::value());
+    PHYSICAL_TCQ(mass  , emu, mass<cgs>::value());
+    PHYSICAL_TCQ(time  , emu, time<cgs>::value());
     PHYSICAL_TCQ(charge, emu, unit::abCoulomb);
     /* }******   END emu UNIT SYSTEM ****** */
 
 
 
     /* {****** BEGIN gaussian UNIT SYSTEM ****** */
-    PHYSICAL_TCQ(length, gaussian, length<PTU(cgs)>::value);
-    PHYSICAL_TCQ(mass  , gaussian, mass<PTU(cgs)>::value);
-    PHYSICAL_TCQ(time  , gaussian, time<PTU(cgs)>::value);
+    PHYSICAL_TCQ(length, gaussian, length<cgs>::value());
+    PHYSICAL_TCQ(mass  , gaussian, mass<cgs>::value());
+    PHYSICAL_TCQ(time  , gaussian, time<cgs>::value());
     /* }******   END gaussian UNIT SYSTEM ****** */
 
 
 
     /* {****** BEGIN heaviside_lorentz UNIT SYSTEM ****** */
-    PHYSICAL_TCQ(length, heaviside_lorentz, length<PTU(cgs)>::value);
-    PHYSICAL_TCQ(mass  , heaviside_lorentz, mass<PTU(cgs)>::value);
-    PHYSICAL_TCQ(time  , heaviside_lorentz, time<PTU(cgs)>::value);
+    PHYSICAL_TCQ(length, heaviside_lorentz, length<cgs>::value());
+    PHYSICAL_TCQ(mass  , heaviside_lorentz, mass<cgs>::value());
+    PHYSICAL_TCQ(time  , heaviside_lorentz, time<cgs>::value());
     /* }******   END heaviside_lorentz UNIT SYSTEM ****** */
   }
 
 
 #undef PHYSICAL_TCQ
-#undef PTU
 }
 
 #  if defined (PHYSICAL_DATA_FOR_RUNTIME)

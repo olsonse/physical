@@ -25,7 +25,7 @@ namespace runtime {
 
 namespace physical {
 
-  template < typename System, template <typename,int> class Dim >
+  template < typename System, template <typename> class Dim >
   struct DimQuantity {
     DimQuantity( const Quantity & q ) : value(q) {}
     operator Quantity&() { return value; }
@@ -34,56 +34,44 @@ namespace physical {
   };
 
 
-  template< typename To, typename From, template <typename,int> class Dim >
+  template< typename To, typename From, template <typename> class Dim >
   struct make_convert_ratio {
-    static const Quantity value;
+    static const Quantity & value() {
+      static const Quantity _value = Dim<From>::value() / Dim<To>::value();
+      return _value;
+    }
   };
 
-  namespace detail {
-    /** The stupid IBM compiler has trouble handling template parameters
-     * correctly, especially also has problems with default template parameters.
-     * We go through this intermediate template function to accommodate for the
-     * IBM compilers incorrect c++ implementation. */
-    template< template <typename,int> class Dim, typename To, typename From, int i >
-    Quantity get_ratio() {
-      return Dim<From,i>::value / Dim<To,i>::value;
-    }
-  }
-
-  template< typename To, typename From, template <typename,int> class Dim >
-  const Quantity make_convert_ratio<To,From,Dim>::value =
-    detail::get_ratio<Dim, To, From, 0>();
-  
-  template< typename From, template <typename,int> class Dim >
+  template< typename From, template <typename> class Dim >
   inline Quantity convert_ratio( const system::id::SYSTEM toId ) {
     switch (toId) {
       case system::si::Id:
-        return make_convert_ratio<system::si, From, Dim>::value;
+        return make_convert_ratio<system::si, From, Dim>::value();
       case system::esu::Id:
-        return make_convert_ratio<system::esu, From, Dim>::value;
+        return make_convert_ratio<system::esu, From, Dim>::value();
       case system::emu::Id:
-        return make_convert_ratio<system::emu, From, Dim>::value;
+        return make_convert_ratio<system::emu, From, Dim>::value();
       case system::atomic::Id:
-        return make_convert_ratio<system::atomic, From, Dim>::value;
+        return make_convert_ratio<system::atomic, From, Dim>::value();
       case system::gaussian::Id:
-        return make_convert_ratio<system::gaussian, From, Dim>::value;
+        return make_convert_ratio<system::gaussian, From, Dim>::value();
       case system::heaviside_lorentz::Id:
-        return make_convert_ratio<system::heaviside_lorentz, From, Dim>::value;
+        return make_convert_ratio<system::heaviside_lorentz, From, Dim>::value();
       default:
         throw runtime::physical::exception("unknown output units on conversion");
     }
   }
 
-  template< typename From, template <typename,int> class Dim >
+  template< typename From, template <typename> class Dim >
   inline DimQuantity<From,Dim> convert( const DimQuantity<From,Dim> & q, const system::id::SYSTEM toId ) {
     DimQuantity<From,Dim> result( q.value * convert_ratio<From, Dim>(toId) );
     return result;
   }
 
-  template< typename To, typename From, template <typename,int> class Dim >
+  template< typename To, typename From, template <typename> class Dim >
   inline DimQuantity<From,Dim> convert( const DimQuantity<From,Dim> & q ) {
-    DimQuantity<From,Dim> result( q.value * make_convert_ratio<To, From, Dim>::value );
-    return result;
+    return DimQuantity<From,Dim>( q.value *
+                                  make_convert_ratio<To, From, Dim>::value() );
   }
 
 }

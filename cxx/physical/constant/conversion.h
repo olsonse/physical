@@ -41,7 +41,7 @@ namespace physical {
     const Quantity v<T>::value = \
       PHYSICAL_QUANTITY_INITn( \
         T::name + "::" + #v, \
-        (constant::si::v * make_convert_ratio<T,system::si,dims>::value), \
+        ( constant::si::v * make_convert_ratio<T,system::si,dims>::value() ), \
         constant::si::v.name + '(' + T::name + " units)" )
 
     _TQUANTITYn(pi,                 dimension::unity);
