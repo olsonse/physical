@@ -30,19 +30,22 @@ namespace physical {
 
 #include <physical/constant/detail/derived-dimensions.h>
 
-#   define _TQUANTITYn(v,dims) \
-    /* definition of where the value is stored. */ \
-    template< typename T = system::si > \
-    struct v { \
-      static const Quantity value; \
-    }; \
-    /* Here is where the generic conversion happens... */ \
-    template <typename T> \
-    const Quantity v<T>::value = \
-      PHYSICAL_QUANTITY_INITn( \
-        T::name + "::" + #v, \
-        ( constant::si::v * make_convert_ratio<T,system::si,dims>::value() ), \
-        constant::si::v.name + '(' + T::name + " units)" )
+#   define _TQUANTITYn(v,dims)                                  \
+    /* definition of where the value is stored. */              \
+    template< typename T = system::si >                         \
+    struct v {                                                  \
+      static const Quantity & value() {                         \
+        /* Here is where the generic conversion happens... */   \
+        static const Quantity _value =                          \
+          PHYSICAL_QUANTITY_INITn(                              \
+            T::name + "::" + #v,                                \
+            ( constant::si::v *                                 \
+              make_convert_ratio<T,system::si,dims>::value() ), \
+            constant::si::v.name + '(' + T::name + " units)"    \
+          );                                                    \
+        return _value;                                          \
+      }                                                         \
+    };
 
     _TQUANTITYn(pi,                 dimension::unity);
     _TQUANTITYn(c,                  dimension::velocity);

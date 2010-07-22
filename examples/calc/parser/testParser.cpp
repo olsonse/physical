@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
       std::cout << "results of argv[2] in units of physical::constant::c" << std::endl;
     try {
       runtime::physical::Quantity::coeff_type res =
-        calc.eval(input, runtime::physical::constant::c<si>::value);
+        calc.eval(input, runtime::physical::constant::c<si>::value());
       std::cout << '\t' << res << std::endl;
     } catch (runtime::physical::calc::no_result) {
       std::cout << "no results" << std::endl;
