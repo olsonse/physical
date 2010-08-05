@@ -130,8 +130,8 @@ BOOST_AUTO_TEST_SUITE( unit_systems );
     BOOST_CHECK_EQUAL( dim::magnetic::flux<esu>::value(),     unit::statMaxwell );
     BOOST_CHECK_EQUAL( dim::magnetic::field<esu>::value(),
                        unit::statMaxwell / SQR(unit::cm) );
-    BOOST_CHECK_EQUAL( dim::magnetic::flux<emu>::value(),     unit::Maxwell );
-    BOOST_CHECK_EQUAL( dim::magnetic::field<emu>::value(),    unit::Gauss );
+    BOOST_CHECK_CLOSE( dim::magnetic::flux<emu>::value(),     unit::Maxwell, 1e-10 );
+    BOOST_CHECK_CLOSE( dim::magnetic::field<emu>::value(),    unit::Gauss, 1e-10 );
   
     /* These test the compile time conversion selection function. */
     BOOST_CHECK_EQUAL( (make_convert_ratio<si,si,dim::energy>::value()), 1. );
