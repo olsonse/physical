@@ -25,7 +25,7 @@ namespace runtime {
           UGLY_PRINT
       };
 
-      template < typename C, enum PRINT_TYPE >
+      template < typename C, PRINT_TYPE pT >
       struct print_coeff {
         std::string operator() ( const C & coeff,
                                  const std::streamsize & prec ) {
@@ -39,7 +39,7 @@ namespace runtime {
         }
       };
 
-      template < typename C, enum PRINT_TYPE pT >
+      template < typename C, PRINT_TYPE pT >
       struct print_coeff< std::complex<C>, pT > {
         std::string operator() ( const std::complex<C> & coeff,
                                  const std::streamsize & prec ) {

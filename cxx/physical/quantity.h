@@ -741,7 +741,7 @@ namespace runtime {
     };
 
     template <class T>
-    enum quantity<T>::PRINT_TYPE quantity<T>::print_type = quantity<T>::PRETTY_PRINT;
+    typename quantity<T>::PRINT_TYPE quantity<T>::print_type = quantity<T>::PRETTY_PRINT;
 
 
     /* **** BEGIN QUANTITY OPERATORS **** */
