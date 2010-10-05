@@ -158,6 +158,7 @@ set( ${PROJECT_NAME}_calc_SOURCES
 find_package( Boost COMPONENTS regex )
 
 if( Boost_REGEX_FOUND )
+    include_directories( ${Boost_INCLUDE_DIRS} )
     add_library( ${PROJECT_NAME}_calc
         ${${PROJECT_NAME}_calc_HEADERS}
         ${${PROJECT_NAME}_calc_SOURCES}
@@ -182,7 +183,9 @@ if( Boost_FOUND )
     )
 
     if( NOT Boost_MATH_DIR )
-        add_definitions( -DBOOST_MATH_NOT_FOUND )
+      add_definitions( -DBOOST_MATH_NOT_FOUND )
+    else()
+      include_directories( ${Boost_INCLUDE_DIRS} )
     endif()
 endif()
 
