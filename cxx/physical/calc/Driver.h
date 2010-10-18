@@ -198,6 +198,39 @@ namespace runtime {
       };
 
     }/* namespace physical::calc */
+
+
+
+    /** Provide an istream operator, since we have a calculator Driver
+     * available. */
+    inline std::istream & operator>> ( std::istream & in,
+                                       runtime::physical::Quantity & out ) {
+      std::string s;
+      char c = '\0';
+
+      in.get(c);
+      while ( in.good() && c && c != ';' && c != ',' && c != '\n' ) {
+        s += c;
+        in.get(c);
+      }
+
+      if ( in.good() && c && c != ';' && c != ',' && c != '\n' )
+        in.putback(c);
+
+      try {
+        if ( s.size() > 0u ) {
+          out = runtime::physical::calc::Driver::instance().eval( s );
+          if ( in.eof() )
+            in.clear( in.rdstate() ^ std::ios::eofbit ^ std::ios::failbit );
+        } else {
+          in.setstate( std::ios::eofbit | std::ios::failbit );
+        }
+      } catch ( const runtime::physical::exception & e ) {
+        in.setstate( std::ios::badbit );
+      }
+      return in;
+    }
+
   }/* namespace runtime::physical */
 }/* namespace runtime */
 
