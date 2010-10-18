@@ -608,12 +608,14 @@ namespace runtime {
             return out;
         }
 
+        /** Assert that the quantity is unitless. */
         inline const quantity & assertUnitless() const throw (exception) {
             if (!units.empty())
                 throw exception(UnitsNotDimensionless);
             return *this;
         }
 
+        /** Assert that the units match those of the given quantity q. */
         inline const quantity & assertMatch(const quantity & q) const throw (exception) {
             if (units != q.units)
                 throw exception(UnitsMismatch);
@@ -621,33 +623,6 @@ namespace runtime {
         }
 
         /* **** BEGIN QUANTITY OPERATORS **** */
-        /* We are only going to define operators here that MUST check units */
-
-        inline quantity & operator+=(const quantity & q) {
-            assertMatch(q);
-            coeff += q.coeff;
-            /* There is no point in trying to keep the name now. */
-            name.clear();
-            return *this;
-        }
-
-        inline quantity & operator-=(const quantity & q) {
-            assertMatch(q);
-            coeff -= q.coeff;
-            /* There is no point in trying to keep the name now. */
-            name.clear();
-            return *this;
-        }
-
-        inline quantity operator+(const quantity & q) const {
-            assertMatch(q);
-            return quantity(coeff + q.coeff, units);
-        }
-
-        inline quantity operator-(const quantity & q) const {
-            assertMatch(q);
-            return quantity(coeff - q.coeff, units);
-        }
 
         /** Assignment operation from another quantity. */
         inline quantity & operator=(const quantity & q) {
@@ -663,31 +638,6 @@ namespace runtime {
             units.clear();
             name.clear();
             return *this;
-        }
-
-        inline bool operator>(const quantity & q) const {
-            assertMatch(q);
-            return coeff > q.coeff;
-        }
-
-        inline bool operator<(const quantity & q) const {
-            assertMatch(q);
-            return coeff < q.coeff;
-        }
-
-        inline bool operator>=(const quantity & q) const {
-            assertMatch(q);
-            return coeff >= q.coeff;
-        }
-
-        inline bool operator<=(const quantity & q) const {
-            assertMatch(q);
-            return coeff <= q.coeff;
-        }
-
-        inline bool operator==(const quantity & q) const {
-            assertMatch(q);
-            return coeff == q.coeff;
         }
 
 
@@ -744,7 +694,101 @@ namespace runtime {
     typename quantity<T>::PRINT_TYPE quantity<T>::print_type = quantity<T>::PRETTY_PRINT;
 
 
+    /** Assert that the given quantity is unitless--calls member function.  This
+     * is mostly for complmenting the non-member version of assertMatch. */
+    template <class T>
+    inline const quantity<T> &
+    assertUnitless( const quantity<T> & q ) throw (exception) {
+        return q.assertUnitless();
+    }
+
+    /** Assert that the units of the two quantities match.
+     * This non-member version actually just calls the member function of the
+     * first quantity on the second quantity.
+     * @returns a reference to the first quantity.
+     */
+    template <class T>
+    inline const quantity<T> &
+    assertMatch( const quantity<T> & lhs,
+                 const quantity<T> & rhs ) throw (exception) {
+        return lhs.assertMatch(rhs);
+    }
+
+
+
     /* **** BEGIN QUANTITY OPERATORS **** */
+    /* These are all the operators that need to assert the units. */
+    template <class T>
+    inline quantity<T> & operator+=(       quantity<T> & lhs,
+                                     const quantity<T> & rhs ) {
+        assertMatch(lhs, rhs);
+        lhs.coeff += rhs.coeff;
+        /* There is no point in trying to keep the name now. */
+        lhs.name.clear();
+        return lhs;
+    }
+
+    template <class T>
+    inline quantity<T> & operator-=(       quantity<T> & lhs,
+                                     const quantity<T> & rhs ) {
+        assertMatch(lhs, rhs);
+        lhs.coeff -= rhs.coeff;
+        /* There is no point in trying to keep the name now. */
+        lhs.name.clear();
+        return lhs;
+    }
+
+    template <class T>
+    inline quantity<T> operator+( const quantity<T> & lhs,
+                                  const quantity<T> & rhs ) {
+        assertMatch(lhs, rhs);
+        return quantity<T>(lhs.coeff + rhs.coeff, lhs.units);
+    }
+
+    template <class T>
+    inline quantity<T> operator-( const quantity<T> & lhs,
+                                  const quantity<T> & rhs ) {
+        assertMatch(lhs, rhs);
+        return quantity<T>(lhs.coeff - rhs.coeff, lhs.units);
+    }
+
+    template <class T>
+    inline bool operator>( const quantity<T> & lhs,
+                           const quantity<T> & rhs ) {
+        assertMatch(lhs, rhs);
+        return lhs.coeff > rhs.coeff;
+    }
+
+    template <class T>
+    inline bool operator<( const quantity<T> & lhs,
+                           const quantity<T> & rhs ) {
+        assertMatch(lhs, rhs);
+        return lhs.coeff < rhs.coeff;
+    }
+
+    template <class T>
+    inline bool operator>=( const quantity<T> & lhs,
+                            const quantity<T> & rhs ) {
+        assertMatch(lhs, rhs);
+        return lhs.coeff >= rhs.coeff;
+    }
+
+    template <class T>
+    inline bool operator<=( const quantity<T> & lhs,
+                            const quantity<T> & rhs ) {
+        assertMatch(lhs, rhs);
+        return lhs.coeff <= rhs.coeff;
+    }
+
+    template <class T>
+    inline bool operator==( const quantity<T> & lhs,
+                            const quantity<T> & rhs ) {
+        assertMatch(lhs, rhs);
+        return lhs.coeff == rhs.coeff;
+    }
+
+
+
     /* we define all operators here that do not need assertMatch */
 
     /** The >> operator prints out the quantity in a semi pretty fashion
