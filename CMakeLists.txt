@@ -174,6 +174,8 @@ endif()
 if( Boost_FOUND )
     # boost::math is header only, so we have to search for it
 
+    add_definitions( ${Boost_DEFINITIONS} )
+
     set( Boost_MATH_DIR "Boost_MATH_DIR-NOTFOUND" CACHE FILEPATH "" FORCE )
     mark_as_advanced( Boost_MATH_DIR )
     find_file( Boost_MATH_DIR
@@ -202,6 +204,7 @@ macro( physical_unit_test test_name )
     find_package( Boost REQUIRED COMPONENTS unit_test_framework )
     set(BOOST_USE_STATIC_LIBS ${Boost_USE_STATIC_LIBS_TMP})
     include_directories( ${Boost_INCLUDE_DIRS} )
+    add_definitions( ${Boost_DEFINITIONS} )
     add_executable( physical.${test_name}.test ${ARGN} )
     target_link_libraries( physical.${test_name}.test
         ${PROJECT_NAME}
@@ -216,6 +219,7 @@ macro( physical_calc_unit_test test_name )
         find_package( Boost REQUIRED COMPONENTS unit_test_framework )
         set(BOOST_USE_STATIC_LIBS ${Boost_USE_STATIC_LIBS_TMP})
         include_directories( ${Boost_INCLUDE_DIRS} )
+        add_definitions( ${Boost_DEFINITIONS} )
         add_executable( physical_calc.${test_name}.test ${ARGN} )
         target_link_libraries( physical_calc.${test_name}.test
             ${PROJECT_NAME}_calc
