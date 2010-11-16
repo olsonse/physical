@@ -60,8 +60,13 @@ set( ${PROJECT_NAME}_SOURCES
     cxx/physical/system.cpp
 )
 
-# runtime.cpp doesn't need optimization
-set_source_files_properties( cxx/physical/runtime.cpp COMPILE_FLAGS -O0 )
+# runtime.cpp doesn't need optimization and often increases build times
+# significantly for optimization builds.
+if( MSVC )
+  set_source_files_properties( cxx/physical/runtime.cpp COMPILE_FLAGS /Od )
+else()
+  set_source_files_properties( cxx/physical/runtime.cpp COMPILE_FLAGS -O0 )
+endif()
 
 add_library( ${PROJECT_NAME} 
     ${${PROJECT_NAME}_HEADERS}
