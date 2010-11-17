@@ -40,22 +40,12 @@ namespace runtime {
 #ifndef PHYSICAL_QUANTITY_CLASS
 #  define PHYSICAL_QUANTITY_COEFF_TYPE PHYSICAL_QUANTITY
 #  define PHYSICAL_QUANTITY_CLASS PHYSICAL_QUANTITY
-#  define PHYSICAL_QUANTITY_INIT(name,c)     c
-#  define PHYSICAL_QUANTITY_INITu(name,c,u)  c
-#  define PHYSICAL_QUANTITY_INITn(name,c,n)  c
-#  define PHYSICAL_QUANTITY_INITun(name,c,n) c
-#  define _QUANTITY(name,c)       const Quantity name = c
-#  define _QUANTITYu(name,c,u)    const Quantity name = c
-#  define _QUANTITYn(name,c,n)    const Quantity name = c
-#  define _QUANTITYun(name,c,u,n) const Quantity name = c
+#  define _QUANTITY(name,c)       const Quantity name (c)
+#  define _QUANTITYu(name,c,u)    const Quantity name (c)
+#  define _QUANTITYn(name,c,n)    const Quantity name (c)
+#  define _QUANTITYun(name,c,u,n) const Quantity name (c)
 
 #else
-
-#  define PHYSICAL_QUANTITY_INIT(name,c)       PHYSICAL_QUANTITY_CLASS(c,"",#name)
-#  define PHYSICAL_QUANTITY_INITu(name,c,u)    PHYSICAL_QUANTITY_CLASS(c,u,"",#name)
-#  define PHYSICAL_QUANTITY_INITn(name,c,n)    PHYSICAL_QUANTITY_CLASS(c,n,#name)
-#  define PHYSICAL_QUANTITY_INITun(name,c,u,n) PHYSICAL_QUANTITY_CLASS(c,u,n,#name)
-
 #  ifdef PHYSICAL_QUANTITY_EXTERN_DECL
 #   define _QUANTITY(name,c)       extern const Quantity name
 #   define _QUANTITYu(name,c,u)    extern const Quantity name
@@ -63,19 +53,19 @@ namespace runtime {
 #   define _QUANTITYun(name,c,u,n) extern const Quantity name
 #  else
     /** Sets only the coefficient of the physical::quantity. */
-#   define _QUANTITY(name,c)       extern const Quantity name = PHYSICAL_QUANTITY_INIT(name,c)
+#   define _QUANTITY(name,c)       extern const Quantity name (c,"",#name)
     /** Sets the value of the coefficient and the units of the physical::quantity
      * (if using the runtime library of course).
      */
-#   define _QUANTITYu(name,c,u)    extern const Quantity name = PHYSICAL_QUANTITY_INITu(name,c,u)
+#   define _QUANTITYu(name,c,u)    extern const Quantity name (c,u,"",#name)
     /** Sets the value of the coefficient and the name of the physical::quantity
      * (if using the runtime library of course).
      */
-#   define _QUANTITYn(name,c,n)    extern const Quantity name = PHYSICAL_QUANTITY_INITn(name,c,n)
+#   define _QUANTITYn(name,c,n)    extern const Quantity name (c,n,#name)
     /** Sets the value of the coefficient, the units, and the name of the
      * physical::quantity (if using the runtime library of course). 
      */
-#   define _QUANTITYun(name,c,u,n) extern const Quantity name = PHYSICAL_QUANTITY_INITun(name,c,u,n)
+#   define _QUANTITYun(name,c,u,n) extern const Quantity name (c,u,n,#name)
 #  endif
 #endif
 
@@ -964,10 +954,6 @@ _CLOSE_NAMESPACE(physical_1)}
 /* now do some cleanup for the macros used internally here. */
 #undef PHYSICAL_QUANTITY_CLASS
 #undef PHYSICAL_QUANTITY_COEFF_TYPE
-#undef PHYSICAL_QUANTITY_INIT
-#undef PHYSICAL_QUANTITY_INITu
-#undef PHYSICAL_QUANTITY_INITn
-#undef PHYSICAL_QUANTITY_INITun
 #undef _QUANTITY
 #undef _QUANTITYu
 #undef _QUANTITYn
