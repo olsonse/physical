@@ -33,6 +33,58 @@ namespace runtime {
      * types.  Many of these are just wrappers for math.h functions.
      * */
     namespace detail {
+
+      /** collection of trig and other functions to use below. */
+      namespace stdmath {
+        using std::cos;
+        using std::cosh;
+        using std::acos;
+        using std::sin;
+        using std::sinh;
+        using std::asin;
+        using std::tan;
+        using std::tanh;
+        using std::atan;
+
+        #ifndef _MSC_VER
+          using ::acosh;
+          using ::asinh;
+          using ::atanh;
+
+          using ::tgamma;
+          using ::erf;
+          using ::erfc;
+        #else
+          using boost::math::tgamma;
+          using boost::math::erf;
+          using boost::math::erfc;
+        #endif
+
+        #ifndef BOOST_MATH_NOT_FOUND
+          using boost::math::acos;
+          using boost::math::asin;
+          using boost::math::atan;
+          using boost::math::acosh;
+          using boost::math::asinh;
+          using boost::math::atanh;
+        #else
+          #define MISSING_FUNC(fun) \
+          template <typename T> \
+          static inline std::complex<T> fun ( const std::complex<T> & t ) { \
+            using runtime::physical::exception; \
+            throw exception(#fun ":  MISSING COMPLEX FUNCTION, no boost::math?"); \
+          }
+
+          MISSING_FUNC(acos)
+          MISSING_FUNC(asin)
+          MISSING_FUNC(atan)
+          MISSING_FUNC(acosh)
+          MISSING_FUNC(asinh)
+          MISSING_FUNC(atanh)
+        #endif
+      } /* namespace runtime::physical::detail::stdmath. */
+
+
       /** Perform units checking for math functions of strictly dimensionless
        * arguments. */
       struct no_dims {
@@ -153,57 +205,6 @@ namespace runtime {
           throw exception(ComplexNotSupported);
         return std::max(lhs.real(), rhs.real());
       }
-
-
-      /** collection of trig and other functions to use below. */
-      namespace stdmath {
-        using std::cos;
-        using std::cosh;
-        using std::acos;
-        using std::sin;
-        using std::sinh;
-        using std::asin;
-        using std::tan;
-        using std::tanh;
-        using std::atan;
-
-        #ifndef _MSC_VER
-          using ::acosh;
-          using ::asinh;
-          using ::atanh;
-
-          using ::tgamma;
-          using ::erf;
-          using ::erfc;
-        #else
-          using boost::math::tgamma;
-          using boost::math::erf;
-          using boost::math::erfc;
-        #endif
-
-        #ifndef BOOST_MATH_NOT_FOUND
-          using boost::math::acos;
-          using boost::math::asin;
-          using boost::math::atan;
-          using boost::math::acosh;
-          using boost::math::asinh;
-          using boost::math::atanh;
-        #else
-          #define MISSING_FUNC(fun) \
-          template <typename T> \
-          static inline std::complex<T> fun ( const std::complex<T> & t ) { \
-            using runtime::physical::exception; \
-            throw exception(#fun ":  MISSING COMPLEX FUNCTION, no boost::math?"); \
-          }
-
-          MISSING_FUNC(acos)
-          MISSING_FUNC(asin)
-          MISSING_FUNC(atan)
-          MISSING_FUNC(acosh)
-          MISSING_FUNC(asinh)
-          MISSING_FUNC(atanh)
-        #endif
-      } /* namespace runtime::physical::detail::stdmath. */
     } /* namespace runtime::physical::detail. */
 
 
