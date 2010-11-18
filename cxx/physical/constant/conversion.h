@@ -36,7 +36,7 @@ namespace physical {
     struct v {                                                  \
       static const Quantity & value() {                         \
         /* Here is where the generic conversion happens... */   \
-        static const Quantity _value =                          \
+        static const Quantity _value                            \
           PHYSICAL_QUANTITY_INITn(                              \
             T::name + "::" + #v,                                \
             ( constant::si::v *                                 \
