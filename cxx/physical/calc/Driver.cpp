@@ -166,8 +166,8 @@ namespace runtime {
 
 
       Driver & Driver::instance() {
-        static Driver * driver = new Driver();
-        return *driver;
+        static Driver driver;
+        return driver;
       }
 
     }/* namespace physical::calc */

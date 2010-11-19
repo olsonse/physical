@@ -28,30 +28,36 @@
 
 /** Just a useful set of tools to help with the registry problem. */
 namespace monkeywrench {
-    extern std::vector<std::string> namespace_stack;
+
+    inline std::vector<std::string> & namespace_stack() {
+      static std::vector< std::string > stack;
+      return stack;
+    }
 
     inline int push_namespace(const std::string & id) {
-        namespace_stack.push_back(id);
+        namespace_stack().push_back(id);
         return 0;
     }
 
     inline int pop_namespace() {
-        namespace_stack.pop_back();
+        namespace_stack().pop_back();
         return 0;
     }
 
     inline std::string get_namespace() {
+        std::vector< std::string > & stack = namespace_stack();
+
         std::string retval;
-        if (namespace_stack.size() > 0)
-            retval = namespace_stack[0];
-        for (unsigned int i = 1; i < namespace_stack.size(); i++) {
-            retval.append("::").append(namespace_stack[i]);
+        if (stack.size() > 0)
+            retval = stack[0];
+        for (unsigned int i = 1; i < stack.size(); i++) {
+            retval.append("::").append(stack[i]);
         }
         return retval;
     }
 
     inline std::string get_prefix() {
-        if (namespace_stack.size() > 0)
+        if (namespace_stack().size() > 0)
             return get_namespace() + "::";
         else
             return "";
@@ -211,8 +217,8 @@ namespace physical {
 
 
             static recorder & instance() {
-                static recorder * rec = new recorder();
-                return *rec;
+                static recorder rec;
+                return rec;
             }
         };
 

@@ -55,7 +55,6 @@ set( ${PROJECT_NAME}_HEADERS
 )
 
 set( ${PROJECT_NAME}_SOURCES
-    cxx/physical/registry.cpp
     cxx/physical/runtime.cpp
     cxx/physical/system.cpp
 )

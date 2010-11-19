@@ -165,7 +165,6 @@ if [ check-version "flex" : "2.5.35" ] {
 
 lib physical
     : # sources
-      cxx/physical/registry.cpp
       cxx/physical/system.cpp
       physical_runtime_constants
       [ glob cxx/physical/*.h ]
