@@ -6,10 +6,27 @@ cmake_minimum_required( VERSION 2.6 )
 
 project( physical )
 
-set( VERSION physical-0.1.4-2-ge5f3027 )
-
 include( CTest )
 
+################################################################################
+# Obtain the physical version
+################################################################################
+set( VERSION )
+
+find_program( GIT_EXECUTABLE NAMES git )
+if( GIT_EXECUTABLE )
+  exec_program(
+    ${GIT_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR} ARGS describe
+    OUTPUT_VARIABLE VERSION
+    RETURN_VALUE GIT_RETVAL )
+  if( NOT ${GIT_RETVAL} EQUAL 0 )
+    # Something went wrong, fall back on other methods.
+    # We still didn't find a version, so it's really unknown.
+    set( VERSION "physical-unknownversion" )
+  endif()
+endif()
+
+message( STATUS "physical VERSION: ${VERSION}" )
 
 # Allow the developer to select what native type to use for
 # runtime::physical::quantity<TYPE>
@@ -20,18 +37,44 @@ mark_as_advanced( RUNTIME_PHYSICAL_QUANTITY )
 
 MESSAGE(STATUS "Creating RUNTIME_PHYSICAL_QUANTITY include file")
 FILE(WRITE
-    ${CMAKE_CURRENT_BINARY_DIR}/rpq.hpp 
+    ${CMAKE_CURRENT_BINARY_DIR}/cxx/physical/rpq.hpp
     "#ifndef CMAKE_AUTO_RUNTIME_PHYSICAL_QUANTITY_INCLUDE\n"
     "#define CMAKE_AUTO_RUNTIME_PHYSICAL_QUANTITY_INCLUDE\n"
     "#define RUNTIME_PHYSICAL_QUANTITY ${RUNTIME_PHYSICAL_QUANTITY}\n"
     "#endif // CMAKE_AUTO_RUNTIME_PHYSICAL_QUANTITY_INCLUDE\n"
 )
 
-
-add_definitions(
-    -DPHYSICAL_VERSION=\"${VERSION}\"
-    -DRUNTIME_PHYSICAL_QUANTITY_INCLUDE=\"${CMAKE_CURRENT_BINARY_DIR}/rpq.hpp\"
+# include the current directory for framework style includes
+LIST(APPEND ${PROJECT_NAME}_INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}/cxx
+    ${CMAKE_CURRENT_BINARY_DIR}/cxx
 )
+
+LIST(APPEND ${PROJECT_NAME}_DEFINITIONS
+    -DPHYSICAL_VERSION=${VERSION}
+    -DRUNTIME_PHYSICAL_QUANTITY_INCLUDE=physical/rpq.hpp
+)
+
+find_package( Boost COMPONENTS regex )
+
+if( Boost_FOUND )
+    # boost::math is header only, so we have to search for it
+    add_definitions( ${Boost_DEFINITIONS} )
+
+    set( Boost_MATH_DIR "Boost_MATH_DIR-NOTFOUND" CACHE FILEPATH "" FORCE )
+    mark_as_advanced( Boost_MATH_DIR )
+    find_file( Boost_MATH_DIR
+        boost/math
+        HINTS ${Boost_INCLUDE_DIRS}
+        NO_DEFAULT_PATH
+    )
+
+    if( NOT Boost_MATH_DIR )
+      LIST(APPEND ${PROJECT_NAME}_DEFINITIONS -DBOOST_MATH_NOT_FOUND )
+    else()
+      include_directories( ${Boost_INCLUDE_DIRS} )
+    endif()
+endif()
 
 
 # /physical//physical configuration
@@ -67,7 +110,9 @@ else()
   set_source_files_properties( cxx/physical/runtime.cpp COMPILE_FLAGS -O0 )
 endif()
 
-add_library( ${PROJECT_NAME} 
+add_definitions( ${${PROJECT_NAME}_DEFINITIONS} )
+include_directories( ${${PROJECT_NAME}_INCLUDE_DIRS} )
+add_library( ${PROJECT_NAME}
     ${${PROJECT_NAME}_HEADERS}
     ${${PROJECT_NAME}_SOURCES}
 )
@@ -87,15 +132,16 @@ if( BISON_VERSION VERSION_EQUAL ${MIN_BISON_VERSION} OR
     set( PhysicalUsesBISON 1 )
     set( ParserHPP )
     set( ParserCPP ${BISON_CalcParser_OUTPUTS} )
-
-    include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 else()
     set( ParserHPP       cxx/physical/calc/detail/pregen-parser/location.hh
                          cxx/physical/calc/detail/pregen-parser/Parser.hpp
                          cxx/physical/calc/detail/pregen-parser/position.hh
                          cxx/physical/calc/detail/pregen-parser/stack.hh )
     set( ParserCPP       cxx/physical/calc/detail/pregen-parser/Parser.cpp )
-    include_directories( cxx/physical/calc/detail/pregen-parser )
+
+    LIST(APPEND ${PROJECT_NAME}_INCLUDE_DIRS
+        cxx/physical/calc/detail/pregen-parser
+    )
 endif()
 
 
@@ -113,8 +159,6 @@ if( FLEX_VERSION VERSION_EQUAL ${MIN_FLEX_VERSION} OR
     set( ScannerHPP )
     set( ScannerCPP ${FLEX_CalcScanner_OUTPUTS} )
 
-    include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
-
     set( PhysicalUsesFLEX 1 )
     if( PhysicalUsesBISON )
         add_flex_bison_dependency( CalcScanner CalcParser )
@@ -122,7 +166,10 @@ if( FLEX_VERSION VERSION_EQUAL ${MIN_FLEX_VERSION} OR
 else()
     set( ScannerHPP      cxx/physical/calc/detail/pregen-scanner/FlexLexer.h )
     set( ScannerCPP      cxx/physical/calc/detail/pregen-scanner/Scanner.cpp )
-    include_directories( cxx/physical/calc/detail/pregen-scanner )
+
+    LIST(APPEND ${PROJECT_NAME}_INCLUDE_DIRS
+        cxx/physical/calc/detail/pregen-scanner
+    )
 endif()
 
 
@@ -158,16 +205,14 @@ set( ${PROJECT_NAME}_calc_SOURCES
     ${ScannerCPP}
 )
 
-
-find_package( Boost COMPONENTS regex )
-
 if( Boost_REGEX_FOUND )
     include_directories( ${Boost_INCLUDE_DIRS} )
+    include_directories( ${${PROJECT_NAME}_INCLUDE_DIRS} )
     add_library( ${PROJECT_NAME}_calc
         ${${PROJECT_NAME}_calc_HEADERS}
         ${${PROJECT_NAME}_calc_SOURCES}
     )
-    
+
     target_link_libraries( ${PROJECT_NAME}_calc
         ${PROJECT_NAME}
         ${Boost_REGEX_LIBRARY}
@@ -175,30 +220,9 @@ if( Boost_REGEX_FOUND )
 endif()
 
 
-if( Boost_FOUND )
-    # boost::math is header only, so we have to search for it
-
-    add_definitions( ${Boost_DEFINITIONS} )
-
-    set( Boost_MATH_DIR "Boost_MATH_DIR-NOTFOUND" CACHE FILEPATH "" FORCE )
-    mark_as_advanced( Boost_MATH_DIR )
-    find_file( Boost_MATH_DIR
-        boost/math
-        HINTS ${Boost_INCLUDE_DIRS}
-        NO_DEFAULT_PATH
-    )
-
-    if( NOT Boost_MATH_DIR )
-      add_definitions( -DBOOST_MATH_NOT_FOUND )
-    else()
-      include_directories( ${Boost_INCLUDE_DIRS} )
-    endif()
-endif()
-
-
-
-# include the current directory for framework style includes
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/cxx )
+# Bogus stuff to help simulate a find module for this project
+set( ${PROJECT_NAME}_DEFINITIONS ${${PROJECT_NAME}_DEFINITIONS} PARENT_SCOPE )
+set( ${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_INCLUDE_DIRS} PARENT_SCOPE )
 
 
 # utility macro to add a unit test to be shared by all subdirectories.
