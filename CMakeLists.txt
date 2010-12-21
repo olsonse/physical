@@ -225,7 +225,7 @@ endif()
 # Stuff to help a simple local find module for this project
 MESSAGE(STATUS "Creating physical-config.cmake")
 FILE(WRITE
-    ${CMAKE_CURRENT_BINARY_DIR}/physical-config.cmake
+    ${CMAKE_BINARY_DIR}/physical-config.cmake
     "set( ${PROJECT_NAME}_VERSION \n"
     "     ${VERSION}\n"
     ")\n"
