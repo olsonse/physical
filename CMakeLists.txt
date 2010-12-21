@@ -217,12 +217,39 @@ if( Boost_REGEX_FOUND )
         ${PROJECT_NAME}
         ${Boost_REGEX_LIBRARY}
     )
+
+    set( ${PROJECT_NAME}_calc_FOUND TRUE )
 endif()
 
 
-# Bogus stuff to help simulate a find module for this project
-set( ${PROJECT_NAME}_DEFINITIONS ${${PROJECT_NAME}_DEFINITIONS} PARENT_SCOPE )
-set( ${PROJECT_NAME}_INCLUDE_DIRS ${${PROJECT_NAME}_INCLUDE_DIRS} PARENT_SCOPE )
+# Stuff to help a simple local find module for this project
+MESSAGE(STATUS "Creating physical-config.cmake")
+FILE(WRITE
+    ${CMAKE_CURRENT_BINARY_DIR}/physical-config.cmake
+    "set( ${PROJECT_NAME}_VERSION \n"
+    "     ${VERSION}\n"
+    ")\n"
+    "set( ${PROJECT_NAME}_DEFINITIONS \n"
+    "   ${${PROJECT_NAME}_DEFINITIONS}\n"
+    ")\n"
+    "set( ${PROJECT_NAME}_INCLUDE_DIRS\n"
+    "   ${${PROJECT_NAME}_INCLUDE_DIRS}\n"
+    ")\n"
+    "set( ${PROJECT_NAME}_LIBRARY\n"
+    "     ${PROJECT_NAME}\n"
+    ")\n"
+    "set( ${PROJECT_NAME}_calc_FOUND\n"
+    "   ${${PROJECT_NAME}_calc_FOUND}\n"
+    ")\n"
+    "set( ${PROJECT_NAME}_calc_LIBRARY\n"
+    "     ${PROJECT_NAME}_calc\n"
+    ")\n"
+    "set( ${PROJECT_NAME}_LIBRARIES\n"
+    "     ${PROJECT_NAME}\n"
+    "     ${PROJECT_NAME}_calc\n"
+    ")\n"
+)
+
 
 
 # utility macro to add a unit test to be shared by all subdirectories.
