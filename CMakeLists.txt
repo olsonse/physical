@@ -219,6 +219,7 @@ if( Boost_REGEX_FOUND )
     )
 
     set( ${PROJECT_NAME}_calc_FOUND TRUE )
+    set( ${PROJECT_NAME}_calc_LIBRARY ${PROJECT_NAME}_calc )
 endif()
 
 
@@ -242,11 +243,11 @@ FILE(WRITE
     "   ${${PROJECT_NAME}_calc_FOUND}\n"
     ")\n"
     "set( ${PROJECT_NAME}_calc_LIBRARY\n"
-    "     ${PROJECT_NAME}_calc\n"
+    "   ${${PROJECT_NAME}_calc_LIBRARY}\n"
     ")\n"
     "set( ${PROJECT_NAME}_LIBRARIES\n"
     "     ${PROJECT_NAME}\n"
-    "     ${PROJECT_NAME}_calc\n"
+    "   ${${PROJECT_NAME}_calc_LIBRARY}\n"
     ")\n"
 )
 
