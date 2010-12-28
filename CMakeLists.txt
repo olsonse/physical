@@ -117,6 +117,7 @@ add_library( ${PROJECT_NAME}
     ${${PROJECT_NAME}_SOURCES}
 )
 
+list(APPEND ${PROJECT_NAME}_COMPONENTS ${PROJECT_NAME})
 
 find_package( BISON )
 
@@ -218,8 +219,7 @@ if( Boost_REGEX_FOUND )
         ${Boost_REGEX_LIBRARY}
     )
 
-    set( ${PROJECT_NAME}_calc_FOUND TRUE )
-    set( ${PROJECT_NAME}_calc_LIBRARY ${PROJECT_NAME}_calc )
+    list(APPEND ${PROJECT_NAME}_COMPONENTS calc)
 endif()
 
 
@@ -236,18 +236,14 @@ FILE(WRITE
     "set( ${PROJECT_NAME}_INCLUDE_DIRS\n"
     "   ${${PROJECT_NAME}_INCLUDE_DIRS}\n"
     ")\n"
-    "set( ${PROJECT_NAME}_LIBRARY\n"
+    "set( ${PROJECT_NAME}_${PROJECT_NAME}_LIBRARY\n"
     "     ${PROJECT_NAME}\n"
-    ")\n"
-    "set( ${PROJECT_NAME}_calc_FOUND\n"
-    "   ${${PROJECT_NAME}_calc_FOUND}\n"
     ")\n"
     "set( ${PROJECT_NAME}_calc_LIBRARY\n"
-    "   ${${PROJECT_NAME}_calc_LIBRARY}\n"
+    "   ${PROJECT_NAME}_calc\n"
     ")\n"
-    "set( ${PROJECT_NAME}_LIBRARIES\n"
-    "     ${PROJECT_NAME}\n"
-    "   ${${PROJECT_NAME}_calc_LIBRARY}\n"
+    "set( ${PROJECT_NAME}_COMPONENTS\n"
+    "   ${${PROJECT_NAME}_COMPONENTS}\n"
     ")\n"
 )
 
