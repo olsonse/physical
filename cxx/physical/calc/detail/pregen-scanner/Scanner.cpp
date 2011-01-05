@@ -526,8 +526,8 @@ static yyconst flex_int16_t yy_chk[143] =
 
 static yyconst flex_int16_t yy_rule_linenum[13] =
     {   0,
-       63,   68,   73,   78,   83,   88,   93,   98,  103,  109,
-      114,  120
+       64,   69,   74,   79,   84,   89,   94,   99,  104,  110,
+      115,  121
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -546,6 +546,7 @@ static yyconst flex_int16_t yy_rule_linenum[13] =
 
 #include <string>
 #include <cstdlib>
+#include <cstdio>
 
 
 /* import the parser's token type into a local typedef */
@@ -570,9 +571,9 @@ typedef runtime::physical::calc::detail::Parser::token_type token_type;
 /* enables the use of start condition stacks */
 /* The following paragraph suffices to track locations accurately. Each time
  * yylex is invoked, the begin position is moved onto the end position. */
-#line 50 "Scanner.ll"
+#line 51 "Scanner.ll"
 #define YY_USER_ACTION  yylloc->columns(yyleng);
-#line 576 "pregen-scanner/Scanner.cpp"
+#line 577 "pregen-scanner/Scanner.cpp"
 
 #define INITIAL 0
 
@@ -734,7 +735,7 @@ YY_DECL
 	register int yy_act;
     
 /* %% [7.0] user's declarations go here */
-#line 53 "Scanner.ll"
+#line 54 "Scanner.ll"
 
 
  /* code to place at the beginning of yylex() */
@@ -745,7 +746,7 @@ YY_DECL
 
  /*** BEGIN EXAMPLE - Change the example lexer rules below ***/
 
-#line 749 "pregen-scanner/Scanner.cpp"
+#line 750 "pregen-scanner/Scanner.cpp"
 
 	if ( !(yy_init) )
 		{
@@ -856,7 +857,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 63 "Scanner.ll"
+#line 64 "Scanner.ll"
 {
   yylval->stringVal = new std::string(yytext, yyleng);
   return token::KEYWORD_QUIT;
@@ -864,7 +865,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 68 "Scanner.ll"
+#line 69 "Scanner.ll"
 {
   yylval->stringVal = new std::string(yytext, yyleng);
   return token::KEYWORD_DUMP;
@@ -872,7 +873,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 73 "Scanner.ll"
+#line 74 "Scanner.ll"
 {
   yylval->stringVal = new std::string(yytext, yyleng);
   return token::KEYWORD_SET;
@@ -880,7 +881,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 78 "Scanner.ll"
+#line 79 "Scanner.ll"
 {
   yylval->stringVal = new std::string(yytext, yyleng);
   return token::KEYWORD_HELP;
@@ -888,7 +889,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 83 "Scanner.ll"
+#line 84 "Scanner.ll"
 {
   yylval->stringVal = new std::string(yytext, yyleng);
   return token::KEYWORD_FROM;
@@ -896,7 +897,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 88 "Scanner.ll"
+#line 89 "Scanner.ll"
 {
   yylval->stringVal = new std::string(yytext, yyleng);
   return token::KEYWORD_CLEAR;
@@ -904,7 +905,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 93 "Scanner.ll"
+#line 94 "Scanner.ll"
 {
   yylval->doubleVal = atof(yytext);
   return token::DOUBLE;
@@ -912,7 +913,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 98 "Scanner.ll"
+#line 99 "Scanner.ll"
 {
   yylval->stringVal = new std::string(yytext, yyleng);
   return token::IDENTIFIER;
@@ -921,7 +922,7 @@ YY_RULE_SETUP
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 103 "Scanner.ll"
+#line 104 "Scanner.ll"
 {
   yylval->stringVal = new std::string(yytext, yyleng);
   return token::STRING;
@@ -930,7 +931,7 @@ YY_RULE_SETUP
 /* gobble up white-spaces */
 case 10:
 YY_RULE_SETUP
-#line 109 "Scanner.ll"
+#line 110 "Scanner.ll"
 {
   yylloc->step();
 }
@@ -939,7 +940,7 @@ YY_RULE_SETUP
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 114 "Scanner.ll"
+#line 115 "Scanner.ll"
 {
   yylloc->lines(yyleng); yylloc->step();
   return token::EOL;
@@ -948,7 +949,7 @@ YY_RULE_SETUP
 /* pass all other characters up to bison */
 case 12:
 YY_RULE_SETUP
-#line 120 "Scanner.ll"
+#line 121 "Scanner.ll"
 {
   return static_cast<token_type>(*yytext);
 }
@@ -956,10 +957,10 @@ YY_RULE_SETUP
 /*** END EXAMPLE - Change the example lexer rules above ***/
 case 13:
 YY_RULE_SETUP
-#line 126 "Scanner.ll"
+#line 127 "Scanner.ll"
 ECHO;
 	YY_BREAK
-#line 963 "pregen-scanner/Scanner.cpp"
+#line 964 "pregen-scanner/Scanner.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2008,7 +2009,7 @@ void Physicalfree (void * ptr )
 
 /* %ok-for-header */
 
-#line 126 "Scanner.ll"
+#line 127 "Scanner.ll"
 
 
 

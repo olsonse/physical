@@ -7,6 +7,7 @@
 
 #include <string>
 #include <cstdlib>
+#include <cstdio>
 
 
 /* import the parser's token type into a local typedef */
