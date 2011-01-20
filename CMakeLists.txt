@@ -124,15 +124,23 @@ find_package( BISON )
 set( MIN_BISON_VERSION 2.4 )
 if( BISON_VERSION VERSION_EQUAL ${MIN_BISON_VERSION} OR
     BISON_VERSION VERSION_GREATER ${MIN_BISON_VERSION} )
+
+    set( CalcParserDir
+      ${CMAKE_CURRENT_BINARY_DIR}/cxx/physical/calc/detail/parser
+    )
+    FILE(MAKE_DIRECTORY ${CalcParserDir} )
+
     BISON_TARGET(
         CalcParser
         cxx/physical/calc/detail/Parser.yy
-        ${CMAKE_CURRENT_BINARY_DIR}/Parser.cpp
+        ${CalcParserDir}/Parser.cpp
     )
 
     set( PhysicalUsesBISON 1 )
     set( ParserHPP )
     set( ParserCPP ${BISON_CalcParser_OUTPUTS} )
+
+    LIST(APPEND ${PROJECT_NAME}_INCLUDE_DIRS ${CalcParserDir} )
 else()
     set( ParserHPP       cxx/physical/calc/detail/pregen-parser/location.hh
                          cxx/physical/calc/detail/pregen-parser/Parser.hpp
@@ -151,10 +159,16 @@ find_package( FLEX )
 set( MIN_FLEX_VERSION 2.5.35 )
 if( FLEX_VERSION VERSION_EQUAL ${MIN_FLEX_VERSION} OR
     FLEX_VERSION VERSION_GREATER ${MIN_FLEX_VERSION} )
+
+    set( CalcScannerDir
+      ${CMAKE_CURRENT_BINARY_DIR}/cxx/physical/calc/detail/scanner
+    )
+    FILE(MAKE_DIRECTORY ${CalcScannerDir} )
+
     FLEX_TARGET(
         CalcScanner
         cxx/physical/calc/detail/Scanner.ll
-        ${CMAKE_CURRENT_BINARY_DIR}/Scanner.cpp
+        ${CalcScannerDir}/Scanner.cpp
     )
 
     set( ScannerHPP )
@@ -164,6 +178,8 @@ if( FLEX_VERSION VERSION_EQUAL ${MIN_FLEX_VERSION} OR
     if( PhysicalUsesBISON )
         add_flex_bison_dependency( CalcScanner CalcParser )
     endif()
+
+    LIST(APPEND ${PROJECT_NAME}_INCLUDE_DIRS ${CalcScannerDir} )
 else()
     set( ScannerHPP      cxx/physical/calc/detail/pregen-scanner/FlexLexer.h )
     set( ScannerCPP      cxx/physical/calc/detail/pregen-scanner/Scanner.cpp )
