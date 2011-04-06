@@ -1,9 +1,6 @@
 /** Demonstrates the use of the "registry" mechanism to store a list of
  * variable names (in std::string format) linked to a particular object in
  * memory.
- *
- * This mechanism is not yet currently in use in the initialization of the
- * units/constants physical::Quantity items.  
  * */
 
 

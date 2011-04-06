@@ -1,7 +1,7 @@
 /** \file This file was originally intended to be a test program for the
  * calculator grammar engine, but has ended up being a fairly capable units
  * calculator.  It can function as a simple calculator with variables,
- * constants, and (at-compile-time-added) mathematical unary functions.
+ * constants, and (at-compile-time-added) mathematical functions.
  *
  * Perhaps it might even rival with GNU units. :-)
  *

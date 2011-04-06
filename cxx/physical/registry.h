@@ -6,6 +6,31 @@
  *
  * */
 
+/** \example registry/testregistry.cpp
+ * Demonstration of the physical quantity registry used for
+ * runtime::physical::quantity.  This registry is primarily to enable all units,
+ * and constants to be automatically propagated into the units calculator in
+ * runtime::physical::calc::Driver.
+ *
+ * This example should print (on stdout):
+   \verbatim
+     a  = <1 m>
+     &a = 0x7fffce9706a0
+     &m = 0x7fffce9706a0
+     other::m :  0x7fffce9706a0
+     physical::constant::Dalton :  0x689d20
+     physical::constant::Daltons :  0x689d80
+     physical::constant::G :  0x68a3e0
+     physical::constant::GeV :  0x6898a0
+     ...
+     physical::units::yards :  0x6820a0
+     physical::units::yd :  0x682100
+     physical::units::year :  0x67c6a0
+     physical::units::years :  0x67c700
+     physical::units::yr :  0x67c760
+   \endverbatim
+ */
+
 #if ( defined(PHYSICAL_DATA_FOR_RUNTIME) && \
      !defined(runtime_physical_registry_h) ) || \
     (!defined(PHYSICAL_DATA_FOR_RUNTIME) && \

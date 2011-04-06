@@ -15,6 +15,60 @@
  *
  * */
 
+/** \example output/testOutput.cpp
+ * A demonstration of the different runtime::physical::quantity printing formats
+ * possible.
+ *
+ * The results (on stdout) of this example should be:
+ * \verbatim
+     b:  (1024,0) * {(m : 10), }
+     c:  (1,0) * {}
+     pow(b,0.1):  (2,0) * {(m : 1), }
+     b = <1024 m^10>
+  
+     d:  <10 radian>
+     sigma_SB : <5.6704e-08 kg / K^4 s^3> (Stefan-Boltzmann constant(SI units))
+     h_bar    : <1.05457e-34 kg m^2 / radian s> (Planck constant(SI units))
+  
+     <1 m / s>m sm s
+     c    : <2.99792e+08 m / s> (speed of light(SI units))
+     v    : <1 m / s>
+     A = v + c  : <2.99792e+08 m / s>
+     v0 = v / c : <1>
+   \endverbatim
+ */
+
+/** \example data-only/testDataOnly.cpp
+ * Example of using the non-runtime (bare physical namespace) interface to
+ * the physical units, constants, element data, and unit-system conversion
+ * capabilities of the physical package.  There are three primary benefits to
+ * the non-runtime interfaces:
+ *   - First, since everything is stored in a native number format (e.g.
+ *     double), compiler optimization is more possible.  Not only can the code
+ *     be compiled quickly, but the resulting binary code can execute quickly;
+ *   - Second, the native number storage format of the non-runtime interface
+ *     allows for easier integration into existing codes;
+ *   - Third, physical::dimension, physical::system, physical::constant,
+ *     physical::convert, physical::convert_ratio, and physical::DimQuantity
+ *     provide for both compile-time (high-performance) and runtime
+ *     (lower-performance) conversion of arbitrary physical quantities between
+ *     two arbitrary unit systems.  Systems already defined by this package
+ *     include SI, CGS(no E&M units), elctrostatic units (ESU/CGS),
+ *     electromagnetic units (EMU/CGS), gaussian (CGS), heaviside_lorentz (CGS),
+ *     and atomic units.  User-defined unit systems are also possible.
+ *   .
+ *
+ * One of the primary disadvantages of these interfaces is that dimensional
+ * analysis is not done for the native storage types.
+ *
+ * The results of this test should be:
+ * \verbatim
+    10
+    0.1
+    10.1
+   \endverbatim
+ * */
+
 #ifndef PHYSICAL_QUANTITY_H
 #define PHYSICAL_QUANTITY_H
 

@@ -1,6 +1,26 @@
 // $Id: driver.h 17 2007-08-19 18:51:39Z tb $         
 /** \file driver.h Declaration of the physical::Driver class. */
 
+/** \example calc/parser/testParser.cpp
+ * Very basic example of using the physical quantity calculator
+ * (runtime::physical::calc::Driver) to parse some simple expressions.
+ *
+ * This example should print on stdout:
+   \verbatim
+     <10 m>
+     (3.33564e-08,0)
+   \endverbatim
+ */
+
+/** \example calc/interactive/testInteractive.cpp
+ * This example was originally intended to be a test program for the
+ * calculator grammar engine, but has ended up being a fairly capable units
+ * calculator.  It can function as a simple calculator with variables,
+ * constants, and (at-compile-time-added) mathematical functions.
+ *
+ * Perhaps it might even rival with GNU units. :-)
+ */
+
 #ifndef physical_calc_Driver_h
 #define physical_calc_Driver_h
 
