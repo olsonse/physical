@@ -2,29 +2,11 @@ Installation Instructions
 *************************
 
 C++:
-  This project uses the Boost.Build system which automatically tracks
-  link, include, and other dependencies among any number of libraries and
-  projects.  Except for using the (unfinished) CMake build configuration, these
-  instructions assume that you have Boost.Build installed on your system.  
-
-  General Install:
-    These instructions are for installing this software into a standard layout
-    where libraries are installed to  <prefix>/lib
-    and headers are installed to      <prefix>/include
-    DEFAULT:  <prefix> = /usr/local
-
-    For a simple install, just do:
-    
-        bjam install
-    
-    To change the installation path, use
-    
-        bjam --prefix=/path/to/install/into/ install
-    
-    For help on other options, execute
-    
-        bjam --help
-
+  This project uses both the Boost.Build and CMake system which separately
+  automatically track link, include, and other dependencies among any number of
+  libraries and projects.  You may use either the Boost.Build or CMake build
+  systems independently.  Below, you should find instructions for using either
+  Boost.Build, CMake, or a general system-style installtion.
 
   Boost.Build:
     If you use Boost.Build, integrating this library into your own project is
@@ -32,12 +14,13 @@ C++:
 
         use-project /physical : path/to/physical ;
 
-    where the path/to/physical path can be either relative or absolute.  
+    where the path/to/physical path can be either relative or absolute.
     This library has two sub-libraries that are useful and which will
     invoke the proper linking to other libraries such as Boost.Regex.
 
         /physical//physical : does NOT invoke linking to Boost.Regex
         /physical//runtime  : DOES invoke linking to Boost.Regex
+
 
   CMake:
     CMake files also accompany the package and make it easier to use in a
@@ -53,7 +36,25 @@ C++:
           ${CMAKE_SOURCE_DIR}/physical/cxx
         )
 
-    NOTE:  the CMake files are a work in progress and may not work yet.
+
+  General Install:
+    These instructions are for installing this software into a standard layout
+    where libraries are installed to  <prefix>/lib
+    and headers are installed to      <prefix>/include
+    DEFAULT:  <prefix> = /usr/local
+
+    For a simple install, just do:
+
+        bjam install
+
+    To change the installation path, use
+
+        bjam --prefix=/path/to/install/into/ install
+
+    For help on other options, execute
+
+        bjam --help
+
 
 
 
@@ -68,7 +69,7 @@ PYTHON:
 GNUPLOT:
   The gnuplot 'port' is not the most elegant (i.e. the namespaces are just
   tacked onto the names, such as 'arc_centesimal_minute' instead of
-  'arc::centesimal::minute' but it has been handy for me. 
+  'arc::centesimal::minute' but it has been handy for me.
 
 
 OCTAVE/MATLAB:
@@ -76,5 +77,5 @@ OCTAVE/MATLAB:
   get all of the units/contants loaded into memory as variables.  The namespaces
   are loaded as structs, except that the physical::unit(s) and
   physical::constant(s) prefixes are removed (perhaps this should not be the
-  case, but oh well). 
+  case, but oh well).
 
