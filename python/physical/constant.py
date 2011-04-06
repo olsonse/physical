@@ -6,6 +6,9 @@ class constant(const):
     def __init__(self,prefix, unit):
         const.__init__(self,prefix + 'constant')
 
+        self.pi = unit.pi / unit.radian
+        #self.pi.name = 'unitless pi'
+
         self.c = 2.99792458e8*unit.meters/unit.second;
         self.c.name = 'speed of light';
 
