@@ -88,11 +88,15 @@ links to documentation for included functions, classs, and data-members.
 /** \namespace physical::constant
  * The set of physical constants that defined for all unit systems (unit system
  * is generally specified as a template parameter--the default being SI units).
+ *
+ * @see si.h
  */
 
 /** \namespace physical::constant::si
  * Direct, non-templated access to the physical constants defined only for SI units.  This
  * namespace allows non-templated access to the constants in SI units.
+ *
+ * @see si.h
  */
 
 /** \namespace physical::element
