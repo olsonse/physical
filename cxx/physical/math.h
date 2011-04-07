@@ -212,7 +212,7 @@ namespace runtime {
         return std::max(lhs.real(), rhs.real());
       }
     } /* namespace runtime::physical::detail. */
-    /** \endcond PHYSICAL_DETAIL_MATH */
+    /** \endcond */
 
 
     /** The power operator.
