@@ -1,6 +1,8 @@
 /** \file
  * Various constants, most of which have been pulled in May 2009 from
- * http://physics.nist.gov/cuu/Constants/index.html.
+ * <a href="http://physics.nist.gov/cuu/Constants/index.html">
+ * http://physics.nist.gov/cuu/Constants/index.html
+ * </a>.
  */
 
 #if ( defined(PHYSICAL_DATA_FOR_RUNTIME) && \
