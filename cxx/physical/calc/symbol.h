@@ -1,3 +1,8 @@
+/** \file
+ * Symbol class for all symbols (constants, variables, functions) used in the
+ * runtime::physical::calc::Driver calculator class.
+ */
+
 #ifndef physical_calc_symbol_h
 #define physical_calc_symbol_h
 

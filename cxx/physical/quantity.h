@@ -720,8 +720,11 @@ namespace runtime {
          * I could not figure out how to get boost::spirit to call my
          * savePow, but using this function seems to work.
          *
-         * @param ExpT
-         *     The type of the exponent may be int, double, or quantity<T>.
+         * @tparam ExpT
+         *    The type of the exponent may be int, double, or quantity<T>.
+         *
+         * @param exponent
+         *    The exponent in the power operation.
          * */
         template<class ExpT>
         inline quantity & operator^=(const ExpT & exponent) {

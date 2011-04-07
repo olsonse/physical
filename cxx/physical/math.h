@@ -1,3 +1,8 @@
+/** \file
+ * Definition of math functions that can be used on runtime::physical::quantity
+ * class instances.
+ */
+
 #ifndef physical_math_h
 #define physical_math_h
 
@@ -31,6 +36,7 @@ namespace runtime {
   namespace physical {
     /** As set of unary mathematical functions that operate on quantity<T>
      * types.  Many of these are just wrappers for math.h functions.
+     * \cond PHYSICAL_DETAIL_MATH
      * */
     namespace detail {
 
@@ -206,6 +212,7 @@ namespace runtime {
         return std::max(lhs.real(), rhs.real());
       }
     } /* namespace runtime::physical::detail. */
+    /** \endcond PHYSICAL_DETAIL_MATH */
 
 
     /** The power operator.

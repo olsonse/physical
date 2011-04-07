@@ -1,3 +1,7 @@
+/** \file
+ * Parsing exceptions used in runtime::physical::calc::Driver.
+ */
+
 #ifndef  physical_calc_except_h
 #define  physical_calc_except_h
 

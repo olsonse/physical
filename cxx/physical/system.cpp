@@ -1,3 +1,7 @@
+/** \file
+ * Assignment of unit system names (from string values).
+ */
+
 #include <physical/system.h>
 #define PHYSICAL_DATA_FOR_RUNTIME
 #  include <physical/system.h>

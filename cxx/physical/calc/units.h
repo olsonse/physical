@@ -1,3 +1,9 @@
+/** \file
+ * Utility to add all runtime::physical::quantity values present in the registry
+ * as symbols to a symbol table to be used in a runtime::physical::calc::Driver
+ * calculator instance.
+ */
+
 #ifndef physical_calc_units_h
 #define physical_calc_units_h
 
@@ -9,14 +15,20 @@ namespace runtime {
   namespace physical {
     namespace calc {
 
+      /** Simple templated classes to add type dependent symbols like
+       * \f$ i = \sqrt{-1} \f$ (for complex data types).
+       */
       namespace detail {
 
+        /** By default, no additional symbols are added. */
         template < typename T >
         struct AddOtherSymbols {
           void operator() ( symbol::table & symbols ) {
           }
         };
 
+        /** For complex types, the imaginary number \f$ i = \sqrt{-1} \f$ symbol
+         * is added. */
         template < typename T >
         struct AddOtherSymbols< std::complex<T> > {
           void operator() ( symbol::table & symbols ) {

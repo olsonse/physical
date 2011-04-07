@@ -1,3 +1,7 @@
+/** \file
+ * Actual location that runtime::physical::* values are instantiated.
+ * Currently, a single compilation unit includes this file.
+ */
 
 /* first thing is the define the appropriate macros so that the data gets
  * initialized instead of extern declared. */

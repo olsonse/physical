@@ -1217,7 +1217,18 @@ PREDEFINED             = APPEND
 # The macro definition that is found in the sources will be used. 
 # Use the PREDEFINED tag if you want to use a different macro definition.
 
-EXPAND_AS_DEFINED      = 
+EXPAND_AS_DEFINED      =  _ELEMENT \
+                          _QUANTITY _QUANTITYn _QUANTITYu \
+                          _OPEN_NAMESPACE _CLOSE_NAMESPACE \
+                          _BEGIN_NAMESPACE _END_NAMESPACE \
+                          _ALIAS_NAMESPACE _IMPORT_NAMESPACE \
+                          PHYSICAL_QUANTITY_CLASS \
+                          PHYSICAL_DIM PHYSICAL_DIM_W_VAL \
+                          PHYSICAL_TCQ _TQUANTITYn \
+                          physical_make_sys \
+                          PHYSICAL_QUANTITY_COEFF_TYPE \
+                          PHYSICAL_QUANTITY_CLASS \
+                          PHYSICAL_DATA_FOR_RUNTIME
 
 # If the SKIP_FUNCTION_MACROS tag is set to YES (the default) then 
 # doxygen's preprocessor will remove all function-like macros that are alone 

@@ -1,5 +1,6 @@
-// $Id: driver.cc 39 2008-08-03 10:07:15Z tb $
-/** \file driver.cc Implementation of the physical::Driver class. */
+/** \file
+ * Implementation of the runtime::physical::Driver class.
+ */
 
 #include <physical/calc/Driver.h>
 #include <physical/calc/except.h>

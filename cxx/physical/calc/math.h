@@ -1,3 +1,9 @@
+/** \file
+ * Utility to add all runtime::physical::quantity related math functions as
+ * defined in physical/math.h to a symbol table to be used in a
+ * runtime::physical::calc::Driver calculator instance.
+ */
+
 #ifndef physical_calc_math_h
 #define physical_calc_math_h
 

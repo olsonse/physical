@@ -48,6 +48,62 @@ links to documentation for included functions, classs, and data-members.
   .
 */
 
+/** \namespace physical
+ * Non-runtime access to physical units, constants, element data, and
+ * conversion.
+ */
+
+/** \namespace runtime::physical
+ * Encapsulation of all items of Non-runtime data and facilities re-cast into
+ * with the runtime::physical::quantity class with dimensional analysis.
+ */
+
+/** \namespace physical::dimension
+ * Expression of most (or many) complex units for any unit system in terms of
+ * the most basic units common to all unit systems:  time, length, mass, charge.
+ * New unit systems need only specify the value of the of the basic units for
+ * the new unit system in <b>SI</b> units.
+ * This namespace also defines several common unit systems:
+ *   - SI
+ *   - Centimeters-grams-seconds (CGS) with no electromagnetic units
+ *   - elctrostatic units (ESU/CGS)
+ *   - electromagnetic units (EMU/CGS)
+ *   - gaussian (CGS)
+ *   - heaviside_lorentz (CGS)
+ *   - atomic units
+ *   .
+ * User-defined unit systems are also possible.
+ */
+
+/** \namespace physical::dimension::electric
+ * Expression of the electric-field related units, such as field, potential,
+ * resistance, in terms of a unit system's basic units.
+ */
+
+/** \namespace physical::dimension::magnetic
+ * Expression of the magnetic-field related units, such as flux, inductance,
+ * moment, in terms of a unit system's basic units.
+ */
+
+/** \namespace physical::constant
+ * The set of physical constants that defined for all unit systems (unit system
+ * is generally specified as a template parameter--the default being SI units).
+ */
+
+/** \namespace physical::constant::si
+ * Direct, non-templated access to the physical constants defined only for SI units.  This
+ * namespace allows non-templated access to the constants in SI units.
+ */
+
+/** \namespace physical::element
+ * Data for elements of the periodic table (not yet complete).  This data
+ * includes the atomic number, mass, and outer-electron ionization energy.
+ */
+
+/** \namespace runtime::physical::calc
+ * The physical units/constants expression calculator classes.
+ */
+
 
 
 //-----------------------------------------------------------
