@@ -93,11 +93,11 @@ project /physical
     : requirements
         <include>cxx
         <library>/boost//headers
-        <define>PHYSICAL_VERSION=\\\"$(VERSION)\\\"
+        <define>PHYSICAL_VERSION=$(VERSION)
     : usage-requirements
         <include>cxx
         <library>/boost//headers
-        <define>PHYSICAL_VERSION=\\\"$(VERSION)\\\"
+        <define>PHYSICAL_VERSION=$(VERSION)
     ;
 
 

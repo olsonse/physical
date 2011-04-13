@@ -14,14 +14,24 @@
 #  define PHYSICAL_VERSION ""
 #endif
 
+#define STR(x) #x
+#define XSTR(x) STR(x)
+
 /** Intro message displayed in interactive mode. */
 const char * opening_msg =
-"physical::calculator: " PHYSICAL_VERSION " compiled on " __DATE__ "\n"
+"physical::calculator: " XSTR(PHYSICAL_VERSION) " compiled on " __DATE__ "\n"
 "Perhaps it might even rival with GNU units. :-)\n"
 "\n"
 "- 2007-2009 Spencer E. Olson\n"
 "  type 'help' at the prompt for usage information.\n\n";
 
+
+// These default commands make the command-line calculator useful by default.
+const char * default_rc_lines =
+"from physical::constant import *;\n"
+"from physical::unit import *;\n"
+"from physical import 'unit::pi';\n"
+"from physical import 'element::.*';\n";
 
 #include <physical/calc/Driver.h>
 #include <physical/calc/except.h>
@@ -248,9 +258,15 @@ int main( int argc, char * argv[] ) {
   std::string HOME( getenv("HOME") ? getenv("HOME") : "/tmp/" );
   std::string PROG( * split(argv[0], '/').rbegin() );
   { /* try and read initial commands saved by the user. */
-    std::ifstream frc( (HOME + "/." + PROG + "rc").c_str() );
     Executor executor( calc );
-    foreach_line( frc, executor );
+
+    std::ifstream frc( (HOME + "/." + PROG + "rc").c_str() );
+    if ( frc.good() )
+      foreach_line( frc, executor );
+    else {
+      std::istringstream default_rc( default_rc_lines );
+      foreach_line( default_rc, executor );
+    }
   }
 
   #ifdef HAVE_READLINE_HISTORY

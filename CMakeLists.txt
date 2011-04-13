@@ -116,8 +116,8 @@ add_library( ${PROJECT_NAME}
     ${${PROJECT_NAME}_HEADERS}
     ${${PROJECT_NAME}_SOURCES}
 )
-
 list(APPEND ${PROJECT_NAME}_COMPONENTS ${PROJECT_NAME})
+list(APPEND targets_to_install ${PROJECT_NAME})
 
 find_package( BISON )
 
@@ -223,6 +223,7 @@ set( ${PROJECT_NAME}_calc_SOURCES
 )
 
 if( Boost_REGEX_FOUND )
+    # configure the physical_calc library
     include_directories( ${Boost_INCLUDE_DIRS} )
     include_directories( ${${PROJECT_NAME}_INCLUDE_DIRS} )
     add_library( ${PROJECT_NAME}_calc
@@ -236,6 +237,98 @@ if( Boost_REGEX_FOUND )
     )
 
     list(APPEND ${PROJECT_NAME}_COMPONENTS calc)
+    list(APPEND targets_to_install ${PROJECT_NAME}_calc)
+
+
+    #  ############## BEGIN ############### #
+    #  ########## physical_units ########## #
+    add_executable( ${PROJECT_NAME}_units
+        examples/calc/interactive/testInteractive.cpp
+    )
+
+    #  THE FOLLOWING IS BECAUSE WE DON'T YET HAVE A FindReadline.cmake
+    #        ##### BEGIN find_package(readline) #####
+    find_library(READLINE_LIBRARY NAMES readline)
+    if(READLINE_LIBRARY)
+        list(APPEND READLINE_LIBRARIES ${READLINE_LIBRARY})
+
+        # #### BEGIN check if we need curses...
+        set(OLD_CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES})
+        list(APPEND CMAKE_REQUIRED_LIBRARIES ${READLINE_LIBRARY})
+        set( READLINE_TEST_CODE
+            "
+            extern \"C\" char * readline(const char *);
+            int main() {
+              char * line = readline(\"prompt> \");
+              return 0;
+            }
+            "
+        )
+        include( CheckCXXSourceCompiles )
+        message( STATUS "Check for simple libreadline compile" )
+        check_cxx_source_compiles( "${READLINE_TEST_CODE}" R_SIMPLE )
+        message( STATUS "Check for simple libreadline compile -- ${R_SIMPLE}" )
+        if( NOT R_SIMPLE )
+            find_package( Curses QUIET )
+            if( CURSES_FOUND )
+                list(APPEND CMAKE_REQUIRED_LIBRARIES ${CURSES_LIBRARIES})
+                
+                message( STATUS "Check for curses-libreadline compile" )
+                check_cxx_source_compiles( "${READLINE_TEST_CODE}" R_CURSES )
+                message( STATUS "Check for curses-libreadline compile -- ${R_CURSES}" )
+                if( R_CURSES )
+                    list(APPEND READLINE_LIBRARIES ${CURSES_LIBRARIES})
+                else()
+                    message(FATAL_ERROR "ARG!")
+                endif()
+            endif()
+        endif()
+        set(CMAKE_REQUIRED_LIBRARIES ${OLD_CMAKE_REQUIRED_LIBRARIES})
+        # #### END check if we need curses...
+
+        message(STATUS "Found GNU readline: ${READLINE_LIBRARY}")
+        #FIXME: test whether history is really supported
+        list(APPEND READLINE_DEFINES
+            HAVE_LIBREADLINE HAVE_READLINE_HISTORY )
+
+        # find headers
+        find_path(READLINE_INCLUDE_DIR readline/readline.h)
+        if( READLINE_INCLUDE_DIR )
+            list(APPEND READLINE_DEFINES HAVE_READLINE_READLINE_H )
+            find_path(HISTORY_INCLUDE_DIR readline/history.h)
+            if( HISTORY_INCLUDE_DIR )
+                list(APPEND READLINE_DEFINES HAVE_READLINE_HISTORY_H )
+            endif()
+        else()
+            find_path(READLINE_INCLUDE_DIR readline.h)
+            if ( READLINE_INCLUDE_DIR )
+                list(APPEND READLINE_DEFINES HAVE_READLINE_H )
+                find_path(HISTORY_INCLUDE_DIR history.h)
+                if( HISTORY_INCLUDE_DIR )
+                    list(APPEND READLINE_DEFINES HAVE_HISTORY_H )
+                endif()
+            endif()
+        endif()
+
+        if( READLINE_INCLUDE_DIR )
+            set_target_properties(
+                ${PROJECT_NAME}_units
+                PROPERTIES COMPILE_DEFINITIONS "${READLINE_DEFINES}"
+            )
+        endif()
+    else()
+        message(FATAL_ERROR "Could not find GNU readline")
+        set(READLINE_LIBRARIES)
+    endif()
+    #        ##### END find_package(readline) #####
+
+    target_link_libraries( ${PROJECT_NAME}_units
+        ${PROJECT_NAME}_calc
+        ${READLINE_LIBRARIES}
+    )
+    list(APPEND targets_to_install ${PROJECT_NAME}_units)
+    #  ########## physical_units ########## #
+    #  ############### END ################ #
 endif()
 
 
@@ -261,6 +354,12 @@ FILE(WRITE
     "set( ${PROJECT_NAME}_COMPONENTS\n"
     "   ${${PROJECT_NAME}_COMPONENTS}\n"
     ")\n"
+)
+
+install( TARGETS ${targets_to_install}
+    ARCHIVE DESTINATION lib/static
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
 )
 
 
