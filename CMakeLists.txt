@@ -311,6 +311,7 @@ if( Boost_REGEX_FOUND )
         endif()
 
         if( READLINE_INCLUDE_DIR )
+            include_directories( ${READLINE_INCLUDE_DIR} )
             set_target_properties(
                 ${PROJECT_NAME}_units
                 PROPERTIES COMPILE_DEFINITIONS "${READLINE_DEFINES}"
