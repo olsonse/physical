@@ -1,0 +1,2 @@
+exe testAdvanced : testAdvanced.cpp /physical//calc ;
+install convenient-copy : testAdvanced : <location>. ;

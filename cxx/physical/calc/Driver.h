@@ -22,6 +22,12 @@
  * Perhaps it might even rival with GNU units. :-)
  */
 
+/** \example calc/advanced/testAdvanced.cpp
+ * Demonstrates how the expression parser can be used to create an abstract
+ * expression tree that can be evaluated at some later time and can depend on
+ * valued modified external to the Parser.
+ */
+
 #ifndef physical_calc_Driver_h
 #define physical_calc_Driver_h
 
