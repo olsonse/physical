@@ -142,6 +142,7 @@ int main(int argc, char *argv[]) {
       bool result = calc.parse( input );
       typedef runtime::physical::calc::Driver::ExpressionVector EVector;
       EVector expressions = calc.expressions;
+      calc.expressions.clear();
 
       std::cout << "interrupting calculation:  "
                 << calc.eval("some_variable = 10*sigma_SB")
@@ -176,6 +177,8 @@ int main(int argc, char *argv[]) {
       } else {
         std::cout << "Result NOT available" << std::endl;
       }
+
+      runtime::physical::calc::Driver::clearExpressions( expressions );
     } catch ( const runtime::physical::calc::syntax_error & e ) {
       std::cerr << e.what() << std::endl;
     }
