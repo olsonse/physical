@@ -115,9 +115,9 @@ namespace {
     static void registerFunctions( runtime::physical::calc::Driver & c ) {
       c.symbols["P"] = & Something::P;
       c.symbols["setP"] = & Something::setP;
-      c.symbols["A"] = Quantity( Something::A );
-      c.symbols["B"] = Quantity( Something::B );
-      c.symbols["C"] = Quantity( Something::C );
+      c.symbols["A"] = Quantity( double(Something::A) );
+      c.symbols["B"] = Quantity( double(Something::B) );
+      c.symbols["C"] = Quantity( double(Something::C) );
     }
   };
 }
