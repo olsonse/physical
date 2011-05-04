@@ -22,6 +22,12 @@
  * Perhaps it might even rival with GNU units. :-)
  */
 
+/** \example calc/advanced/testAdvanced.cpp
+ * Demonstrates how the expression parser can be used to create an abstract
+ * expression tree that can be evaluated at some later time and can depend on
+ * valued modified external to the Parser.
+ */
+
 #ifndef physical_calc_Driver_h
 #define physical_calc_Driver_h
 
@@ -182,15 +188,20 @@ namespace runtime {
         void exec( const std::string & input,
                    const std::string & sname = "exec input" );
 
-        /** Free all saved expression abstract syntax trees. */
-        void clearExpressions() {
-          const EIter end = expressions.end();
-          for( EIter i = expressions.begin(); i != end; ++i ) {
+        /** Disconnected deletion of expression abstract syntax trees. */
+        static void clearExpressions( ExpressionVector & v ) {
+          const EIter end = v.end();
+          for( EIter i = v.begin(); i != end; ++i ) {
             delete (*i);
           }
 
           /* doesn't really free space, but I think that should be fine. */
-          expressions.clear();
+          v.clear();
+        }
+
+        /** Free all saved expression abstract syntax trees. */
+        void clearExpressions() {
+          Driver::clearExpressions( this->expressions );
         }
 
         /** Dump a list of (a subset) of all the symbols in the symbol table. */

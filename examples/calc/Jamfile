@@ -1,2 +1,3 @@
 build-project interactive ;
 build-project parser ;
+build-project advanced ;
