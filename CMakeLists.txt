@@ -222,16 +222,14 @@ set( ${PROJECT_NAME}_calc_SOURCES
     ${ScannerCPP}
 )
 
-add_library( ${PROJECT_NAME}_calc
-    ${${PROJECT_NAME}_calc_HEADERS}
-    ${${PROJECT_NAME}_calc_SOURCES} )
-
-# configure the physical_calc library
-include_directories( ${Boost_INCLUDE_DIRS} )
-include_directories( ${${PROJECT_NAME}_INCLUDE_DIRS} )
-
-
 if( Boost_REGEX_FOUND )
+    # configure the physical_calc library
+    include_directories( ${Boost_INCLUDE_DIRS} )
+    include_directories( ${${PROJECT_NAME}_INCLUDE_DIRS} )
+    add_library( ${PROJECT_NAME}_calc
+        ${${PROJECT_NAME}_calc_HEADERS}
+        ${${PROJECT_NAME}_calc_SOURCES}
+    )
 
     target_link_libraries( ${PROJECT_NAME}_calc
         ${PROJECT_NAME}
@@ -319,6 +317,9 @@ if( Boost_REGEX_FOUND )
                 PROPERTIES COMPILE_DEFINITIONS "${READLINE_DEFINES}"
             )
         endif()
+    else()
+        message(FATAL_ERROR "Could not find GNU readline")
+        set(READLINE_LIBRARIES)
     endif()
     #        ##### END find_package(readline) #####
 
