@@ -318,7 +318,7 @@ if( Boost_REGEX_FOUND )
             )
         endif()
     else()
-        message(FATAL_ERROR "Could not find GNU readline")
+        message(WARNING "Could not find GNU readline for ${PROJECT_NAME}_units")
         set(READLINE_LIBRARIES)
     endif()
     #        ##### END find_package(readline) #####
