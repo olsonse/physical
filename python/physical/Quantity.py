@@ -1,6 +1,6 @@
 from exceptions import RuntimeError
 
-class Quantity:
+class Quantity(object):
     """
     This is the documentation for a physical Quantity.
     """
