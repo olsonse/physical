@@ -1,5 +1,11 @@
 from exceptions import RuntimeError
 
+
+UnitsMismatch = 'Units mismatch:  cannot add/subtract/compare mismatched units'
+UnitsNotRoot  = 'Units not root:  cannot take non-even root of units'
+UnitsNotDimensionless = 'Units not dimensionless:  cannot create non-even powers of unit'
+
+
 class Quantity(object):
     """
     This is the documentation for a physical Quantity.
@@ -193,7 +199,7 @@ class Quantity(object):
                 del u[k]
         return u
 
-    def unitsMatch(self,other):
+    def unitsMatch(self,other,msg=UnitsMismatch):
         """
         Compares units of two quantities to see if they match.
         If both items are of type Quantity and they match return 1
@@ -210,7 +216,7 @@ class Quantity(object):
                 # Neither are really Quantity types, so we'll just
                 # give a softer indicator than an exception
                 return -1
-            raise RuntimeError(UnitsMismatch)
+            raise RuntimeError(msg)
 
         if self.units.keys() == [ ] and other.units.keys() == [ ]:
             # Neither are really Quantity types, so we'll just
@@ -218,10 +224,6 @@ class Quantity(object):
             return 0
 
         if self.units != other.units:
-            raise RuntimeError(UnitsMismatch)
+            raise RuntimeError(msg)
         return 1
-
-UnitsMismatch = 'Units mismatch:  cannot add/subtract/compare mismatched units'
-UnitsNotRoot  = 'Units not root:  cannot take non-even root of units'
-UnitsNotDimensionless = 'Units not dimensionless:  cannot create non-even powers of unit'
 
