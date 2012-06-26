@@ -149,6 +149,7 @@ class unit(const):
         self.us = self.microsecond;
         self.nanosecond = self.second/1000000000.0;
         self.nanoseconds = self.nanosecond;
+        self.ns = self.nanosecond;
         self.picosecond = self.second/1000000000000.0;
         self.picoseconds = self.picosecond;
         self.minute = 60.0*self.seconds;
