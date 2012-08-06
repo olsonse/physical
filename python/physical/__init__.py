@@ -70,4 +70,7 @@ class _physical(const):
         # copy over the Quantity module so that the user can reference it.
         self.base = Quantity
 
+        # also provide a direct reference to the Quantity class
+        self.Quantity = Quantity.Quantity
+
 sys.modules[__name__]=_physical()

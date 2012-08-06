@@ -68,7 +68,7 @@ class unit(const):
         self.proof = self.percent/2.0;
         self.karat = 1.0/24.0;
         self.karats = self.karat;
-        self.mole = 6.0221367e+23;
+        self.mole = 6.02214179e+23;
         self.moles = self.mole;
         self.mol = self.mole;
         self.pi = 3.14159265358979323846*self.radians;
@@ -213,6 +213,8 @@ class unit(const):
         self.Pascal = self.Newton/(self.meter*self.meter);
         self.Pascals = self.Pascal;
         self.Pa = self.Pascal;
+        self.kiloPascal = 1000.0 * self.Pascal
+        self.kPa = self.kiloPascal
         self.Barie = self.Pascal/10.0;
         self.Baries = self.Barie;
         self.Barye = self.Barie;
@@ -314,7 +316,8 @@ class unit(const):
         self.Weber = self.Volt*self.second;
         self.Webers = self.Weber;
         self.Wb = self.Weber;
-        self.Maxwell = self.Weber/100000000.0;
+      ##self.Maxwell = self.Weber/100000000.0;
+        self.Maxwell = self.abVolt * self.second;
         self.Maxwells = self.Maxwell;
         self.M = self.Maxwell;
         self.statMaxwell = self.statVolt * self.second

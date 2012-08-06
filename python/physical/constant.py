@@ -3,11 +3,14 @@ from unit import unit;
 from physical.Quantity import Quantity;
 
 class constant(const):
+    """
+    Various constants, most of which have been pulled in May 2009 from
+    http://physics.nist.gov/cuu/Constants/index.html.
+    """
     def __init__(self,prefix, unit):
         const.__init__(self,prefix + 'constant')
 
-        self.pi = Quantity(unit.pi.coeff, {});
-        self.pi.name = 'Unitless Pi constant'
+        self.pi = Quantity(unit.pi.coeff, {}, 'unitless pi constant')
 
         self.c = 2.99792458e8*unit.meters/unit.second;
         self.c.name = 'speed of light';
@@ -37,77 +40,99 @@ class constant(const):
         self.MeV.name = 'Mega-electron Volt';
         self.GeV = 1000000000.0*self.eV;
         self.GeV.name = 'Giga-electron Volt';
-        self.Rydberg = 13.6054*self.eV;
+        self.Rinfinity = 10973731.568527/unit.m;
+        self.Rinfinity.name = 'Rydberg constant (R_inf)';
+        self.Rydberg = self.h * self.c * self.Rinfinity;
         self.Rydberg.name = 'Rydberg energy';
         self.Rydbergs = self.Rydberg;
+        self.Hartree = 2. * self.Rydberg;
+        self.Hartree.name = 'Atomic energy unit';
+        self.Hartrees = self.Hartree;
 
         #          mass
         # electron mass
-        self.m_e = 9.1093897e-31*unit.kilograms;
+        self.m_e = 9.10938215e-31*unit.kilograms;
         self.m_e.name = 'electron mass';
         # proton mass
-        self.m_P = 1.6726231e-27*unit.kilograms;
-        self.m_P.name = 'proton mass';
+        self.m_p = 1.672621637e-27*unit.kilograms;
+        self.m_p.name = 'proton mass';
         # deuteron mass
-        self.m_D = 1875.61339*self.MeV/(self.c*self.c);
-        self.m_D.name = 'deuteron mass';
+        self.m_d = 1875.612793*self.MeV/(self.c*self.c);
+        self.m_d.name = 'deuteron mass';
 
         # unified atomic mass unit
-        self.atomic_mass_unit = 1.6605402e-27*unit.kilograms;
+        self.atomic_mass_unit = 1.660538782e-27*unit.kilograms;
         self.atomic_mass_unit.name = 'unified atomic mass unit';
         self.atomic_mass_units = self.atomic_mass_unit;
         self.amu = self.atomic_mass_unit;
         self.Dalton = self.atomic_mass_unit;
         self.Daltons = self.Dalton;
 
-        self.epsilon = 8.854187817e-12*unit.Farads/unit.meter;
-        self.epsilon.name = 'permittivity of free space';
+        self.epsilon0 = 8.854187817e-12*unit.Farads/unit.meter;
+        self.epsilon0.name = 'permittivity of free space';
 
-        self.mu = 12.566370614e-7*unit.Newtons/(unit.A*unit.A);
-        self.mu.name = 'permeability of free space';
+        self.k_E = 1. / ( 4. * self.pi * self.epsilon0 );
+        self.k_E.name = 'Coulomb constant';
 
-        self.alpha = Quantity(1.0/137.0359895,{});
-        self.alpha.name = 'fine-structure constant';
+        self.mu0 = 4 * self.pi * 1e-7 * unit.Newtons / unit.A**2;
+        self.mu0.name = 'permeability of free space';
+
+        self.alpha = Quantity(7.2973525376e-3,  {}, 'fine-structure constant')
+        self.g_e   = Quantity(-2.0023193043622, {}, 'electron g-factor')
+        self.g_d   = Quantity(0.8574382308,     {}, 'deuteron g-factor')
 
         self.r_e = 2.81794092e-15*unit.meters;
         self.r_e.name = 'classical electron radius';
 
-        self.lambda_bar = 3.86159323e-13*unit.meters;
-        self.lambda_bar.name = 'electron Compton wavelength';
+        self.lambda_C = self.h / (self.m_e * self.c);
+        self.lambda_C.name = 'Compton wavelength';
 
-        self.a_0 = 0.529177249e-10*unit.meters;
+        self.lambda_C_bar = self.lambda_C / (2 *unit.pi);
+        self.lambda_C_bar.name = 'Compton wavelength (over 2pi)';
+
+        self.a_0 = self.alpha / (4*self.pi * self.Rinfinity);
         self.a_0.name = 'Bohr radius';
 
-        self.lambda_1eV = 1.23984244e-6*unit.meters;
+        self.lambda_1eV = self.h / (self.eV / self.c);
         self.lambda_1eV.name = 'wavelength of 1 eV/c particle';
 
-        self.sigma_0 = 0.66524616*unit.barns;
+        self.sigma_0 = 0.6652458558*unit.barns;
         self.sigma_0.name = 'Thomson cross section';
 
-        self.mu_B = 5.78838263e-11*self.MeV/unit.Tesla;
+        self.mu_B = 5.7883818e-11*self.MeV/unit.Tesla;
         self.mu_B.name = 'Bohr magnetron';
 
-        self.mu_N = 3.15245166e-14*self.MeV/unit.Tesla;
+        self.mu_N = 3.1524513e-14*self.MeV/unit.Tesla;
         self.mu_N.name = 'nuclear magnetron';
 
-        self.E_M_e = 1.75881962e11*unit.C/unit.kg*(unit.rad/(unit.s*unit.T));
-        self.E_M_e.name = 'electron cyclotron frequency/field';
+        self.e_m_e = self.e / self.m_e;
+        self.e_m_e.name = 'electron cyclotron frequency/field';
 
-        self.E_M_P = 9.5788309e7*unit.C/unit.kg*(unit.rad/(unit.s*unit.T));
-        self.E_M_P.name = 'proton cyclotron frequency/field';
+        self.e_m_p = self.e / self.m_p;
+        self.e_m_p.name = 'proton cyclotron frequency/field';
 
-        self.G = 6.67259e-11*unit.m*unit.m*unit.m/(unit.kg*unit.s*unit.s);
+        self.G = 6.67428e-11* unit.m**3 /(unit.kg * unit.s**2);
         self.G.name = 'gravitational constant';
 
-        self.N_A = Quantity(6.0221367e23,{});
-        self.N_A.name = 'Avogadro\'s constant';
+        self.N_A = Quantity(6.02214179e23, {}, "Avogadro's constant")
 
-        self.K_B = 1.380658e-23*unit.Joules/unit.Kelvin;
+        self.K_B = 1.3806504e-23*unit.Joules/unit.Kelvin;
         self.K_B.name = 'Boltzmann constant';
 
-        self.V_molar = 2.897756e-3*unit.meter*unit.Kelvins;
-        self.V_molar.name = 'molar volume, ideal gas at standard temperature and pressure';
+        self.stdtemp = 273.15 * unit.Kelvin;
+        self.stdtemp.name = 'standard temperature';
 
-        self.sigma_SB = 5.67051e-8*unit.W/(unit.m*unit.m*unit.K*unit.K*unit.K*unit.K);
+        self.R = self.K_B * self.N_A;
+        self.R.name = 'universal gas constant';
+
+        self.V_molar = self.R * self.stdtemp / unit.atm
+        self.V_molar.name = 'molar volume, ideal gas, 273.15 K, 101.325 kPa'
+
+        self.n_0 = self.N_A / self.V_molar
+        self.n_0.name = 'Loschmidt constant, ideal gas, 273.15 K, 101.325 kPa'
+
+        self.sigma_SB = 5.670400e-8*unit.W/(unit.m**2 * unit.K**4);
         self.sigma_SB.name = 'Stefan-Boltzmann constant';
 
+        self.z0 = self.c * self.mu0
+        self.z0.name = 'impedance of free space'
