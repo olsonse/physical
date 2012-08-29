@@ -10,6 +10,7 @@ class Quantity(object):
     """
     This is the documentation for a physical Quantity.
     """
+    fmt = '<{coeff} {units}>{name}'
 
     def __init__(self,coeff,units,name=None):
         self.name = name
@@ -36,29 +37,31 @@ class Quantity(object):
         putuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
         nutuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
 
-        str = '<%g' % self.coeff
+        U = ''
 
         # numerator first
+        sep = ''
         for u,e in putuples:
-            str = str + ' ' + u
+            U += sep + u
+            sep = ' '
             if e != 1:
-                str = str + '^' + `e`
+                U += '^' + `e`
 
         # now denominator
         if nutuples != []:
-            str = str + ' /'
+            U += ' /'
 
         for u,e in nutuples:
-            str = str + ' ' + u
+            U += sep + u
+            sep = ' '
             if e != -1:
-                str = str + '^' + `-e`
+                U += '^' + `-e`
 
-        str = str + '>'
-
+        name = ''
         if self.name is not None:
-            str = str + ' (' + self.name + ')'
+            name = ' (' + self.name + ')'
 
-        return str
+        return self.fmt.format(coeff=self.coeff, units=U, name=name)
 
     def __add__(self,other):
         um = self.unitsMatch(other)
