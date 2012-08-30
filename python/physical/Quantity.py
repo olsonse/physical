@@ -167,6 +167,12 @@ class Quantity(object):
             return c
         return Quantity(c, u)
 
+    def __mod__(self, other):
+        try:
+          return Quantity( self.coeff % other.coeff, self.units )
+        except AttributeError:
+          return Quantity( self.coeff % other, self.units )
+
     def __neg__(self):
         if self.units.keys() == [ ]:
             return -self.coeff
