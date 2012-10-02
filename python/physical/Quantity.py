@@ -1,3 +1,5 @@
+from math import log10
+
 from exceptions import RuntimeError
 
 
@@ -6,23 +8,64 @@ UnitsNotRoot  = 'Units not root:  cannot take non-even root of units'
 UnitsNotDimensionless = 'Units not dimensionless:  cannot create non-even powers of unit'
 
 
-class Quantity(object):
-    """
-    This is the documentation for a physical Quantity.
-    """
-    fmt = '<{coeff} {units}>{name}'
+class pretty_print:
+    def get_name(self):
+      return 'pretty'
 
-    def __init__(self,coeff,units,name=None):
-        self.name = name
-        self.coeff = 1. * coeff
-        self.units = units.copy()
-        for k in self.units.keys():
-            if self.units[k] == 0:
-                del self.units[k]
+    def __call__(self,Q):
+      # first sort into pos or neg exponent (of units)
+      utuples = Q.units.items()
+      # insert marker tuple
+      marker = ('--',0)
+      utuples.append(marker)
+      utuples.sort(lambda (k1,v1),(k2,v2): cmp(v2,0))
 
-    def __repr__(self):
+      # find marker
+      mi = utuples.index(marker)
+
+      # separate into separate tuples and then sort lexically
+      putuples = utuples[:mi]
+      nutuples = utuples[(mi+1):]
+      putuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
+      nutuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
+
+      U = ''
+
+      # numerator first
+      sep = ''
+      for u,e in putuples:
+          U += sep + u
+          sep = ' '
+          if e != 1:
+              U += '^' + `e`
+
+      # now denominator
+      if nutuples != []:
+          U += ' /'
+
+      for u,e in nutuples:
+          U += sep + u
+          sep = ' '
+          if e != -1:
+              U += '^' + `-e`
+
+      name = ''
+      if Q.name is not None:
+          name = ' (' + Q.name + ')'
+
+      return Q.fmt.format(coeff=Q.coeff, units=U, name=name)
+
+
+class math_print:
+    def __init__(self, precision=12):
+        self.precision = precision
+
+    def get_name(self):
+      return 'math'
+
+    def __call__(self, Q):
         # first sort into pos or neg exponent (of units)
-        utuples = self.units.items()
+        utuples = Q.units.items()
         # insert marker tuple
         marker = ('--',0)
         utuples.append(marker)
@@ -37,31 +80,195 @@ class Quantity(object):
         putuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
         nutuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
 
-        U = ''
+        U = '({C:.{P}}'.format(C=Q.coeff,P=self.precision)
 
         # numerator first
-        sep = ''
-        for u,e in putuples:
-            U += sep + u
-            sep = ' '
-            if e != 1:
-                U += '^' + `e`
+        if putuples:
+          U += ' * '
+          sep = ''
+          for u,e in putuples:
+              U += sep + u
+              sep = ' * '
+              if e != 1:
+                  U += '**' + `e`
 
         # now denominator
-        if nutuples != []:
-            U += ' /'
+        if nutuples:
+            if len(nutuples) > 1:
+                U += ' / ('
+            else:
+                U += ' / '
 
-        for u,e in nutuples:
-            U += sep + u
-            sep = ' '
-            if e != -1:
-                U += '^' + `-e`
+            sep = ''
+            for u,e in nutuples:
+                U += sep + u
+                sep = ' * '
+                if e != -1:
+                    U += '**' + `-e`
 
+            if len(nutuples) > 1:
+                U += ')'
+        U += ')'
+
+        return U
+
+class latex_print:
+    def __init__(self, oneline=True, precision=12):
+        self.precision = precision
+        self.oneline = oneline
+
+    def get_name(self):
+        return {True:'latex-oneline', False:'latex'}[self.oneline]
+
+    def print_coeff(self, C):
+        decade = int( log10( abs(C) ) )
+        if ( abs(decade) >= 3):
+            sig_figs = C / 10.0**decade
+            return '{sf:.{P}} \\times 10^{{{D}}}' \
+                   .format(sf=sig_figs,P=self.precision,D=decade)
+        else:
+            return '{C:.{P}}'.format(C=C, P=self.precision)
+
+
+    def print_complex_coeff(self, coeff):
+        if coeff.real == 0 and coeff.imag == 0:
+            return '0'
+
+        out = ''
+        if coeff.real != 0:
+            if coeff.imag != 0:
+                out += '('
+            out += self.print_coeff(coeff.real)
+
+        if coeff.imag != 0:
+            sign = {True:'-', False:'+'}[coeff.imag < 0]
+            if coeff.real != 0:
+                out += ' ' + sign + ' '
+            elif sign == '-':
+                out += '-'
+
+            out += "i" + self.print_coeff(abs(coeff.imag))
+            if coeff.real != 0:
+                out += ')'
+        return out
+
+    def _print_unit(self, u, e):
+        estr = ''
+        if abs(e) > 1:
+            # Again, NOTE that we print out positive exponents and assume
+            # that the calling function puts this in the denominator
+            # correctly.
+            estr = '^{{{e:.{P}}}}'.format(e=abs(e),P=self.precision)
+        return '\\mathrm{{{u:.{P}}}}{e}'.format(u=u,P=self.precision, e=estr)
+
+
+    def print_units(self, tuples):
+        return '~'.join([ self._print_unit(u,e)  for u,e in tuples ])
+
+
+    def __call__(self, Q):
+        # first sort into pos or neg exponent (of units)
+        utuples = Q.units.items()
+        # insert marker tuple
+        marker = ('--',0)
+        utuples.append(marker)
+        utuples.sort(lambda (k1,v1),(k2,v2): cmp(v2,0))
+
+        # find marker
+        mi = utuples.index(marker)
+
+        # separate into separate tuples and then sort lexically
+        putuples = utuples[:mi]
+        nutuples = utuples[(mi+1):]
+        putuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
+        nutuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
+
+        U = self.print_complex_coeff(Q.coeff)
+        if putuples or nutuples:
+            U += '~' # spacing between coeff and units
+
+        if (not self.oneline) and nutuples:
+            U += '\\frac{'
+
+        # numerator first
+        if putuples:
+            U += self.print_units( putuples )
+        elif nutuples:
+            U += '1'
+
+        # now denominator
+        if nutuples:
+            if self.oneline:
+                U += '/'
+            else:
+                U += '}{'
+            U += self.print_units( putuples )
+
+        if (not self.oneline) and nutuples:
+            U += '}'
+
+        return U
+
+
+class ugly_print:
+    def __init__(self, precision=12):
+        self.precision = precision
+
+    def get_name(self):
+        return 'ugly'
+
+    def __call__(self, Q):
         name = ''
-        if self.name is not None:
-            name = ' (' + self.name + ')'
+        if Q.name is not None:
+            name = ' (' + Q.name + ')'
+        return '{C:.{P}} * {U} {N}' \
+               .format(C=Q.coeff, P=self.precision, U=repr(Q.units), N=name)
 
-        return self.fmt.format(coeff=self.coeff, units=U, name=name)
+
+
+styles = {
+    'math'   : math_print,
+    'latex'  : latex_print,
+    'ugly'   : ugly_print,
+    'pretty' : pretty_print,
+    'default': pretty_print,
+}
+
+def mkPrinter(style,*args,**kwargs):
+    return styles.get( style, styles['default'] )(*args, **kwargs)
+
+
+class Quantity(object):
+    """
+    This is the documentation for a physical Quantity.
+    """
+    fmt = '<{coeff} {units}>{name}'
+    print_style = pretty_print()
+
+    @classmethod
+    def set_default_print_style(cls, *args, **kwargs):
+        cls.print_style = mkPrinter(*args, **kwargs)
+
+    @classmethod
+    def get_default_print_style(cls):
+        return cls.print_style.get_name()
+
+    def set_print_style(self, *args, **kwargs):
+        self.print_style = mkPrinter(*args, **kwargs)
+
+    def get_print_style(self):
+        return self.print_style.get_name()
+
+    def __init__(self,coeff,units,name=None):
+        self.name = name
+        self.coeff = 1. * coeff
+        self.units = units.copy()
+        for k in self.units.keys():
+            if self.units[k] == 0:
+                del self.units[k]
+
+    def __repr__(self):
+      return self.print_style(self)
 
     def __add__(self,other):
         um = self.unitsMatch(other)
