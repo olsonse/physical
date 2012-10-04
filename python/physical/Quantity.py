@@ -3,9 +3,9 @@ from math import log10
 from exceptions import RuntimeError
 
 
-UnitsMismatch = 'Units mismatch:  cannot add/subtract/compare mismatched units'
-UnitsNotRoot  = 'Units not root:  cannot take non-even root of units'
-UnitsNotDimensionless = 'Units not dimensionless:  cannot create non-even powers of unit'
+UnitsMismatch = 'Units mismatch:  cannot add/subtract/compare mismatched units ({} != {})'
+UnitsNotRoot  = 'Units not root:  cannot take non-even root of units ({})'
+UnitsNotDimensionless = 'Units not dimensionless:  cannot create non-integer powers of unit ({})'
 
 
 class pretty_print:
@@ -364,9 +364,9 @@ class Quantity(object):
         for k in u.keys():
             if fexp < 1:
                 if ((float(u[k]) % (1.0/fexp)) != 0):
-                    raise RuntimeError(UnitsNotRoot)
+                    raise RuntimeError(UnitsNotRoot.format(self.units))
             elif (int(fexp) - fexp) != 0:
-                raise RuntimeError(UnitsNotDimensionless)
+                raise RuntimeError(UnitsNotDimensionless.format(self.units))
             u[k] = int(u[k] * exponent)
 
         c  = self.coeff ** exponent
@@ -427,12 +427,18 @@ class Quantity(object):
             1. both are of an empty type, return 0
             2. only one is an empty type, raise an exception
         """
+        def get_units(u):
+          if type(u) is Quantity:
+            return u.units
+          else:
+            return dict()
+
         if other.__class__ != Quantity:
             if self.units.keys() == [ ]:
                 # Neither are really Quantity types, so we'll just
                 # give a softer indicator than an exception
                 return -1
-            raise RuntimeError(msg)
+            raise RuntimeError(msg.format(self.units, get_units(other)))
 
         if self.units.keys() == [ ] and other.units.keys() == [ ]:
             # Neither are really Quantity types, so we'll just
@@ -440,6 +446,6 @@ class Quantity(object):
             return 0
 
         if self.units != other.units:
-            raise RuntimeError(msg)
+            raise RuntimeError(msg.format(self.units, get_units(other)))
         return 1
 
