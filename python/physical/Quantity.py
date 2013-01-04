@@ -10,7 +10,7 @@ UnitsNotDimensionless = 'Units not dimensionless:  cannot create non-integer pow
 
 class pretty_print:
     def get_name(self):
-      return 'pretty'
+      return ('pretty',{})
 
     def __call__(self,Q):
       # first sort into pos or neg exponent (of units)
@@ -57,11 +57,16 @@ class pretty_print:
 
 
 class math_print:
-    def __init__(self, precision=12):
+    def __init__(self, precision=12, omit_outside_parens=False):
         self.precision = precision
+        self.omit_parens = omit_outside_parens
 
     def get_name(self):
-      return 'math'
+        return ('math',
+                {'precision':self.precision,
+                 'omit_outside_parens':self.omit_parens,
+                }
+               )
 
     def __call__(self, Q):
         # first sort into pos or neg exponent (of units)
@@ -80,7 +85,11 @@ class math_print:
         putuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
         nutuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
 
-        U = '({C:.{P}}'.format(C=Q.coeff,P=self.precision)
+        if not self.omit_parens:
+          U = '('
+        else:
+          U = ''
+        U += '{C:.{P}}'.format(C=Q.coeff,P=self.precision)
 
         # numerator first
         if putuples:
@@ -108,17 +117,22 @@ class math_print:
 
             if len(nutuples) > 1:
                 U += ')'
-        U += ')'
+        if not self.omit_parens:
+          U += ')'
 
         return U
 
 class latex_print:
-    def __init__(self, oneline=True, precision=12):
+    def __init__(self, precision=12, oneline=True):
         self.precision = precision
         self.oneline = oneline
 
     def get_name(self):
-        return {True:'latex-oneline', False:'latex'}[self.oneline]
+        return ('latex',
+                {'precision':self.precision,
+                 'oneline':self.oneline,
+                }
+               )
 
     def print_coeff(self, C):
         decade = int( log10( abs(C) ) )
@@ -215,7 +229,7 @@ class ugly_print:
         self.precision = precision
 
     def get_name(self):
-        return 'ugly'
+        return ('ugly', {'precision':self.precision})
 
     def __call__(self, Q):
         name = ''
@@ -247,16 +261,41 @@ class Quantity(object):
 
     @classmethod
     def set_default_print_style(cls, *args, **kwargs):
+        """
+        Sets the default print style for all physical quantities that have not
+        yet had their style set specifically.
+
+        usage: set_default_print_style(style, options)
+          STYLES      OPTIONS
+          'pretty'
+          'math'      precision [=12]
+                      omit_outside_parens [=False]
+          'latex'     precision [=12]
+                      oneline [=True]
+          'ugly'      precision [=12]
+        """
         cls.print_style = mkPrinter(*args, **kwargs)
 
     @classmethod
     def get_default_print_style(cls):
+        """
+        Get the default print style for all physical quantities that have not
+        yet had their style set specifically.
+        """
         return cls.print_style.get_name()
 
     def set_print_style(self, *args, **kwargs):
+        """
+        Set the print style for this physical quantity specifically.
+        """
         self.print_style = mkPrinter(*args, **kwargs)
 
     def get_print_style(self):
+        """
+        Get the print style for this physical quantity.
+        This might return the default style or the specific style if it has been
+        set for this quantity.
+        """
         return self.print_style.get_name()
 
     def __init__(self,coeff,units,name=None):
