@@ -100,10 +100,10 @@ class constant(const):
         self.sigma_0.name = 'Thomson cross section';
 
         self.mu_B = 5.7883818e-11*self.MeV/unit.Tesla;
-        self.mu_B.name = 'Bohr magnetron';
+        self.mu_B.name = 'Bohr magneton';
 
         self.mu_N = 3.1524513e-14*self.MeV/unit.Tesla;
-        self.mu_N.name = 'nuclear magnetron';
+        self.mu_N.name = 'nuclear magneton';
 
         self.e_m_e = self.e / self.m_e;
         self.e_m_e.name = 'electron cyclotron frequency/field';
