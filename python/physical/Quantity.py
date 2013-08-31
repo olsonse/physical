@@ -374,8 +374,15 @@ class Quantity(object):
             c = 1. * self.coeff / other.coeff
             u = self.multUnits(other, -1)
         except AttributeError:
-            c = 1. * self.coeff / other
-            u = self.units
+            try:
+              # this is just a hack attempt at supporting
+              # Quantity / other operations where "other" is something like a
+              # numpy.ndarray object.
+              assert iter(other) and other.__rdiv__ is not None, 'help!'
+              return other.__rdiv__( self )
+            except (TypeError, AttributeError):
+              c = 1. * self.coeff / other
+              u = self.units
         if u.keys() == [ ]:
             return c
         else:
