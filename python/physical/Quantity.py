@@ -310,22 +310,34 @@ class Quantity(object):
       return self.print_style(self)
 
     def __add__(self,other):
-        um = self.unitsMatch(other)
-        if um < 0:
-            return self.coeff + other
-        elif um == 0:
-            return self.coeff + other.coeff
-        else:
-            return Quantity(self.coeff + other.coeff, self.units)
+        try:
+            # this is a hack to attempt supporting Quantity + other where
+            # "other" is something like a numpy.ndarray object.
+            assert iter(other) and other.__radd__ is not None, 'hi'
+            return other.__radd__(self)
+        except TypeError, AttributeError:
+            um = self.unitsMatch(other)
+            if um < 0:
+                return self.coeff + other
+            elif um == 0:
+                return self.coeff + other.coeff
+            else:
+                return Quantity(self.coeff + other.coeff, self.units)
 
     def __sub__(self,other):
-        um = self.unitsMatch(other)
-        if um < 0:
-            return self.coeff - other
-        elif um == 0:
-            return self.coeff - other.coeff
-        else:
-            return Quantity(self.coeff - other.coeff, self.units)
+        try:
+            # this is a hack to attempt supporting Quantity + other where
+            # "other" is something like a numpy.ndarray object.
+            assert iter(other) and other.__rsub__ is not None, 'hi'
+            return other.__rsub__(self)
+        except TypeError, AttributeError:
+            um = self.unitsMatch(other)
+            if um < 0:
+                return self.coeff - other
+            elif um == 0:
+                return self.coeff - other.coeff
+            else:
+                return Quantity(self.coeff - other.coeff, self.units)
 
     def __cmp__(self,other):
         um = self.unitsMatch(other)
