@@ -190,6 +190,9 @@ namespace runtime {
     struct units_map : std::map<std::string, int> {};
     typedef std::pair<const std::string, int> units_pair;
 
+    inline std::ostream & ugly_print (std::ostream & out, const units_pair & p);
+    inline std::ostream & ugly_print (std::ostream & out, const units_map & u);
+
     /** A simple ostream helper class to print items in a container using
      * std::for_each
      * */
