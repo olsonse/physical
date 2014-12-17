@@ -443,6 +443,11 @@ class Quantity(object):
             return -self.coeff
         return Quantity(-self.coeff, self.units)
 
+    def __pos__(self):
+        if self.units.keys() == [ ]:
+            return self.coeff
+        return self
+
     def __abs__(self):
         if self.units.keys() == [ ]:
             return abs(self.coeff)
