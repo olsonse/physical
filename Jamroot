@@ -142,7 +142,7 @@ rule check-version ( name : minimum-version : version-opt ? :
 
 local ParserYY ;
 local YY_include ;
-if [ check-version "bison" : "2.4" ] {
+if [ check-version "bison" : "3.0" ] {
     import bison ;
     ParserYY = cxx/physical/calc/detail/Parser.yy ;
 } else {
