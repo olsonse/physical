@@ -49,10 +49,10 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
 %skeleton "lalr1.cc"
 
 /* namespace to enclose parser in */
-%define "namespace" "runtime::physical::calc::detail"
+%define api.namespace {runtime::physical::calc::detail}
 
 /* set the parser's class identifier */
-%define "parser_class_name" "Parser"
+%define "parser_class_name" {Parser}
 
 /* keep track of the current position within the input */
 %locations
@@ -326,7 +326,7 @@ set_command : KEYWORD_SET IDENTIFIER IDENTIFIER
         delete $3;
 
         if ( !success ) {
-          error(yyloc, "invalid set command " );
+          error(yyla.location, "invalid set command " );
           YYERROR;
         }
       }
@@ -346,7 +346,7 @@ from_command : KEYWORD_FROM IDENTIFIER IDENTIFIER '*'
         delete $3;
 
         if ( !success ) {
-          error(yyloc, "invalid from command " );
+          error(yyla.location, "invalid from command " );
           YYERROR;
         }
       }
@@ -365,7 +365,7 @@ from_command : KEYWORD_FROM IDENTIFIER IDENTIFIER '*'
         delete $6;
 
         if ( !success ) {
-          error(yyloc, "invalid from command " );
+          error(yyla.location, "invalid from command " );
           YYERROR;
         }
       }
@@ -385,7 +385,7 @@ from_command : KEYWORD_FROM IDENTIFIER IDENTIFIER '*'
         delete $4;
 
         if ( !success ) {
-          error(yyloc, "invalid from command " );
+          error(yyla.location, "invalid from command " );
           YYERROR;
         }
       }
@@ -405,7 +405,7 @@ from_command : KEYWORD_FROM IDENTIFIER IDENTIFIER '*'
         delete $6;
 
         if ( !success ) {
-          error(yyloc, "invalid from command " );
+          error(yyla.location, "invalid from command " );
           YYERROR;
         }
       }
