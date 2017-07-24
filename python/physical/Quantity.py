@@ -2,6 +2,8 @@ from math import log10
 
 from exceptions import RuntimeError
 
+from . import sympy_util
+
 
 UnitsMismatch = 'Units mismatch:  cannot add/subtract/compare mismatched units ({} != {})'
 UnitsNotRoot  = 'Units not root:  cannot take non-even root of units ({})'
@@ -310,6 +312,9 @@ class Quantity(object):
       return self.print_style(self)
 
     def __add__(self,other):
+        if sympy_util.is_sympy(other):
+            return other.__radd__(self)
+
         try:
             # this is a hack to attempt supporting Quantity + other where
             # "other" is something like a numpy.ndarray object.
@@ -325,6 +330,9 @@ class Quantity(object):
                 return Quantity(self.coeff + other.coeff, self.units)
 
     def __sub__(self,other):
+        if sympy_util.is_sympy(other):
+            return other.__rsub__(self)
+
         try:
             # this is a hack to attempt supporting Quantity + other where
             # "other" is something like a numpy.ndarray object.
@@ -382,6 +390,9 @@ class Quantity(object):
 
     def __div__(self,other):
         """ Quantity / other """
+        if sympy_util.is_sympy(other):
+            return other.__rdiv__(self)
+
         try:
             c = 1. * self.coeff / other.coeff
             u = self.multUnits(other, -1)
@@ -512,3 +523,5 @@ class Quantity(object):
             raise RuntimeError(msg.format(self.units, get_units(other)))
         return 1
 
+    if sympy_util.has_sympy:
+        _sympy_ = sympy_util.to_sympy
