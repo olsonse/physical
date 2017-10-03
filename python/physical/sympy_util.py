@@ -31,15 +31,25 @@ def to_sympy(Q):
     return expr
 
 
-def from_sympy(expr):
+def from_sympy(expr, zero_units=None):
     """
     Translates sympy expression into a physical.Quantity if possible.
+
+    zero_units: if the value is equal to zero, sympy inappropriately eliminates
+        the units.  If this is the case, scale the resultant zero by the given
+        units.  If this is not specified, no scaling is performed.
     """
     if not expr.args:
         # this must be a simple expression, just convert via simple means
         if isinstance(expr, sympy.physics.units.Unit):
             # this is directly a simple, single unit
             return map_unit_to_Quantity(expr)
+
+        if expr == 0:
+            if zero_units is not None:
+                return 0*zero_units
+            print 'WARNING: returning zero with no units'
+            return 0
 
         if isinstance(expr, sympy.Integer):
             return int(expr)
@@ -52,7 +62,7 @@ def from_sympy(expr):
                         .format(type(expr)))
 
     # Each sympy expression that is a valid physical quantity must be a
-    # multiplication of a coefficient and a bunch of units to optioncal various
+    # multiplication of a coefficient and a bunch of units to optional various
     # powers
     ans = 1.0
     for arg in expr.args:
