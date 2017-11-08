@@ -1,5 +1,5 @@
 calc/advanced/testAdvanced
-calc/interactive/testInteractive
+calc/interactive/ounits
 calc/parser/testParser
 data-only/testDataOnly
 output/testOutput

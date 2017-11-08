@@ -7,5 +7,5 @@ lib readline :
       <define>HAVE_READLINE_HISTORY
     ;
 
-exe testInteractive : testInteractive.cpp /physical//calc readline ;
-install convenient-copy : testInteractive : <location>. ;
+exe ounits : ounits.cpp /physical//calc readline ;
+install convenient-copy : ounits : <location>. ;
