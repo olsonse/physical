@@ -87,7 +87,7 @@ path-constant TOP : . ;
 constant VERSION : [ SHELL "printf `cd $(TOP); git describe 2> /dev/null` || printf physical-0.1.5 " ] ;
 
 # root-project loads boost and others...
-use-project /root-project : ../ ;
+#use-project /root-project : ../ ;
 
 project /physical
     : requirements
