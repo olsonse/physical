@@ -9,30 +9,32 @@ class British(const):
         #volume
         self.fluid = fluid.fluid(prefix + 'British.',unit)
 
-        self.peck = 2.0*self.fluid.gallons;
-        self.pecks = self.peck;
-        self.pk = self.peck;
-        self.bushel = 4.0*self.pecks;
-        self.bushels = self.bushel;
-        self.bu = self.bushel;
-        self.barrel = 36.0*self.fluid.gallons;
-        self.barrels = self.barrel;
-        self.bbl = self.barrel;
-        self.bl = self.barrel;
+        self.minim   = self.fluid.drachm / 60.0
+        self.minims  = self.minim
+        self.peck    = self.fluid.gallons * 2.0
+        self.pecks   = self.peck
+        self.pk      = self.peck
+        self.bushel  = self.pecks * 4.0
+        self.bushels = self.bushel
+        self.bu      = self.bushel
+        self.barrel  = self.fluid.gallons * 36.0
+        self.barrels = self.barrel
+        self.bbl     = self.barrel
+        self.bl      = self.barrel
 
         #length
-        self.cable_length = 100.0*unit.fathoms;
-        self.cable_lengths = self.cable_length;
+        self.cable_length  = unit.fathoms * 100.0
+        self.cable_lengths = self.cable_length
 
         #mass
-        self.hundredweight = 112.0*unit.avoirdupois.pounds;
-        self.cwt = self.hundredweight;
-        self.quarter = self.hundredweight/4.0;
-        self.quarters = self.quarter;
-        self.qr = self.quarter;
-        self.ton = 20.0*self.hundredweight;
-        self.tons = self.ton;
-        self.tn = self.ton;
+        self.hundredweight = unit.avoirdupois.pounds * 112.0
+        self.cwt           = self.hundredweight
+        self.quarter       = self.hundredweight / 4.0
+        self.quarters      = self.quarter
+        self.qr            = self.quarter
+        self.ton           = self.hundredweight * 20.0
+        self.tons          = self.ton
+        self.tn            = self.ton
 
 
         # do some trickery to get modules set to instantiated classes

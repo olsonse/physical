@@ -656,8 +656,6 @@ _BEGIN_NAMESPACE(physical) {
         _QUANTITY(township,             36.0*sections);
         _QUANTITY(townships,            township);
         // volume
-        _QUANTITY(minim,                6.161152e-8*(m*m*m));
-        _QUANTITY(minims,               minim);
         _QUANTITY(drop,                 0.03*cc);
         _QUANTITY(drops,                drop);
         _QUANTITY(teaspoon,             4.928922*cc);
@@ -666,27 +664,26 @@ _BEGIN_NAMESPACE(physical) {
         _QUANTITY(tablespoons,          tablespoon);
         _OPEN_NAMESPACE(1,US) {
             _BEGIN_NAMESPACE(liquid) {
-                _QUANTITY(dram,         60.0*minims);
-                _QUANTITY(drams,        dram);
-                _QUANTITY(dr,           dram);
-                _QUANTITY(ounce,        8.0*drams);
-                _QUANTITY(ounces,       ounce);
-                _QUANTITY(oz,           ounce);
-                _QUANTITY(gill,         4.0*ounces);
-                _QUANTITY(gills,        gill);
-                _QUANTITY(gl,           gill);
-                _QUANTITY(pint,         4.0*gills);
-                _QUANTITY(pints,        pint);
-                _QUANTITY(pt,           pint);
-                _QUANTITY(quart,        2.0*pints);
-                _QUANTITY(quarts,       quart);
-                _QUANTITY(qt,           quart);
-                _QUANTITY(magnum,       2.0*quarts);
-                _QUANTITY(magnums,      magnum);
-                _QUANTITY(gallon,       4.0*quarts);
+                _QUANTITY(gallon,       231*inches*inches*inches);
                 _QUANTITY(gallons,      gallon);
                 _QUANTITY(gal,          gallon);
+                _QUANTITY(quart,        gallon / 4.0);
+                _QUANTITY(quarts,       quart);
+                _QUANTITY(qt,           quart);
+                _QUANTITY(pint,         quart / 2.0);
+                _QUANTITY(pints,        pint);
+                _QUANTITY(pt,           pint);
+                _QUANTITY(gill,         pint / 4.0);
+                _QUANTITY(gills,        gill);
+                _QUANTITY(gl,           gill);
+                _QUANTITY(ounce,        pint / 16.0);
+                _QUANTITY(ounces,       ounce);
+                _QUANTITY(oz,           ounce);
+                _QUANTITY(dram,         ounce / 16.0);
+                _QUANTITY(drams,        dram);
+                _QUANTITY(dr,           dram);
             _END_NAMESPACE}
+            _ALIAS_NAMESPACE(fluid, liquid);
             _BEGIN_NAMESPACE(dry) {
                 _QUANTITY(pint,         550.61047*cc);
                 _QUANTITY(pints,        pint);
@@ -695,6 +692,8 @@ _BEGIN_NAMESPACE(physical) {
                 _QUANTITY(quarts,       quart);
                 _QUANTITY(qt,           quart);
             _END_NAMESPACE}
+            _QUANTITY(minim,            fluid::dram / 60.0);
+            _QUANTITY(minims,           minim);
             _QUANTITY(peck,             8.0*dry::quarts);
             _QUANTITY(pecks,            peck);
             _QUANTITY(pk,               peck);
@@ -708,25 +707,33 @@ _BEGIN_NAMESPACE(physical) {
         _CLOSE_NAMESPACE(1)}
         _OPEN_NAMESPACE(1,British) {
             _BEGIN_NAMESPACE(fluid) {
-              _QUANTITY(drachm,         60.0*minims);
-              _QUANTITY(drachms,        drachm);
-              _QUANTITY(dr,             drachm);
-              _QUANTITY(ounce,          8.0*drachms);
-              _QUANTITY(ounces,         ounce);
-              _QUANTITY(oz,             ounce);
-              _QUANTITY(gill,           5.0*ounces);
-              _QUANTITY(gills,          gill);
-              _QUANTITY(gi,             gill);
-              _QUANTITY(pint,           4.0*gills);
-              _QUANTITY(pints,          pint);
-              _QUANTITY(pt,             pint);
-              _QUANTITY(quart,          2.0*pints);
-              _QUANTITY(quarts,         quart);
-              _QUANTITY(qt,             quart);
-              _QUANTITY(gallon,         4.0*quarts);
-              _QUANTITY(gallons,        gallon);
-              _QUANTITY(gal,            gallon);
+              _QUANTITY(gallon,        4.54609 * liters);
+              _QUANTITY(gallons,       gallon);
+              _QUANTITY(gal,           gallon);
+              _QUANTITY(quart,         gallon / 4.0);
+              _QUANTITY(quarts,        quart);
+              _QUANTITY(qt,            quart);
+              _QUANTITY(pint,          quart / 2.0);
+              _QUANTITY(pints,         pint);
+              _QUANTITY(pt,            pint);
+              _QUANTITY(gill,          pint / 4.0);
+              _QUANTITY(gills,         gill);
+              _QUANTITY(gl,            gill);
+              _QUANTITY(ounce,         pint / 20.0);
+              _QUANTITY(ounces,        ounce);
+              _QUANTITY(oz,            ounce);
+              _QUANTITY(drachm,        ounce / 8.0);
+              _QUANTITY(drachms,       drachm);
+              _QUANTITY(dr,            drachm);
+              _QUANTITY(reputedquart,  quart * (2.0/3.0));
+              _QUANTITY(reputedquarts, reputedquart);
+              _QUANTITY(reputedpint,   reputedquart / 2.0);
+              _QUANTITY(reputedpints,  reputedpint);
+              _QUANTITY(magnum,        reputedquarts * 2.0);
+              _QUANTITY(magnums,       magnum);
               _END_NAMESPACE}
+            _QUANTITY(minim,            fluid::drachm / 60.0);
+            _QUANTITY(minims,           minim);
             _QUANTITY(peck,             2.0*fluid::gallons);
             _QUANTITY(pecks,            peck);
             _QUANTITY(pk,               peck);

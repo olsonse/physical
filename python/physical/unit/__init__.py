@@ -514,8 +514,6 @@ class unit(const):
         self.dwt = self.pennyweight;
 
         # volume
-        self.minim = 6.161152e-8*(self.m*self.m*self.m);
-        self.minims = self.minim;
         self.drop = 0.03*self.cc;
         self.drops = self.drop;
         self.teaspoon = 4.928922*self.cc;

@@ -520,8 +520,6 @@
                      township = 36.0*sections;
                      townships = township;
         # volume
-                     minim = 6.161152e-8*(m*m*m);
-                     minims = minim;
                      drop = 0.03*cc;
                      drops = drop;
                      teaspoon = 4.928922*cc;
@@ -530,26 +528,24 @@
                      tablespoons = tablespoon;
 #       namespace US {
 #           namespace liquid {
-                  US_liquid_dram = 60.0*minims;
-                  US_liquid_drams = US_liquid_dram;
-                  US_liquid_dr = US_liquid_dram;
-                  US_liquid_ounce = 8.0*US_liquid_drams;
-                  US_liquid_ounces = US_liquid_ounce;
-                  US_liquid_oz = US_liquid_ounce;
-                  US_liquid_gill = 4.0*US_liquid_ounces;
-                  US_liquid_gills = US_liquid_gill;
-                  US_liquid_gl = US_liquid_gill;
-                  US_liquid_pint = 4.0*US_liquid_gills;
-                  US_liquid_pints = US_liquid_pint;
-                  US_liquid_pt = US_liquid_pint;
-                  US_liquid_quart = 2.0*US_liquid_pints;
-                  US_liquid_quarts = US_liquid_quart;
-                  US_liquid_qt = US_liquid_quart;
-                  US_liquid_magnum = 2.0*US_liquid_quarts;
-                  US_liquid_magnums = US_liquid_magnum;
-                  US_liquid_gallon = 4.0*US_liquid_quarts;
+                  US_liquid_gallon  = 231*inches**3;
                   US_liquid_gallons = US_liquid_gallon;
-                  US_liquid_gal = US_liquid_gallon;
+                  US_liquid_gal     = US_liquid_gallon;
+                  US_liquid_quart   = US_liquid_gallon / 4.0;
+                  US_liquid_quarts  = US_liquid_quart;
+                  US_liquid_qt      = US_liquid_quart;
+                  US_liquid_pint    = US_liquid_quart / 2.0;
+                  US_liquid_pints   = US_liquid_pint;
+                  US_liquid_pt      = US_liquid_pint;
+                  US_liquid_gill    = US_liquid_pint / 4.0;
+                  US_liquid_gills   = US_liquid_gill;
+                  US_liquid_gl      = US_liquid_gill;
+                  US_liquid_ounce   = US_liquid_pint / 16.0;
+                  US_liquid_ounces  = US_liquid_ounce;
+                  US_liquid_oz      = US_liquid_ounce;
+                  US_liquid_dram    = US_liquid_ounce / 16.0;
+                  US_liquid_drams   = US_liquid_dram;
+                  US_liquid_dr      = US_liquid_dram;
 #           }
 #           namespace dry {
                   US_dry_pint = 550.61047*cc;
@@ -559,6 +555,8 @@
                   US_dry_quarts = US_dry_quart;
                   US_dry_qt = US_dry_quart;
 #           }
+                  US_minim = US_liquid_dram / 60.0;
+                  US_minims = US_minim;
                   US_peck = 8.0*US_dry_quarts;
                   US_pecks = US_peck;
                   US_pk = US_peck;
@@ -572,25 +570,33 @@
 #       }
 #       namespace British {
 #           namespace fluid {
-            British_fluid_drachm = 60.0*minims;
-            British_fluid_drachms = British_fluid_drachm;
-            British_fluid_dr = British_fluid_drachm;
-            British_fluid_ounce = 8.0*British_fluid_drachms;
-            British_fluid_ounces = British_fluid_ounce;
-            British_fluid_oz = British_fluid_ounce;
-            British_fluid_gill = 5.0*British_fluid_ounces;
-            British_fluid_gills = British_fluid_gill;
-            British_fluid_gi = British_fluid_gill;
-            British_fluid_pint = 4.0*British_fluid_gills;
-            British_fluid_pints = British_fluid_pint;
-            British_fluid_pt = British_fluid_pint;
-            British_fluid_quart = 2.0*British_fluid_pints;
-            British_fluid_quarts = British_fluid_quart;
-            British_fluid_qt = British_fluid_quart;
-            British_fluid_gallon = 4.0*British_fluid_quarts;
-            British_fluid_gallons = British_fluid_gallon;
-            British_fluid_gal = British_fluid_gallon;
+            British_fluid_gallon        = 4.54609 * liters;
+            British_fluid_gallons       = British_fluid_gallon;
+            British_fluid_gal           = British_fluid_gallon;
+            British_fluid_quart         = British_fluid_gallon / 4.0;
+            British_fluid_quarts        = British_fluid_quart;
+            British_fluid_qt            = British_fluid_quart;
+            British_fluid_pint          = British_fluid_quart / 2.0;
+            British_fluid_pints         = British_fluid_pint;
+            British_fluid_pt            = British_fluid_pint;
+            British_fluid_gill          = British_fluid_pint / 4.0;
+            British_fluid_gills         = British_fluid_gill;
+            British_fluid_gl            = British_fluid_gill;
+            British_fluid_ounce         = British_fluid_pint / 20.0;
+            British_fluid_ounces        = British_fluid_ounce;
+            British_fluid_oz            = British_fluid_ounce;
+            British_fluid_drachm        = British_fluid_ounce / 8.0;
+            British_fluid_drachms       = British_fluid_drachm;
+            British_fluid_dr            = British_fluid_drachm;
+            British_fluid_reputedquart  = British_fluid_quart * (2.0/3.0);
+            British_fluid_reputedquarts = British_fluid_reputedquart;
+            British_fluid_reputedpint   = British_fluid_reputedquart / 2.0;
+            British_fluid_reputedpints  = British_fluid_reputedpint;
+            British_fluid_magnum        = British_fluid_reputedquarts * 2.0;
+            British_fluid_magnums       = British_fluid_magnum;
 #             }
+            British_minim = British_fluid_dram / 60.0;
+            British_minims = British_minim;
             British_peck = 2.0*British_fluid_gallons;
             British_pecks = British_peck;
             British_pk = British_peck;

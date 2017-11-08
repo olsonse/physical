@@ -531,8 +531,6 @@
                      township = 36.0*sections;
                      townships = township;
         % volume
-                     minim = 6.161152e-8*(m*m*m);
-                     minims = minim;
                      drop = 0.03*cc;
                      drops = drop;
                      teaspoon = 4.928922*cc;
@@ -541,27 +539,26 @@
                      tablespoons = tablespoon;
 %       namespace US {
 %           namespace liquid {
-                  US.liquid. dram = 60.0*minims;
-                  US.liquid. drams = US.liquid.dram;
-                  US.liquid. dr = US.liquid.dram;
-                  US.liquid. ounce = 8.0*US.liquid.drams;
-                  US.liquid. ounces = US.liquid.ounce;
-                  US.liquid. oz = US.liquid.ounce;
-                  US.liquid. gill = 4.0*US.liquid.ounces;
-                  US.liquid. gills = US.liquid.gill;
-                  US.liquid. gl = US.liquid.gill;
-                  US.liquid. pint = 4.0*US.liquid.gills;
-                  US.liquid. pints = US.liquid.pint;
-                  US.liquid. pt = US.liquid.pint;
-                  US.liquid. quart = 2.0*US.liquid.pints;
-                  US.liquid. quarts = US.liquid.quart;
-                  US.liquid. qt = US.liquid.quart;
-                  US.liquid. magnum = 2.0*US.liquid.quarts;
-                  US.liquid. magnums = US.liquid.magnum;
-                  US.liquid. gallon = 4.0*US.liquid.quarts;
-                  US.liquid. gallons = US.liquid.gallon;
-                  US.liquid. gal = US.liquid.gallon;
+                  US.liquid.gallon  = 231*inches^3;
+                  US.liquid.gallons = US.liquid.gallon;
+                  US.liquid.gal     = US.liquid.gallon;
+                  US.liquid.quart   = US.liquid.gallon / 4.0;
+                  US.liquid.quarts  = US.liquid.quart;
+                  US.liquid.qt      = US.liquid.quart;
+                  US.liquid.pint    = US.liquid.quart / 2.0;
+                  US.liquid.pints   = US.liquid.pint;
+                  US.liquid.pt      = US.liquid.pint;
+                  US.liquid.gill    = US.liquid.pint / 4.0;
+                  US.liquid.gills   = US.liquid.gill;
+                  US.liquid.gl      = US.liquid.gill;
+                  US.liquid.ounce   = US.liquid.pint / 16.0;
+                  US.liquid.ounces  = US.liquid.ounce;
+                  US.liquid.oz      = US.liquid.ounce;
+                  US.liquid.dram    = US.liquid.ounce / 16.0;
+                  US.liquid.drams   = US.liquid.dram;
+                  US.liquid.dr      = US.liquid.dram;
 %           }
+            US.fluid = US.liquid
 %           namespace dry {
                   US.dry.    pint = 550.61047*cc;
                   US.dry.    pints = US.dry.pint;
@@ -570,6 +567,8 @@
                   US.dry.    quarts = US.dry.quart;
                   US.dry.    qt = US.dry.quart;
 %           }
+                  US.    minim = US.fluid.dram / 60.0
+                  US.    minims = US.minim
                   US.    peck = 8.0*US.dry.quarts;
                   US.    pecks = US.peck;
                   US.    pk = US.peck;
@@ -583,25 +582,33 @@
 %       }
 %       namespace British {
 %           namespace fluid {
-            British.fluid. drachm = 60.0*minims;
-            British.fluid. drachms = British.fluid.drachm;
-            British.fluid. dr = British.fluid.drachm;
-            British.fluid. ounce = 8.0*British.fluid.drachms;
-            British.fluid. ounces = British.fluid.ounce;
-            British.fluid. oz = British.fluid.ounce;
-            British.fluid. gill = 5.0*British.fluid.ounces;
-            British.fluid. gills = British.fluid.gill;
-            British.fluid. gi = British.fluid.gill;
-            British.fluid. pint = 4.0*British.fluid.gills;
-            British.fluid. pints = British.fluid.pint;
-            British.fluid. pt = British.fluid.pint;
-            British.fluid. quart = 2.0*British.fluid.pints;
-            British.fluid. quarts = British.fluid.quart;
-            British.fluid. qt = British.fluid.quart;
-            British.fluid. gallon = 4.0*British.fluid.quarts;
-            British.fluid. gallons = British.fluid.gallon;
-            British.fluid. gal = British.fluid.gallon;
+            British.fluid. gallon        = 4.54609 * unit.liters;
+            British.fluid. gallons       = self.gallon;
+            British.fluid. gal           = self.gallon;
+            British.fluid. quart         = self.gallon / 4.0;
+            British.fluid. quarts        = self.quart;
+            British.fluid. qt            = self.quart;
+            British.fluid. pint          = self.quart / 2.0;
+            British.fluid. pints         = self.pint;
+            British.fluid. pt            = self.pint;
+            British.fluid. gill          = self.pint / 4.0;
+            British.fluid. gills         = self.gill;
+            British.fluid. gl            = self.gill;
+            British.fluid. ounce         = self.pint / 20.0;
+            British.fluid. ounces        = self.ounce;
+            British.fluid. oz            = self.ounce;
+            British.fluid. drachm        = self.ounce / 8.0;
+            British.fluid. drachms       = self.drachm;
+            British.fluid. dr            = self.drachm;
+            British.fluid. reputedquart  = self.quart * (2.0/3.0);
+            British.fluid. reputedquarts = self.reputedquart;
+            British.fluid. reputedpint   = self.reputedquart / 2.0;
+            British.fluid. reputedpints  = self.reputedpint;
+            British.fluid. magnum        = self.reputedquarts * 2.0;
+            British.fluid. magnums       = self.magnum;
 %             }
+            British.     minim = British.fluid.dram / 60.0
+            British.     minims = British.minim
             British.     peck = 2.0*British.fluid.gallons;
             British.     pecks = British.peck;
             British.     pk = British.peck;

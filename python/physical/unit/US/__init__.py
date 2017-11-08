@@ -25,9 +25,12 @@ class US(const):
 
         #volume
         self.liquid = liquid.liquid(prefix + 'US.', unit)
+        self.fluid = self.liquid
 
         self.dry = dry.dry(prefix + 'US.', unit)
 
+        self.minim        = self.fluid.dram/60.
+        self.minims       = self.minim
         self.peck         = 8.0*self.dry.quarts;
         self.pecks        = self.peck;
         self.pk           = self.peck;
@@ -45,6 +48,7 @@ class US(const):
         # care of here.
         self.liquid.__name__ = liquid.__name__
         sys.modules[liquid.__name__] = self.liquid
+        sys.modules[liquid.__name__.replace('.liquid', '.fluid')] = self.liquid
 
         self.dry.__name__ = dry.__name__
         sys.modules[dry.__name__] = self.dry
