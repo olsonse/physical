@@ -1,7 +1,7 @@
-from physical.const import const;
-import fluid;
+from ...const import const
+from . import fluid
 
-import sys;
+import sys
 class British(const):
     def __init__(self,prefix,unit):
         const.__init__(self,prefix + 'British')

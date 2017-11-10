@@ -1,18 +1,16 @@
-from const import const;
-
-import unit;
-import units; # dummy module to overwrite for 'from units import' statements
-
-import constant;
-import constants;
-
-import element;
-import elements;
-
 import sys
-import Quantity
+from .const import const
 
-import license
+# Several of these are dummy modules to overwrite for things like:
+#   'from units import' statements
+from . import unit
+from . import units
+from . import constant
+from . import constants
+from . import element
+from . import elements
+from . import Quantity
+from . import license
 
 """
 Released under MIT License:
@@ -39,7 +37,7 @@ THE SOFTWARE.
 """
 class _physical(const):
     def __init__(self):
-        const.__init__(self,'physical');
+        const.__init__(self,'physical')
 
         self.unit = unit.unit('physical.')
         self.units = self.unit

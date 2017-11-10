@@ -1,4 +1,4 @@
-from physical.const import const;
+from ...const import const
 
 class fluid(const):
     def __init__(self,prefix,unit):

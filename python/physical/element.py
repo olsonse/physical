@@ -1,5 +1,5 @@
-from physical.const import const
-from physical.Quantity import Quantity
+from .const import const
+from .Quantity import Quantity
 
 class Element(const):
     """

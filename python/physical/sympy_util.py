@@ -5,6 +5,8 @@ Utilities to help with interaction between the units of this package and those
 from sympy.
 """
 
+from logging import warning
+
 try:
     import sympy, sympy.physics
     has_sympy = True
@@ -23,7 +25,7 @@ def to_sympy(Q):
     """
     # first sort into pos or neg exponent (of units)
     expr = sympy.Float(Q.coeff)
-    for unit, power in Q.units.iteritems():
+    for unit, power in Q.units.items():
       # the following lookup depends on the SI units being common
       # between physical package and sympy units
       expr *= getattr(sympy.physics.units,unit)**(power)
@@ -48,7 +50,7 @@ def from_sympy(expr, zero_units=None):
         if expr == 0:
             if zero_units is not None:
                 return 0*zero_units
-            print 'WARNING: returning zero with no units'
+            warning('Returning zero with no units')
             return 0
 
         if isinstance(expr, sympy.Integer):

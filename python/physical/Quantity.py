@@ -1,7 +1,5 @@
 from math import log10
 
-from exceptions import RuntimeError
-
 from . import sympy_util
 
 
@@ -16,11 +14,11 @@ class pretty_print:
 
     def __call__(self,Q):
       # first sort into pos or neg exponent (of units)
-      utuples = Q.units.items()
+      utuples = list(Q.units.items())
       # insert marker tuple
       marker = ('--',0)
       utuples.append(marker)
-      utuples.sort(lambda (k1,v1),(k2,v2): cmp(v2,0))
+      utuples.sort(key = lambda u: -u[1])
 
       # find marker
       mi = utuples.index(marker)
@@ -28,8 +26,8 @@ class pretty_print:
       # separate into separate tuples and then sort lexically
       putuples = utuples[:mi]
       nutuples = utuples[(mi+1):]
-      putuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
-      nutuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
+      putuples.sort(key = lambda u: u[0])
+      nutuples.sort(key = lambda u: u[0])
 
       U = ''
 
@@ -39,7 +37,7 @@ class pretty_print:
           U += sep + u
           sep = ' '
           if e != 1:
-              U += '^' + `e`
+              U += '^' + repr(e)
 
       # now denominator
       if nutuples != []:
@@ -49,7 +47,7 @@ class pretty_print:
           U += sep + u
           sep = ' '
           if e != -1:
-              U += '^' + `-e`
+              U += '^' + repr(-e)
 
       name = ''
       if Q.name is not None:
@@ -72,11 +70,11 @@ class math_print:
 
     def __call__(self, Q):
         # first sort into pos or neg exponent (of units)
-        utuples = Q.units.items()
+        utuples = list(Q.units.items())
         # insert marker tuple
         marker = ('--',0)
         utuples.append(marker)
-        utuples.sort(lambda (k1,v1),(k2,v2): cmp(v2,0))
+        utuples.sort(key = lambda u: -u[1])
 
         # find marker
         mi = utuples.index(marker)
@@ -84,8 +82,8 @@ class math_print:
         # separate into separate tuples and then sort lexically
         putuples = utuples[:mi]
         nutuples = utuples[(mi+1):]
-        putuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
-        nutuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
+        putuples.sort(key = lambda u: u[0])
+        nutuples.sort(key = lambda u: u[0])
 
         if not self.omit_parens:
           U = '('
@@ -101,7 +99,7 @@ class math_print:
               U += sep + u
               sep = ' * '
               if e != 1:
-                  U += '**' + `e`
+                  U += '**' + repr(e)
 
         # now denominator
         if nutuples:
@@ -115,7 +113,7 @@ class math_print:
                 U += sep + u
                 sep = ' * '
                 if e != -1:
-                    U += '**' + `-e`
+                    U += '**' + repr(-e)
 
             if len(nutuples) > 1:
                 U += ')'
@@ -174,8 +172,8 @@ class latex_print:
             # Again, NOTE that we print out positive exponents and assume
             # that the calling function puts this in the denominator
             # correctly.
-            estr = '^{{{e:.{P}}}}'.format(e=abs(e),P=self.precision)
-        return '\\mathrm{{{u:.{P}}}}{e}'.format(u=u,P=self.precision, e=estr)
+            estr = '^{{{e:.{P}g}}}'.format(e=abs(e),P=self.precision)
+        return '\\mathrm{{{u}}}{e}'.format(u=u, e=estr)
 
 
     def print_units(self, tuples):
@@ -184,11 +182,11 @@ class latex_print:
 
     def __call__(self, Q):
         # first sort into pos or neg exponent (of units)
-        utuples = Q.units.items()
+        utuples = list(Q.units.items())
         # insert marker tuple
         marker = ('--',0)
         utuples.append(marker)
-        utuples.sort(lambda (k1,v1),(k2,v2): cmp(v2,0))
+        utuples.sort(key = lambda u: -u[1])
 
         # find marker
         mi = utuples.index(marker)
@@ -196,8 +194,8 @@ class latex_print:
         # separate into separate tuples and then sort lexically
         putuples = utuples[:mi]
         nutuples = utuples[(mi+1):]
-        putuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
-        nutuples.sort(lambda (k1,v1),(k2,v2): cmp(k1,k2))
+        putuples.sort(key = lambda u: u[0])
+        nutuples.sort(key = lambda u: u[0])
 
         U = self.print_complex_coeff(Q.coeff)
         if putuples or nutuples:
@@ -218,7 +216,7 @@ class latex_print:
                 U += '/'
             else:
                 U += '}{'
-            U += self.print_units( putuples )
+            U += self.print_units( nutuples )
 
         if (not self.oneline) and nutuples:
             U += '}'
@@ -303,10 +301,7 @@ class Quantity(object):
     def __init__(self,coeff,units,name=None):
         self.name = name
         self.coeff = 1. * coeff
-        self.units = units.copy()
-        for k in self.units.keys():
-            if self.units[k] == 0:
-                del self.units[k]
+        self.units = {k:e for k,e in units.items() if e != 0}
 
     def __repr__(self):
       return self.print_style(self)
@@ -320,7 +315,7 @@ class Quantity(object):
             # "other" is something like a numpy.ndarray object.
             assert iter(other) and other.__radd__ is not None, 'hi'
             return other.__radd__(self)
-        except TypeError, AttributeError:
+        except (TypeError, AttributeError):
             um = self.unitsMatch(other)
             if um < 0:
                 return self.coeff + other
@@ -338,7 +333,7 @@ class Quantity(object):
             # "other" is something like a numpy.ndarray object.
             assert iter(other) and other.__rsub__ is not None, 'hi'
             return other.__rsub__(self)
-        except TypeError, AttributeError:
+        except (TypeError, AttributeError):
             um = self.unitsMatch(other)
             if um < 0:
                 return self.coeff - other
@@ -360,7 +355,7 @@ class Quantity(object):
         if other.__class__ == Quantity:
             c = 1. * self.coeff * other.coeff
             u = self.multUnits(other, 1)
-            if u.keys() == [ ]:
+            if not u:
                 return c
             return Quantity(c, u)
         else:
@@ -375,7 +370,7 @@ class Quantity(object):
         # fundamental numeric type.  Otherwise, other.__mul__ should have been
         # called (which might in turn call Quantity.__rmul__).  This works for
         # instance if we do (Quantity)*(numpy.ndarray).
-        if self.units.keys() == [ ]:
+        if not self.units:
             # so, self is not actually a unit... flatten
             return other * self.coeff
         return Quantity(other * self.coeff, self.units)
@@ -406,7 +401,7 @@ class Quantity(object):
             except (TypeError, AttributeError):
               c = 1. * self.coeff / other
               u = self.units
-        if u.keys() == [ ]:
+        if not u:
             return c
         else:
             return Quantity(c, u)
@@ -414,11 +409,9 @@ class Quantity(object):
     def __rdiv__(self,other):
         """ other / Quantity """
         c = other / self.coeff
-        u = self.units.copy()
-        for k in u.keys():
-            u[k] = -u[k]
-        if u.keys() == [ ]:
+        if not self.units:
             return c
+        u = {k:-v for k,v in self.units.items()}
         return Quantity(c, u)
 
     def __pow__(self,exponent):
@@ -439,7 +432,7 @@ class Quantity(object):
             u[k] = int(u[k] * exponent)
 
         c  = self.coeff ** exponent
-        if u.keys() == [ ]:
+        if not u:
             return c
         return Quantity(c, u)
 
@@ -450,17 +443,17 @@ class Quantity(object):
           return Quantity( self.coeff % other, self.units )
 
     def __neg__(self):
-        if self.units.keys() == [ ]:
+        if not self.units:
             return -self.coeff
         return Quantity(-self.coeff, self.units)
 
     def __pos__(self):
-        if self.units.keys() == [ ]:
+        if not self.units:
             return self.coeff
         return self
 
     def __abs__(self):
-        if self.units.keys() == [ ]:
+        if not self.units:
             return abs(self.coeff)
         return Quantity(abs(self.coeff), self.units)
 
@@ -478,15 +471,16 @@ class Quantity(object):
 
     def multUnits(self,other,n):
         u = self.units.copy()
-        for k in u.keys():
-            if k in other.units.keys():
-                u[k] = u[k] + n * other.units[k]
-        for k in other.units.keys():
-            if k not in u.keys():
-                u[k] = n * other.units[k]
-        for k in u.keys():
-            if u[k] == 0:
-                del u[k]
+        for k, e in other.units.items():
+            if k in u:
+                u[k] += n * e
+
+                # we assume that we only get to zero when we add...
+                if u[k] == 0:
+                    del u[k]
+            else:
+                u[k] = n * e
+
         return u
 
     def unitsMatch(self,other,msg=UnitsMismatch):
@@ -508,13 +502,13 @@ class Quantity(object):
             return dict()
 
         if other.__class__ != Quantity:
-            if self.units.keys() == [ ]:
+            if not self.units:
                 # Neither are really Quantity types, so we'll just
                 # give a softer indicator than an exception
                 return -1
             raise RuntimeError(msg.format(self.units, get_units(other)))
 
-        if self.units.keys() == [ ] and other.units.keys() == [ ]:
+        if not (self.units or other.units):
             # Neither are really Quantity types, so we'll just
             # give a soft indicator of 'equal enough'
             return 0

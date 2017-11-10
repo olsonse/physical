@@ -1,4 +1,4 @@
-from physical.const import const;
+from ..const import const
 
 class Gunters(const):
     def __init__(self,prefix,unit):
@@ -6,5 +6,5 @@ class Gunters(const):
         # English Units
         # length
 
-        self.chain = unit.chain;
-        self.chains = self.chain;
+        self.chain = unit.chain
+        self.chains = self.chain
