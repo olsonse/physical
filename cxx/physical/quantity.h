@@ -668,14 +668,14 @@ namespace runtime {
         }
 
         /** Assert that the quantity is unitless. */
-        inline const quantity & assertUnitless() const throw (exception) {
+        inline const quantity & assertUnitless() const {
             if (!units.empty())
                 throw exception(UnitsNotDimensionless);
             return *this;
         }
 
         /** Assert that the units match those of the given quantity q. */
-        inline const quantity & assertMatch(const quantity & q) const throw (exception) {
+        inline const quantity & assertMatch(const quantity & q) const {
             if (units != q.units)
                 throw exception(UnitsMismatch);
             return *this;
@@ -760,7 +760,7 @@ namespace runtime {
      * is mostly for complmenting the non-member version of assertMatch. */
     template <class T>
     inline const quantity<T> &
-    assertUnitless( const quantity<T> & q ) throw (exception) {
+    assertUnitless( const quantity<T> & q ) {
         return q.assertUnitless();
     }
 
@@ -772,7 +772,7 @@ namespace runtime {
     template <class T>
     inline const quantity<T> &
     assertMatch( const quantity<T> & lhs,
-                 const quantity<T> & rhs ) throw (exception) {
+                 const quantity<T> & rhs ) {
         return lhs.assertMatch(rhs);
     }
 

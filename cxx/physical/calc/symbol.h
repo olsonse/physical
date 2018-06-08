@@ -354,8 +354,7 @@ namespace runtime {
         static void import( table & tab,
                             const std::string & base,
                             const std::string & regex,
-                            const std::string & new_ns = "" )
-        throw (symbol_error) {
+                            const std::string & new_ns = "" ) {
           try {
             registry::importer<regex_matcher>()(
                 tab,
@@ -372,8 +371,7 @@ namespace runtime {
         /** Clear matched symbols from a symbol table. */
         static void clear( table & tab,
                            const std::string & base,
-                           const std::string & regex )
-        throw (symbol_error) {
+                           const std::string & regex ) {
           try {
             registry::clearer<regex_matcher>()(
                 tab,
