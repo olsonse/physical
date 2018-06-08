@@ -132,7 +132,7 @@ namespace runtime {
 
       template < typename T >
       struct Real< std::complex<T> > {
-        inline const T & operator()( const std::complex<T> & t ) {
+        inline const T operator()( const std::complex<T> & t ) {
           return t.real();
         }
       };
@@ -147,7 +147,7 @@ namespace runtime {
 
       template < typename T >
       struct Imag< std::complex<T> > {
-        inline const T & operator()( const std::complex<T> & t ) {
+        inline const T operator()( const std::complex<T> & t ) {
           return t.imag();
         }
       };
