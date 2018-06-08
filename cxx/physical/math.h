@@ -52,41 +52,54 @@ namespace runtime {
         using std::tanh;
         using std::atan;
 
-        #ifndef _MSC_VER
-          using ::acosh;
-          using ::asinh;
-          using ::atanh;
-
-          using ::tgamma;
-          using ::erf;
-          using ::erfc;
+        #if __cplusplus > 199711L
+          // C++11 compliant compiler
+          using std::acos;
+          using std::asin;
+          using std::atan;
+          using std::acosh;
+          using std::asinh;
+          using std::atanh;
+          using std::tgamma;
+          using std::erf;
+          using std::erfc;
         #else
-          using boost::math::tgamma;
-          using boost::math::erf;
-          using boost::math::erfc;
-        #endif
+          #ifndef _MSC_VER
+            using ::acosh;
+            using ::asinh;
+            using ::atanh;
 
-        #ifndef BOOST_MATH_NOT_FOUND
-          using boost::math::acos;
-          using boost::math::asin;
-          using boost::math::atan;
-          using boost::math::acosh;
-          using boost::math::asinh;
-          using boost::math::atanh;
-        #else
-          #define MISSING_FUNC(fun) \
-          template <typename T> \
-          static inline std::complex<T> fun ( const std::complex<T> & t ) { \
-            using runtime::physical::exception; \
-            throw exception(#fun ":  MISSING COMPLEX FUNCTION, no boost::math?"); \
-          }
+            using ::tgamma;
+            using ::erf;
+            using ::erfc;
+          #else
+            using boost::math::tgamma;
+            using boost::math::erf;
+            using boost::math::erfc;
+          #endif
 
-          MISSING_FUNC(acos)
-          MISSING_FUNC(asin)
-          MISSING_FUNC(atan)
-          MISSING_FUNC(acosh)
-          MISSING_FUNC(asinh)
-          MISSING_FUNC(atanh)
+          #ifndef BOOST_MATH_NOT_FOUND
+            using boost::math::acos;
+            using boost::math::asin;
+            using boost::math::atan;
+            using boost::math::acosh;
+            using boost::math::asinh;
+            using boost::math::atanh;
+          #else
+            #define MISSING_FUNC(fun) \
+            template <typename T> \
+            static inline std::complex<T> fun ( const std::complex<T> & t ) { \
+              using runtime::physical::exception; \
+              throw exception(#fun ":  MISSING COMPLEX FUNCTION, no boost::math?"); \
+            }
+
+            MISSING_FUNC(acos)
+            MISSING_FUNC(asin)
+            MISSING_FUNC(atan)
+            MISSING_FUNC(acosh)
+            MISSING_FUNC(asinh)
+            MISSING_FUNC(atanh)
+          #endif
         #endif
       } /* namespace runtime::physical::detail::stdmath. */
 
