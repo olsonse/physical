@@ -1,0 +1,11 @@
+changelog
+physical/
+python-physical/
+python3-physical/
+*.log
+*.substvars
+files
+debhelper-build-stamp
+*.postinst.debhelper
+*.prerm.debhelper
+*.swp

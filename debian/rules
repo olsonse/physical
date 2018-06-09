@@ -1,0 +1,65 @@
+#!/usr/bin/make -f
+# debian/rules
+# -*- makefile -*-
+
+export DH_VERBOSE=1
+
+# allows the user to override with make BUILD=/path/to/builddir
+BUILD=$(CURDIR)/builddir
+
+BJAM = bjam --build-dir=$(BUILD)
+
+#!/usr/bin/make -f
+# See debhelper(7) (uncomment to enable)
+# output every command that modifies files on the build system.
+DH_VERBOSE = 1
+
+# see EXAMPLES in dpkg-buildflags(1) and read /usr/share/dpkg/*
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/default.mk
+
+# see FEATURE AREAS in dpkg-buildflags(1)
+#export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+# see ENVIRONMENT in dpkg-buildflags(1)
+# package maintainers to append CFLAGS
+#export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic
+# package maintainers to append LDFLAGS
+#export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+
+# main packaging script based on dh7 syntax
+%:
+	dh $@ --with python2,python3
+
+build clean binary :  $(CURDIR)/debian/changelog
+
+override_dh_auto_configure:
+	@#echo "No configuration necesary"
+
+override_dh_auto_build:
+	$(BJAM) release
+	cd $(CURDIR)/examples/calc/interactive && $(BJAM) release
+
+override_dh_auto_test:
+	cd $(CURDIR)/cxx && $(BJAM) release
+
+override_dh_auto_install:
+	@echo "Installing c++ code"
+	$(BJAM) release install --prefix=$(CURDIR)/debian/physical/usr
+	mkdir -p \
+		$(CURDIR)/debian/physical/usr/bin/
+	install $(CURDIR)/examples/calc/interactive/ounits \
+		$(CURDIR)/debian/physical/usr/bin/
+	@#
+	@echo "Installing Python(2) code"
+	mkdir -p $(CURDIR)/debian/python-physical/usr/lib/python2.7/dist-packages/
+	cp -R    $(CURDIR)/python/physical \
+		 $(CURDIR)/debian/python-physical/usr/lib/python2.7/dist-packages/
+	@#
+	@echo "Installing Python(3) code"
+	mkdir -p $(CURDIR)/debian/python3-physical/usr/lib/python3/dist-packages/
+	cp -R    $(CURDIR)/python/physical \
+		 $(CURDIR)/debian/python3-physical/usr/lib/python3/dist-packages/
+
+$(CURDIR)/debian/changelog : $(CURDIR)/debian/mk_changelog
+	$(CURDIR)/debian/mk_changelog > $(CURDIR)/debian/changelog

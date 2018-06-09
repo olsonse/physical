@@ -1,0 +1,65 @@
+Source: physical
+Section: universe/science
+Priority: optional
+Build-Depends: debhelper (>= 9), dh-python,
+ libboost-tools-dev, libboost-program-options, libboost-regex,
+ libboost-test-dev, libreadline-dev,
+ python-all (>=2.6.6-3~),
+ python3-all (>=3.2)
+Maintainer: Spencer E. Olson <olsonse@umich.edu>
+Standards-Version: 3.9.2
+Homepage: https://github.com/olsonse/physical
+Vcs-Git: https://github.com/olsonse/physical.git
+X-Python-Version: >= 2.7
+X-Python3-Version: >= 3.2
+XS-Python-Version: >= 2.7
+XS-Python3-Version: >= 3.2
+
+Package: python-physical
+Architecture: all
+Depends: ${python:Depends}, ${misc:Depends}
+Description: Library of units with dimensional analysis in various languages
+ .
+ This purpose of this package is to easy and consistent access to an extensive
+ set of physical units, constants, unit systems, and conversion of physical
+ quantities between various arbitrary unit systems.  While this package began
+ with the crude support of the C++/C languages only, it now includes a
+ sophisticated interface for the C++ and Python languages that allows for
+ parsing of complex mathematical expressions with strict runtime dimensional
+ analysis.  Also included are new rudimentary interfaces for the Octave/Matlab
+ language as well as for Gnuplot.
+ .
+ This package provides the Python interface.
+
+Package: python3-physical
+Architecture: all
+Depends: ${python3:Depends}, ${misc:Depends}
+Description: Library of units with dimensional analysis in various languages
+ .
+ This purpose of this package is to easy and consistent access to an extensive
+ set of physical units, constants, unit systems, and conversion of physical
+ quantities between various arbitrary unit systems.  While this package began
+ with the crude support of the C++/C languages only, it now includes a
+ sophisticated interface for the C++ and Python languages that allows for
+ parsing of complex mathematical expressions with strict runtime dimensional
+ analysis.  Also included are new rudimentary interfaces for the Octave/Matlab
+ language as well as for Gnuplot.
+ .
+ This package provides the Python3 interface.
+
+Package: physical
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Library of units with dimensional analysis in various languages
+ .
+ This purpose of this package is to easy and consistent access to an extensive
+ set of physical units, constants, unit systems, and conversion of physical
+ quantities between various arbitrary unit systems.  While this package began
+ with the crude support of the C++/C languages only, it now includes a
+ sophisticated interface for the C++ and Python languages that allows for
+ parsing of complex mathematical expressions with strict runtime dimensional
+ analysis.  Also included are new rudimentary interfaces for the Octave/Matlab
+ language as well as for Gnuplot.
+ .
+ This package provides the C++ interface headers, libraries, and example
+ expression parser/executor.
