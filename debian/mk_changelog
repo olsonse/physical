@@ -68,9 +68,16 @@ class GitVersionCollection(object):
     self.tags = p.communicate()[0].decode().splitlines()
     self.tags.reverse()
 
+    self.has_untagged_changes = False
+    p = Popen(['git', 'describe'], stdout=PIPE)
+    current = p.communicate()[0].decode().strip()
+    if current not in self.tags:
+      self.has_untagged_changes = True
+
   def __call__(self):
     out = io.StringIO()
-    out.write(GitVersion()())
+    if self.has_untagged_changes:
+      out.write(GitVersion()())
     for tag in self.tags:
       out.write(GitVersion(tag)())
 
