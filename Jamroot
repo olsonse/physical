@@ -264,7 +264,7 @@ explicit install-code ;
 package.install install-docs
     : $(install-properties)
       <install-source-root>$(TOP)
-      <install-header-subdir>../share/physical
+      <install-header-subdir>../share/doc/physical
     :
     :
     : $(docs)
