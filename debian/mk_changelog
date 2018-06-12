@@ -6,12 +6,19 @@ from datetime import datetime
 
 class GitVersion(object):
   def __init__(self, tag=None):
+    self.date = None
+
     if tag is None:
       p = Popen(['git', 'describe'], stdout=PIPE)
       self.current_git_version = p.communicate()[0].decode().strip()
 
       p = Popen(['git', 'describe', '--abbrev=0'], stdout=PIPE)
       self.current_git_tag = p.communicate()[0].decode().strip()
+
+      # let's set the date for this version to the last commit
+      p = Popen(['git','log','-1','--format=%cD',self.current_git_version],
+                stdout=PIPE)
+      self.date = p.communicate()[0].decode().strip()
     else:
       self.current_git_version = self.current_git_tag = tag
 
@@ -24,7 +31,8 @@ class GitVersion(object):
     m = re.search('\nTagger:\s*(?P<name>[^\n]*)\nDate:\s*(?P<date>[^\n]*)\n', tag_commit)
     self.maintainer = m.groupdict()['name']
     date = datetime.strptime(m.groupdict()['date'], '%a %b %d %H:%M:%S %Y %z')
-    self.date = date.strftime('%a, %d %b %Y %H:%M:%S %z')
+    if not self.date:
+      self.date = date.strftime('%a, %d %b %Y %H:%M:%S %z')
 
   @property
   def version_number(self):
@@ -87,8 +95,6 @@ class GitVersionCollection(object):
 def main():
   c = GitVersionCollection()
   print(c())
-  #v = GitVersion()
-  #print(v())
 
 if __name__=='__main__':
   main()
