@@ -19,7 +19,6 @@ Package: python-physical
 Architecture: all
 Depends: ${python:Depends}, ${misc:Depends}
 Description: Library of units with dimensional analysis in various languages
- .
  This purpose of this package is to easy and consistent access to an extensive
  set of physical units, constants, unit systems, and conversion of physical
  quantities between various arbitrary unit systems.  While this package began
@@ -35,7 +34,6 @@ Package: python3-physical
 Architecture: all
 Depends: ${python3:Depends}, ${misc:Depends}
 Description: Library of units with dimensional analysis in various languages
- .
  This purpose of this package is to easy and consistent access to an extensive
  set of physical units, constants, unit systems, and conversion of physical
  quantities between various arbitrary unit systems.  While this package began
@@ -51,7 +49,6 @@ Package: physical
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Library of units with dimensional analysis in various languages
- .
  This purpose of this package is to easy and consistent access to an extensive
  set of physical units, constants, unit systems, and conversion of physical
  quantities between various arbitrary unit systems.  While this package began
