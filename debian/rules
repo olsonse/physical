@@ -31,7 +31,7 @@ include /usr/share/dpkg/default.mk
 %:
 	dh $@ --with python2,python3
 
-build clean binary :  $(CURDIR)/debian/changelog
+build binary :  $(CURDIR)/debian/changelog $(CURDIR)/debian/copyright
 
 override_dh_auto_configure:
 	@#echo "No configuration necesary"
@@ -63,3 +63,6 @@ override_dh_auto_install:
 
 $(CURDIR)/debian/changelog : $(CURDIR)/debian/mk_changelog
 	$(CURDIR)/debian/mk_changelog > $(CURDIR)/debian/changelog
+
+$(CURDIR)/debian/copyright : $(CURDIR)/COPYING
+	cp $(CURDIR)/COPYING $(CURDIR)/debian/copyright
