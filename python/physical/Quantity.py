@@ -351,6 +351,41 @@ class Quantity(object):
         else:
             return cmp(self.coeff, other.coeff)
 
+    def __eq__(self,other):
+        um = self.unitsMatch(other)
+        if um < 0:
+            return self.coeff == other
+        else:
+            return self.coeff == other.coeff
+
+    def __lt__(self,other):
+        um = self.unitsMatch(other)
+        if um < 0:
+            return self.coeff < other
+        else:
+            return self.coeff < other.coeff
+
+    def __le__(self,other):
+        um = self.unitsMatch(other)
+        if um < 0:
+            return self.coeff <= other
+        else:
+            return self.coeff <= other.coeff
+
+    def __gt__(self,other):
+        um = self.unitsMatch(other)
+        if um < 0:
+            return self.coeff > other
+        else:
+            return self.coeff > other.coeff
+
+    def __ge__(self,other):
+        um = self.unitsMatch(other)
+        if um < 0:
+            return self.coeff >= other
+        else:
+            return self.coeff >= other.coeff
+
     def __mul__(self,other):
         if other.__class__ == Quantity:
             c = 1. * self.coeff * other.coeff
