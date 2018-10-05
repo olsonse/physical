@@ -303,6 +303,25 @@ class Quantity(object):
         self.coeff = 1. * coeff
         self.units = {k:e for k,e in units.items() if e != 0}
 
+    SERIALIZATION_NAME = 'physical.Quantity'
+
+    @staticmethod
+    def to_dict(q):
+      """
+      Serialization for physical.Quantity.
+      """
+      return dict(name=q.name, coeff=q.coeff, units=q.units,
+                  __class__=Quantity.SERIALIZATION_NAME)
+
+    @staticmethod
+    def from_dict(cls_name, D):
+      """
+      Deserialization for physical.Quantity.
+      """
+      assert cls_name == Quantity.SERIALIZATION_NAME, \
+        'mismatch on class name for physical.Quantity deserialization'
+      return Quantity(D['coeff'], D['units'], D['name'])
+
     def __repr__(self):
       return self.print_style(self)
 
