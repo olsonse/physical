@@ -52,7 +52,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
 %define api.namespace {runtime::physical::calc::detail}
 
 /* set the parser's class identifier */
-%define "parser_class_name" {Parser}
+%define api.parser.class {Parser}
 
 /* keep track of the current position within the input */
 %locations
@@ -67,7 +67,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
 %parse-param { class Driver& driver }
 
 /* verbose error messages */
-%error-verbose
+%define parse.error verbose
 
 %code requires {
 #include <vector>

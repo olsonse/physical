@@ -1,8 +1,8 @@
-// A Bison parser, made by GNU Bison 3.0.2.
+// A Bison parser, made by GNU Bison 3.5.1.
 
 // Skeleton implementation for Bison LALR(1) parsers in C++
 
-// Copyright (C) 2002-2013 Free Software Foundation, Inc.
+// Copyright (C) 2002-2015, 2018-2020 Free Software Foundation, Inc.
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -30,9 +30,13 @@
 // This special exception was added by the Free Software Foundation in
 // version 2.2 of Bison.
 
+// Undocumented macros, especially those whose name start with YY_,
+// are private implementation details.  Do not rely on them.
 
-// First part of user declarations.
-#line 4 "Parser.yy" // lalr1.cc:399
+
+
+// First part of user prologue.
+#line 4 "Parser.yy"
  /*** C/C++ Declarations ***/
 
 #include <physical/runtime.h>
@@ -61,20 +65,13 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
 } } } }
 
 
-#line 65 "pregen-parser/Parser.cpp" // lalr1.cc:399
+#line 69 "pregen-parser/Parser.cpp"
 
-# ifndef YY_NULLPTR
-#  if defined __cplusplus && 201103L <= __cplusplus
-#   define YY_NULLPTR nullptr
-#  else
-#   define YY_NULLPTR 0
-#  endif
-# endif
 
 #include "Parser.hpp"
 
-// User implementation prologue.
-#line 135 "Parser.yy" // lalr1.cc:407
+// Second part of user prologue.
+#line 135 "Parser.yy"
 
 
 #include <physical/calc/detail/Scanner.h>
@@ -86,7 +83,8 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
 #define yylex driver.lexer->lex
 
 
-#line 90 "pregen-parser/Parser.cpp" // lalr1.cc:407
+#line 87 "pregen-parser/Parser.cpp"
+
 
 
 #ifndef YY_
@@ -98,6 +96,15 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
 # endif
 # ifndef YY_
 #  define YY_(msgid) msgid
+# endif
+#endif
+
+// Whether we are compiled with exception support.
+#ifndef YY_EXCEPTIONS
+# if defined __GNUC__ && !defined __EXCEPTIONS
+#  define YY_EXCEPTIONS 0
+# else
+#  define YY_EXCEPTIONS 1
 # endif
 #endif
 
@@ -118,12 +125,9 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
         {                                                               \
           (Current).begin = (Current).end = YYRHSLOC (Rhs, 0).end;      \
         }                                                               \
-    while (/*CONSTCOND*/ false)
+    while (false)
 # endif
 
-
-// Suppress unused-variable warnings by "using" E.
-#define YYUSE(E) ((void) (E))
 
 // Enable debugging if requested.
 #if YYDEBUG
@@ -137,7 +141,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
     {                                           \
       *yycdebug_ << Title << ' ';               \
       yy_print_ (*yycdebug_, Symbol);           \
-      *yycdebug_ << std::endl;                  \
+      *yycdebug_ << '\n';                       \
     }                                           \
   } while (false)
 
@@ -156,23 +160,24 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
 #else // !YYDEBUG
 
 # define YYCDEBUG if (false) std::cerr
-# define YY_SYMBOL_PRINT(Title, Symbol)  YYUSE(Symbol)
-# define YY_REDUCE_PRINT(Rule)           static_cast<void>(0)
-# define YY_STACK_PRINT()                static_cast<void>(0)
+# define YY_SYMBOL_PRINT(Title, Symbol)  YYUSE (Symbol)
+# define YY_REDUCE_PRINT(Rule)           static_cast<void> (0)
+# define YY_STACK_PRINT()                static_cast<void> (0)
 
 #endif // !YYDEBUG
 
 #define yyerrok         (yyerrstatus_ = 0)
-#define yyclearin       (yyempty = true)
+#define yyclearin       (yyla.clear ())
 
 #define YYACCEPT        goto yyacceptlab
 #define YYABORT         goto yyabortlab
 #define YYERROR         goto yyerrorlab
 #define YYRECOVERING()  (!!yyerrstatus_)
 
-#line 52 "Parser.yy" // lalr1.cc:474
+#line 52 "Parser.yy"
 namespace runtime { namespace physical { namespace calc { namespace detail {
-#line 176 "pregen-parser/Parser.cpp" // lalr1.cc:474
+#line 180 "pregen-parser/Parser.cpp"
+
 
   /* Return YYSTR after stripping away unnecessary quotes and
      backslashes, so that it's suitable for yyerror.  The heuristic is
@@ -184,7 +189,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
   {
     if (*yystr == '"')
       {
-        std::string yyr = "";
+        std::string yyr;
         char const *yyp = yystr;
 
         for (;;)
@@ -197,7 +202,10 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
             case '\\':
               if (*++yyp != '\\')
                 goto do_not_strip_quotes;
-              // Fall through.
+              else
+                goto append;
+
+            append:
             default:
               yyr += *yyp;
               break;
@@ -214,10 +222,11 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
 
   /// Build a parser object.
   Parser::Parser (class Driver& driver_yyarg)
-    :
 #if YYDEBUG
-      yydebug_ (false),
+    : yydebug_ (false),
       yycdebug_ (&std::cerr),
+#else
+    :
 #endif
       driver (driver_yyarg)
   {}
@@ -225,147 +234,158 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
   Parser::~Parser ()
   {}
 
+  Parser::syntax_error::~syntax_error () YY_NOEXCEPT YY_NOTHROW
+  {}
 
   /*---------------.
   | Symbol types.  |
   `---------------*/
 
-  inline
-  Parser::syntax_error::syntax_error (const location_type& l, const std::string& m)
-    : std::runtime_error (m)
-    , location (l)
-  {}
-
   // basic_symbol.
+#if 201103L <= YY_CPLUSPLUS
   template <typename Base>
-  inline
-  Parser::basic_symbol<Base>::basic_symbol ()
-    : value ()
+  Parser::basic_symbol<Base>::basic_symbol (basic_symbol&& that)
+    : Base (std::move (that))
+    , value (std::move (that.value))
+    , location (std::move (that.location))
   {}
+#endif
 
   template <typename Base>
-  inline
-  Parser::basic_symbol<Base>::basic_symbol (const basic_symbol& other)
-    : Base (other)
-    , value ()
-    , location (other.location)
-  {
-    value = other.value;
-  }
-
-
-  template <typename Base>
-  inline
-  Parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const semantic_type& v, const location_type& l)
-    : Base (t)
-    , value (v)
-    , location (l)
+  Parser::basic_symbol<Base>::basic_symbol (const basic_symbol& that)
+    : Base (that)
+    , value (that.value)
+    , location (that.location)
   {}
 
 
   /// Constructor for valueless symbols.
   template <typename Base>
-  inline
-  Parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, const location_type& l)
+  Parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, YY_MOVE_REF (location_type) l)
     : Base (t)
     , value ()
     , location (l)
   {}
 
   template <typename Base>
-  inline
-  Parser::basic_symbol<Base>::~basic_symbol ()
+  Parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, YY_RVREF (semantic_type) v, YY_RVREF (location_type) l)
+    : Base (t)
+    , value (YY_MOVE (v))
+    , location (YY_MOVE (l))
+  {}
+
+  template <typename Base>
+  bool
+  Parser::basic_symbol<Base>::empty () const YY_NOEXCEPT
   {
+    return Base::type_get () == empty_symbol;
   }
 
   template <typename Base>
-  inline
   void
   Parser::basic_symbol<Base>::move (basic_symbol& s)
   {
-    super_type::move(s);
-    value = s.value;
-    location = s.location;
+    super_type::move (s);
+    value = YY_MOVE (s.value);
+    location = YY_MOVE (s.location);
   }
 
   // by_type.
-  inline
   Parser::by_type::by_type ()
-     : type (empty)
+    : type (empty_symbol)
   {}
 
-  inline
-  Parser::by_type::by_type (const by_type& other)
-    : type (other.type)
+#if 201103L <= YY_CPLUSPLUS
+  Parser::by_type::by_type (by_type&& that)
+    : type (that.type)
+  {
+    that.clear ();
+  }
+#endif
+
+  Parser::by_type::by_type (const by_type& that)
+    : type (that.type)
   {}
 
-  inline
   Parser::by_type::by_type (token_type t)
     : type (yytranslate_ (t))
   {}
 
-  inline
+  void
+  Parser::by_type::clear ()
+  {
+    type = empty_symbol;
+  }
+
   void
   Parser::by_type::move (by_type& that)
   {
     type = that.type;
-    that.type = empty;
+    that.clear ();
   }
 
-  inline
   int
-  Parser::by_type::type_get () const
+  Parser::by_type::type_get () const YY_NOEXCEPT
   {
     return type;
   }
 
 
   // by_state.
-  inline
-  Parser::by_state::by_state ()
-    : state (empty)
+  Parser::by_state::by_state () YY_NOEXCEPT
+    : state (empty_state)
   {}
 
-  inline
-  Parser::by_state::by_state (const by_state& other)
-    : state (other.state)
+  Parser::by_state::by_state (const by_state& that) YY_NOEXCEPT
+    : state (that.state)
   {}
 
-  inline
+  void
+  Parser::by_state::clear () YY_NOEXCEPT
+  {
+    state = empty_state;
+  }
+
   void
   Parser::by_state::move (by_state& that)
   {
     state = that.state;
-    that.state = empty;
+    that.clear ();
   }
 
-  inline
-  Parser::by_state::by_state (state_type s)
+  Parser::by_state::by_state (state_type s) YY_NOEXCEPT
     : state (s)
   {}
 
-  inline
   Parser::symbol_number_type
-  Parser::by_state::type_get () const
+  Parser::by_state::type_get () const YY_NOEXCEPT
   {
-    return state == empty ? 0 : yystos_[state];
+    if (state == empty_state)
+      return empty_symbol;
+    else
+      return yystos_[+state];
   }
 
-  inline
   Parser::stack_symbol_type::stack_symbol_type ()
   {}
 
-
-  inline
-  Parser::stack_symbol_type::stack_symbol_type (state_type s, symbol_type& that)
-    : super_type (s, that.location)
+  Parser::stack_symbol_type::stack_symbol_type (YY_RVREF (stack_symbol_type) that)
+    : super_type (YY_MOVE (that.state), YY_MOVE (that.value), YY_MOVE (that.location))
   {
-    value = that.value;
+#if 201103L <= YY_CPLUSPLUS
     // that is emptied.
-    that.type = empty;
+    that.state = empty_state;
+#endif
   }
 
-  inline
+  Parser::stack_symbol_type::stack_symbol_type (state_type s, YY_MOVE_REF (symbol_type) that)
+    : super_type (s, YY_MOVE (that.value), YY_MOVE (that.location))
+  {
+    // that is emptied.
+    that.type = empty_symbol;
+  }
+
+#if YY_CPLUSPLUS < 201103L
   Parser::stack_symbol_type&
   Parser::stack_symbol_type::operator= (const stack_symbol_type& that)
   {
@@ -375,9 +395,19 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
     return *this;
   }
 
+  Parser::stack_symbol_type&
+  Parser::stack_symbol_type::operator= (stack_symbol_type& that)
+  {
+    state = that.state;
+    value = that.value;
+    location = that.location;
+    // that is emptied.
+    that.state = empty_state;
+    return *this;
+  }
+#endif
 
   template <typename Base>
-  inline
   void
   Parser::yy_destroy_ (const char* yymsg, basic_symbol<Base>& yysym) const
   {
@@ -387,38 +417,33 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
     // User destructor.
     switch (yysym.type_get ())
     {
-            case 5: // "string"
-
-#line 120 "Parser.yy" // lalr1.cc:599
-        { delete (yysym.value.stringVal); }
-#line 395 "pregen-parser/Parser.cpp" // lalr1.cc:599
+      case 5: // "string"
+#line 120 "Parser.yy"
+                    { delete (yysym.value.stringVal); }
+#line 424 "pregen-parser/Parser.cpp"
         break;
 
       case 6: // "identifier"
-
-#line 120 "Parser.yy" // lalr1.cc:599
-        { delete (yysym.value.stringVal); }
-#line 402 "pregen-parser/Parser.cpp" // lalr1.cc:599
+#line 120 "Parser.yy"
+                    { delete (yysym.value.stringVal); }
+#line 430 "pregen-parser/Parser.cpp"
         break;
 
       case 25: // literal
-
-#line 121 "Parser.yy" // lalr1.cc:599
-        { delete (yysym.value.calcnode); }
-#line 409 "pregen-parser/Parser.cpp" // lalr1.cc:599
+#line 121 "Parser.yy"
+                    { delete (yysym.value.calcnode); }
+#line 436 "pregen-parser/Parser.cpp"
         break;
 
       case 26: // variable
-
-#line 121 "Parser.yy" // lalr1.cc:599
-        { delete (yysym.value.calcnode); }
-#line 416 "pregen-parser/Parser.cpp" // lalr1.cc:599
+#line 121 "Parser.yy"
+                    { delete (yysym.value.calcnode); }
+#line 442 "pregen-parser/Parser.cpp"
         break;
 
       case 27: // expr_list
-
-#line 124 "Parser.yy" // lalr1.cc:599
-        {
+#line 124 "Parser.yy"
+                    {
   while ( !(yysym.value.nodeVector)->empty() ) {
     delete (yysym.value.nodeVector)->back();
     (yysym.value.nodeVector)->pop_back();
@@ -426,65 +451,56 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
   
   delete (yysym.value.nodeVector);
 }
-#line 430 "pregen-parser/Parser.cpp" // lalr1.cc:599
+#line 455 "pregen-parser/Parser.cpp"
         break;
 
       case 28: // string_list
-
-#line 123 "Parser.yy" // lalr1.cc:599
-        { delete (yysym.value.stringVector); }
-#line 437 "pregen-parser/Parser.cpp" // lalr1.cc:599
+#line 123 "Parser.yy"
+                    { delete (yysym.value.stringVector); }
+#line 461 "pregen-parser/Parser.cpp"
         break;
 
       case 29: // function
-
-#line 122 "Parser.yy" // lalr1.cc:599
-        { delete (yysym.value.calcnode); }
-#line 444 "pregen-parser/Parser.cpp" // lalr1.cc:599
+#line 122 "Parser.yy"
+                    { delete (yysym.value.calcnode); }
+#line 467 "pregen-parser/Parser.cpp"
         break;
 
       case 30: // atomexpr
-
-#line 122 "Parser.yy" // lalr1.cc:599
-        { delete (yysym.value.calcnode); }
-#line 451 "pregen-parser/Parser.cpp" // lalr1.cc:599
+#line 122 "Parser.yy"
+                    { delete (yysym.value.calcnode); }
+#line 473 "pregen-parser/Parser.cpp"
         break;
 
       case 31: // powexpr
-
-#line 122 "Parser.yy" // lalr1.cc:599
-        { delete (yysym.value.calcnode); }
-#line 458 "pregen-parser/Parser.cpp" // lalr1.cc:599
+#line 122 "Parser.yy"
+                    { delete (yysym.value.calcnode); }
+#line 479 "pregen-parser/Parser.cpp"
         break;
 
       case 32: // factor
-
-#line 122 "Parser.yy" // lalr1.cc:599
-        { delete (yysym.value.calcnode); }
-#line 465 "pregen-parser/Parser.cpp" // lalr1.cc:599
+#line 122 "Parser.yy"
+                    { delete (yysym.value.calcnode); }
+#line 485 "pregen-parser/Parser.cpp"
         break;
 
       case 33: // term
-
-#line 122 "Parser.yy" // lalr1.cc:599
-        { delete (yysym.value.calcnode); }
-#line 472 "pregen-parser/Parser.cpp" // lalr1.cc:599
+#line 122 "Parser.yy"
+                    { delete (yysym.value.calcnode); }
+#line 491 "pregen-parser/Parser.cpp"
         break;
 
       case 34: // expr
-
-#line 122 "Parser.yy" // lalr1.cc:599
-        { delete (yysym.value.calcnode); }
-#line 479 "pregen-parser/Parser.cpp" // lalr1.cc:599
+#line 122 "Parser.yy"
+                    { delete (yysym.value.calcnode); }
+#line 497 "pregen-parser/Parser.cpp"
         break;
 
       case 35: // assignment
-
-#line 122 "Parser.yy" // lalr1.cc:599
-        { delete (yysym.value.calcnode); }
-#line 486 "pregen-parser/Parser.cpp" // lalr1.cc:599
+#line 122 "Parser.yy"
+                    { delete (yysym.value.calcnode); }
+#line 503 "pregen-parser/Parser.cpp"
         break;
-
 
       default:
         break;
@@ -500,6 +516,12 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
     std::ostream& yyoutput = yyo;
     YYUSE (yyoutput);
     symbol_number_type yytype = yysym.type_get ();
+#if defined __GNUC__ && ! defined __clang__ && ! defined __ICC && __GNUC__ * 100 + __GNUC_MINOR__ <= 408
+    // Avoid a (spurious) G++ 4.8 warning about "array subscript is
+    // below array bounds".
+    if (yysym.empty ())
+      std::abort ();
+#endif
     yyo << (yytype < yyntokens_ ? "token" : "nterm")
         << ' ' << yytname_[yytype] << " ("
         << yysym.location << ": ";
@@ -508,26 +530,27 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
   }
 #endif
 
-  inline
   void
-  Parser::yypush_ (const char* m, state_type s, symbol_type& sym)
-  {
-    stack_symbol_type t (s, sym);
-    yypush_ (m, t);
-  }
-
-  inline
-  void
-  Parser::yypush_ (const char* m, stack_symbol_type& s)
+  Parser::yypush_ (const char* m, YY_MOVE_REF (stack_symbol_type) sym)
   {
     if (m)
-      YY_SYMBOL_PRINT (m, s);
-    yystack_.push (s);
+      YY_SYMBOL_PRINT (m, sym);
+    yystack_.push (YY_MOVE (sym));
   }
 
-  inline
   void
-  Parser::yypop_ (unsigned int n)
+  Parser::yypush_ (const char* m, state_type s, YY_MOVE_REF (symbol_type) sym)
+  {
+#if 201103L <= YY_CPLUSPLUS
+    yypush_ (m, stack_symbol_type (s, std::move (sym)));
+#else
+    stack_symbol_type ss (s, sym);
+    yypush_ (m, ss);
+#endif
+  }
+
+  void
+  Parser::yypop_ (int n)
   {
     yystack_.pop (n);
   }
@@ -559,7 +582,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
   }
 #endif // YYDEBUG
 
-  inline Parser::state_type
+  Parser::state_type
   Parser::yy_lr_goto_state_ (state_type yystate, int yysym)
   {
     int yyr = yypgoto_[yysym - yyntokens_] + yystate;
@@ -569,25 +592,27 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
       return yydefgoto_[yysym - yyntokens_];
   }
 
-  inline bool
+  bool
   Parser::yy_pact_value_is_default_ (int yyvalue)
   {
     return yyvalue == yypact_ninf_;
   }
 
-  inline bool
+  bool
   Parser::yy_table_value_is_error_ (int yyvalue)
   {
     return yyvalue == yytable_ninf_;
   }
 
   int
+  Parser::operator() ()
+  {
+    return parse ();
+  }
+
+  int
   Parser::parse ()
   {
-    /// Whether yyla contains a lookahead.
-    bool yyempty = true;
-
-    // State.
     int yyn;
     /// Length of the RHS of the rule being reduced.
     int yylen = 0;
@@ -605,61 +630,70 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
     /// The return value of parse ().
     int yyresult;
 
-    // FIXME: This shoud be completely indented.  It is not yet to
-    // avoid gratuitous conflicts when merging into the master branch.
+#if YY_EXCEPTIONS
     try
+#endif // YY_EXCEPTIONS
       {
-    YYCDEBUG << "Starting parse" << std::endl;
+    YYCDEBUG << "Starting parse\n";
 
 
     // User initialization code.
-    #line 59 "Parser.yy" // lalr1.cc:725
+#line 59 "Parser.yy"
 {
   // initialize the initial location object
   yyla.location.begin.filename = yyla.location.end.filename = &driver.streamname;
 }
 
-#line 623 "pregen-parser/Parser.cpp" // lalr1.cc:725
+#line 648 "pregen-parser/Parser.cpp"
+
 
     /* Initialize the stack.  The initial state will be set in
        yynewstate, since the latter expects the semantical and the
        location values to have been already stored, initialize these
        stacks with a primary value.  */
     yystack_.clear ();
-    yypush_ (YY_NULLPTR, 0, yyla);
+    yypush_ (YY_NULLPTR, 0, YY_MOVE (yyla));
 
-    // A new symbol was pushed on the stack.
+  /*-----------------------------------------------.
+  | yynewstate -- push a new symbol on the stack.  |
+  `-----------------------------------------------*/
   yynewstate:
-    YYCDEBUG << "Entering state " << yystack_[0].state << std::endl;
+    YYCDEBUG << "Entering state " << int (yystack_[0].state) << '\n';
 
     // Accept?
     if (yystack_[0].state == yyfinal_)
-      goto yyacceptlab;
+      YYACCEPT;
 
     goto yybackup;
 
-    // Backup.
-  yybackup:
 
+  /*-----------.
+  | yybackup.  |
+  `-----------*/
+  yybackup:
     // Try to take a decision without lookahead.
-    yyn = yypact_[yystack_[0].state];
+    yyn = yypact_[+yystack_[0].state];
     if (yy_pact_value_is_default_ (yyn))
       goto yydefault;
 
     // Read a lookahead token.
-    if (yyempty)
+    if (yyla.empty ())
       {
         YYCDEBUG << "Reading a token: ";
+#if YY_EXCEPTIONS
         try
+#endif // YY_EXCEPTIONS
           {
             yyla.type = yytranslate_ (yylex (&yyla.value, &yyla.location));
           }
+#if YY_EXCEPTIONS
         catch (const syntax_error& yyexc)
           {
+            YYCDEBUG << "Caught exception: " << yyexc.what() << '\n';
             error (yyexc);
             goto yyerrlab1;
           }
-        yyempty = false;
+#endif // YY_EXCEPTIONS
       }
     YY_SYMBOL_PRINT ("Next token is", yyla);
 
@@ -667,7 +701,9 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
        to detect an error, take that action.  */
     yyn += yyla.type_get ();
     if (yyn < 0 || yylast_ < yyn || yycheck_[yyn] != yyla.type_get ())
-      goto yydefault;
+      {
+        goto yydefault;
+      }
 
     // Reduce or error.
     yyn = yytable_[yyn];
@@ -679,34 +715,33 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
         goto yyreduce;
       }
 
-    // Discard the token being shifted.
-    yyempty = true;
-
     // Count tokens shifted since error; after three, turn off error status.
     if (yyerrstatus_)
       --yyerrstatus_;
 
     // Shift the lookahead token.
-    yypush_ ("Shifting", yyn, yyla);
+    yypush_ ("Shifting", state_type (yyn), YY_MOVE (yyla));
     goto yynewstate;
+
 
   /*-----------------------------------------------------------.
   | yydefault -- do the default action for the current state.  |
   `-----------------------------------------------------------*/
   yydefault:
-    yyn = yydefact_[yystack_[0].state];
+    yyn = yydefact_[+yystack_[0].state];
     if (yyn == 0)
       goto yyerrlab;
     goto yyreduce;
 
+
   /*-----------------------------.
-  | yyreduce -- Do a reduction.  |
+  | yyreduce -- do a reduction.  |
   `-----------------------------*/
   yyreduce:
     yylen = yyr2_[yyn];
     {
       stack_symbol_type yylhs;
-      yylhs.state = yy_lr_goto_state_(yystack_[yylen].state, yyr1_[yyn]);
+      yylhs.state = yy_lr_goto_state_ (yystack_[yylen].state, yyr1_[yyn]);
       /* If YYLEN is nonzero, implement the default value of the
          action: '$$ = $1'.  Otherwise, use the top of the stack.
 
@@ -718,260 +753,263 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
       else
         yylhs.value = yystack_[0].value;
 
-      // Compute the default @$.
+      // Default location.
       {
-        slice<stack_symbol_type, stack_type> slice (yystack_, yylen);
-        YYLLOC_DEFAULT (yylhs.location, slice, yylen);
+        stack_type::slice range (yystack_, yylen);
+        YYLLOC_DEFAULT (yylhs.location, range, yylen);
+        yyerror_range[1].location = yylhs.location;
       }
 
       // Perform the reduction.
       YY_REDUCE_PRINT (yyn);
+#if YY_EXCEPTIONS
       try
+#endif // YY_EXCEPTIONS
         {
           switch (yyn)
             {
   case 2:
-#line 152 "Parser.yy" // lalr1.cc:847
-    {
+#line 152 "Parser.yy"
+      {
         (yylhs.value.calcnode) = new expression::Literal((yystack_[0].value.doubleVal));
       }
-#line 739 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 777 "pregen-parser/Parser.cpp"
     break;
 
   case 3:
-#line 157 "Parser.yy" // lalr1.cc:847
-    {
+#line 157 "Parser.yy"
+      {
         (yylhs.value.calcnode) = new expression::VariableLookup(driver.symbols, *(yystack_[0].value.stringVal));
         delete (yystack_[0].value.stringVal);
       }
-#line 748 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 786 "pregen-parser/Parser.cpp"
     break;
 
   case 4:
-#line 163 "Parser.yy" // lalr1.cc:847
-    {
+#line 163 "Parser.yy"
+      {
         (yylhs.value.nodeVector) = new std::vector< expression::Node * >();
         (yylhs.value.nodeVector)->push_back( (yystack_[0].value.calcnode) );
       }
-#line 757 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 795 "pregen-parser/Parser.cpp"
     break;
 
   case 5:
-#line 168 "Parser.yy" // lalr1.cc:847
-    {
+#line 168 "Parser.yy"
+      {
         (yylhs.value.nodeVector) = (yystack_[2].value.nodeVector);
         (yylhs.value.nodeVector)->push_back( (yystack_[0].value.calcnode) );
       }
-#line 766 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 804 "pregen-parser/Parser.cpp"
     break;
 
   case 6:
-#line 174 "Parser.yy" // lalr1.cc:847
-    {
+#line 174 "Parser.yy"
+      {
         (yylhs.value.stringVector) = new std::vector< std::string >();
         (yylhs.value.stringVector)->push_back( sstrip(*(yystack_[0].value.stringVal)) );
         delete (yystack_[0].value.stringVal);
       }
-#line 776 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 814 "pregen-parser/Parser.cpp"
     break;
 
   case 7:
-#line 180 "Parser.yy" // lalr1.cc:847
-    {
+#line 180 "Parser.yy"
+      {
         (yylhs.value.stringVector) = (yystack_[2].value.stringVector);
         (yylhs.value.stringVector)->push_back( sstrip(*(yystack_[0].value.stringVal)) );
         delete (yystack_[0].value.stringVal);
       }
-#line 786 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 824 "pregen-parser/Parser.cpp"
     break;
 
   case 8:
-#line 187 "Parser.yy" // lalr1.cc:847
-    {
+#line 187 "Parser.yy"
+      {
         (yylhs.value.calcnode) = new expression::Function(driver.symbols, *(yystack_[2].value.stringVal));
         delete (yystack_[2].value.stringVal);
       }
-#line 795 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 833 "pregen-parser/Parser.cpp"
     break;
 
   case 9:
-#line 192 "Parser.yy" // lalr1.cc:847
-    {
+#line 192 "Parser.yy"
+      {
         (yylhs.value.calcnode) = new expression::Function(driver.symbols, *(yystack_[3].value.stringVal), *(yystack_[1].value.nodeVector));
         delete (yystack_[3].value.stringVal);
         delete (yystack_[1].value.nodeVector);
       }
-#line 805 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 843 "pregen-parser/Parser.cpp"
     break;
 
   case 10:
-#line 198 "Parser.yy" // lalr1.cc:847
-    {
+#line 198 "Parser.yy"
+      {
         (yylhs.value.calcnode) = new expression::StringFunction(driver.symbols, *(yystack_[3].value.stringVal), *(yystack_[1].value.stringVector));
         delete (yystack_[3].value.stringVal);
         delete (yystack_[1].value.stringVector);
       }
-#line 815 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 853 "pregen-parser/Parser.cpp"
     break;
 
   case 11:
-#line 205 "Parser.yy" // lalr1.cc:847
-    {
+#line 205 "Parser.yy"
+      {
         (yylhs.value.calcnode) = (yystack_[0].value.calcnode);
       }
-#line 823 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 861 "pregen-parser/Parser.cpp"
     break;
 
   case 12:
-#line 209 "Parser.yy" // lalr1.cc:847
-    {
+#line 209 "Parser.yy"
+      {
         (yylhs.value.calcnode) = (yystack_[0].value.calcnode);
       }
-#line 831 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 869 "pregen-parser/Parser.cpp"
     break;
 
   case 13:
-#line 213 "Parser.yy" // lalr1.cc:847
-    {
+#line 213 "Parser.yy"
+      {
         (yylhs.value.calcnode) = (yystack_[1].value.calcnode);
       }
-#line 839 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 877 "pregen-parser/Parser.cpp"
     break;
 
   case 14:
-#line 217 "Parser.yy" // lalr1.cc:847
-    {
+#line 217 "Parser.yy"
+      {
         (yylhs.value.calcnode) = (yystack_[0].value.calcnode);
       }
-#line 847 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 885 "pregen-parser/Parser.cpp"
     break;
 
   case 15:
-#line 222 "Parser.yy" // lalr1.cc:847
-    {
+#line 222 "Parser.yy"
+      {
         (yylhs.value.calcnode) = (yystack_[0].value.calcnode);
       }
-#line 855 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 893 "pregen-parser/Parser.cpp"
     break;
 
   case 16:
-#line 226 "Parser.yy" // lalr1.cc:847
-    {
+#line 226 "Parser.yy"
+      {
         (yylhs.value.calcnode) = new expression::Power((yystack_[2].value.calcnode), (yystack_[0].value.calcnode));
       }
-#line 863 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 901 "pregen-parser/Parser.cpp"
     break;
 
   case 17:
-#line 231 "Parser.yy" // lalr1.cc:847
-    {
+#line 231 "Parser.yy"
+      {
         (yylhs.value.calcnode) = (yystack_[0].value.calcnode);
       }
-#line 871 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 909 "pregen-parser/Parser.cpp"
     break;
 
   case 18:
-#line 235 "Parser.yy" // lalr1.cc:847
-    {
+#line 235 "Parser.yy"
+      {
         (yylhs.value.calcnode) = (yystack_[0].value.calcnode);
       }
-#line 879 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 917 "pregen-parser/Parser.cpp"
     break;
 
   case 19:
-#line 239 "Parser.yy" // lalr1.cc:847
-    {
+#line 239 "Parser.yy"
+      {
         (yylhs.value.calcnode) = new expression::Negate((yystack_[0].value.calcnode));
       }
-#line 887 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 925 "pregen-parser/Parser.cpp"
     break;
 
   case 20:
-#line 244 "Parser.yy" // lalr1.cc:847
-    {
+#line 244 "Parser.yy"
+      {
         (yylhs.value.calcnode) = (yystack_[0].value.calcnode);
       }
-#line 895 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 933 "pregen-parser/Parser.cpp"
     break;
 
   case 21:
-#line 248 "Parser.yy" // lalr1.cc:847
-    {
+#line 248 "Parser.yy"
+      {
         (yylhs.value.calcnode) = new expression::Multiply((yystack_[2].value.calcnode), (yystack_[0].value.calcnode));
       }
-#line 903 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 941 "pregen-parser/Parser.cpp"
     break;
 
   case 22:
-#line 252 "Parser.yy" // lalr1.cc:847
-    {
+#line 252 "Parser.yy"
+      {
         (yylhs.value.calcnode) = new expression::Divide((yystack_[2].value.calcnode), (yystack_[0].value.calcnode));
       }
-#line 911 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 949 "pregen-parser/Parser.cpp"
     break;
 
   case 23:
-#line 256 "Parser.yy" // lalr1.cc:847
-    {
+#line 256 "Parser.yy"
+      {
         (yylhs.value.calcnode) = new expression::Modulo((yystack_[2].value.calcnode), (yystack_[0].value.calcnode));
       }
-#line 919 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 957 "pregen-parser/Parser.cpp"
     break;
 
   case 24:
-#line 261 "Parser.yy" // lalr1.cc:847
-    {
+#line 261 "Parser.yy"
+      {
         (yylhs.value.calcnode) = (yystack_[0].value.calcnode);
       }
-#line 927 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 965 "pregen-parser/Parser.cpp"
     break;
 
   case 25:
-#line 265 "Parser.yy" // lalr1.cc:847
-    {
+#line 265 "Parser.yy"
+      {
         (yylhs.value.calcnode) = new expression::Add((yystack_[2].value.calcnode), (yystack_[0].value.calcnode));
       }
-#line 935 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 973 "pregen-parser/Parser.cpp"
     break;
 
   case 26:
-#line 269 "Parser.yy" // lalr1.cc:847
-    {
+#line 269 "Parser.yy"
+      {
         (yylhs.value.calcnode) = new expression::Subtract((yystack_[2].value.calcnode), (yystack_[0].value.calcnode));
       }
-#line 943 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 981 "pregen-parser/Parser.cpp"
     break;
 
   case 27:
-#line 274 "Parser.yy" // lalr1.cc:847
-    {
+#line 274 "Parser.yy"
+      {
         (yylhs.value.calcnode) = new expression::Assign(driver.symbols, *(yystack_[2].value.stringVal), (yystack_[0].value.calcnode));
         delete (yystack_[2].value.stringVal);
       }
-#line 952 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 990 "pregen-parser/Parser.cpp"
     break;
 
   case 28:
-#line 279 "Parser.yy" // lalr1.cc:847
-    {
+#line 279 "Parser.yy"
+      {
         (yylhs.value.calcnode) = new expression::Assign(driver.symbols, *(yystack_[2].value.stringVal), (yystack_[0].value.calcnode));
         delete (yystack_[2].value.stringVal);
       }
-#line 961 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 999 "pregen-parser/Parser.cpp"
     break;
 
   case 29:
-#line 285 "Parser.yy" // lalr1.cc:847
-    {
+#line 285 "Parser.yy"
+      {
         driver.dump( std::cout );
         delete (yystack_[0].value.stringVal);
       }
-#line 970 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 1008 "pregen-parser/Parser.cpp"
     break;
 
   case 30:
-#line 290 "Parser.yy" // lalr1.cc:847
-    { /* e.g. dump constants */
+#line 290 "Parser.yy"
+      { /* e.g. dump constants */
         enum symbol::TYPE sym_type = symbol::UNDEFINED;
         if      ( (*(yystack_[0].value.stringVal)) == "constants" )
             sym_type = symbol::CONSTANT;
@@ -985,12 +1023,12 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
         delete (yystack_[1].value.stringVal);
         delete (yystack_[0].value.stringVal);
       }
-#line 989 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 1027 "pregen-parser/Parser.cpp"
     break;
 
   case 31:
-#line 306 "Parser.yy" // lalr1.cc:847
-    { /* e.g.  set output pretty */
+#line 306 "Parser.yy"
+      { /* e.g.  set output pretty */
         bool success = false;
         if (*(yystack_[1].value.stringVal) == "output") {
           success = true;
@@ -1017,12 +1055,12 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
           YYERROR;
         }
       }
-#line 1021 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 1059 "pregen-parser/Parser.cpp"
     break;
 
   case 32:
-#line 335 "Parser.yy" // lalr1.cc:847
-    { /* e.g.  from physical::unit import * */
+#line 335 "Parser.yy"
+      { /* e.g.  from physical::unit import * */
         bool success = true;
         if ( *(yystack_[1].value.stringVal) == "import" )
           symbol::import( driver.symbols, *(yystack_[2].value.stringVal), "*" );
@@ -1040,12 +1078,12 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
           YYERROR;
         }
       }
-#line 1044 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 1082 "pregen-parser/Parser.cpp"
     break;
 
   case 33:
-#line 354 "Parser.yy" // lalr1.cc:847
-    { /* e.g.  from physical::unit import * to myunits */
+#line 354 "Parser.yy"
+      { /* e.g.  from physical::unit import * to myunits */
         bool success = true;
         if ( *(yystack_[3].value.stringVal) == "import" && *(yystack_[1].value.stringVal) == "to" )
           symbol::import( driver.symbols, *(yystack_[4].value.stringVal), "*", *(yystack_[0].value.stringVal) );
@@ -1063,12 +1101,12 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
           YYERROR;
         }
       }
-#line 1067 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 1105 "pregen-parser/Parser.cpp"
     break;
 
   case 34:
-#line 373 "Parser.yy" // lalr1.cc:847
-    { /* e.g.  from physical import 'element::.*' */
+#line 373 "Parser.yy"
+      { /* e.g.  from physical import 'element::.*' */
         bool success = true;
         if ( *(yystack_[1].value.stringVal) == "import" )
           symbol::import( driver.symbols, *(yystack_[2].value.stringVal), sstrip(*(yystack_[0].value.stringVal)) );
@@ -1087,12 +1125,12 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
           YYERROR;
         }
       }
-#line 1091 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 1129 "pregen-parser/Parser.cpp"
     break;
 
   case 35:
-#line 393 "Parser.yy" // lalr1.cc:847
-    { /* e.g.  from physical::unit import 'element::.*' to myelements */
+#line 393 "Parser.yy"
+      { /* e.g.  from physical::unit import 'element::.*' to myelements */
         bool success = true;
         if ( *(yystack_[3].value.stringVal) == "import" && *(yystack_[1].value.stringVal) == "to" )
           symbol::import( driver.symbols, *(yystack_[4].value.stringVal), sstrip(*(yystack_[2].value.stringVal)), *(yystack_[0].value.stringVal) );
@@ -1111,93 +1149,98 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
           YYERROR;
         }
       }
-#line 1115 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 1153 "pregen-parser/Parser.cpp"
     break;
 
   case 36:
-#line 414 "Parser.yy" // lalr1.cc:847
-    { /* e.g. clear * */
+#line 414 "Parser.yy"
+      { /* e.g. clear * */
         symbol::clear( driver.symbols, "", "*" );
         delete (yystack_[1].value.stringVal);
       }
-#line 1124 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 1162 "pregen-parser/Parser.cpp"
     break;
 
   case 37:
-#line 419 "Parser.yy" // lalr1.cc:847
-    { /* e.g. clear physcal::unit::m */
+#line 419 "Parser.yy"
+      { /* e.g. clear physcal::unit::m */
         symbol::clear( driver.symbols, *(yystack_[0].value.stringVal), "" );
         delete (yystack_[1].value.stringVal);
         delete (yystack_[0].value.stringVal);
       }
-#line 1134 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 1172 "pregen-parser/Parser.cpp"
     break;
 
   case 38:
-#line 425 "Parser.yy" // lalr1.cc:847
-    { /* e.g. clear 'physical::element::.*' */
+#line 425 "Parser.yy"
+      { /* e.g. clear 'physical::element::.*' */
         symbol::clear( driver.symbols, "", sstrip(*(yystack_[0].value.stringVal)) );
         delete (yystack_[1].value.stringVal);
         delete (yystack_[0].value.stringVal);
       }
-#line 1144 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 1182 "pregen-parser/Parser.cpp"
     break;
 
   case 39:
-#line 432 "Parser.yy" // lalr1.cc:847
-    {
+#line 432 "Parser.yy"
+      {
         std::cerr << "just hit CTL-C!" << std::endl;
         delete (yystack_[0].value.stringVal);
         /* std::exit(EXIT_SUCCESS); */
       }
-#line 1154 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 1192 "pregen-parser/Parser.cpp"
     break;
 
   case 42:
-#line 440 "Parser.yy" // lalr1.cc:847
-    {
+#line 440 "Parser.yy"
+      {
         bison_parser_help();
         delete (yystack_[0].value.stringVal);
       }
-#line 1163 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 1201 "pregen-parser/Parser.cpp"
     break;
 
   case 52:
-#line 459 "Parser.yy" // lalr1.cc:847
-    {
+#line 459 "Parser.yy"
+      {
         driver.expressions.push_back((yystack_[1].value.calcnode));
       }
-#line 1171 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 1209 "pregen-parser/Parser.cpp"
     break;
 
   case 53:
-#line 463 "Parser.yy" // lalr1.cc:847
-    {
+#line 463 "Parser.yy"
+      {
         driver.expressions.push_back((yystack_[1].value.calcnode));
       }
-#line 1179 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 1217 "pregen-parser/Parser.cpp"
     break;
 
 
-#line 1183 "pregen-parser/Parser.cpp" // lalr1.cc:847
+#line 1221 "pregen-parser/Parser.cpp"
+
             default:
               break;
             }
         }
+#if YY_EXCEPTIONS
       catch (const syntax_error& yyexc)
         {
+          YYCDEBUG << "Caught exception: " << yyexc.what() << '\n';
           error (yyexc);
           YYERROR;
         }
+#endif // YY_EXCEPTIONS
       YY_SYMBOL_PRINT ("-> $$ =", yylhs);
       yypop_ (yylen);
       yylen = 0;
       YY_STACK_PRINT ();
 
       // Shift the result of the reduction.
-      yypush_ (YY_NULLPTR, yylhs);
+      yypush_ (YY_NULLPTR, YY_MOVE (yylhs));
     }
     goto yynewstate;
+
 
   /*--------------------------------------.
   | yyerrlab -- here on detecting error.  |
@@ -1207,8 +1250,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
     if (!yyerrstatus_)
       {
         ++yynerrs_;
-        error (yyla.location, yysyntax_error_ (yystack_[0].state,
-                                           yyempty ? yyempty_ : yyla.type_get ()));
+        error (yyla.location, yysyntax_error_ (yystack_[0].state, yyla));
       }
 
 
@@ -1221,10 +1263,10 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
         // Return failure if at end of input.
         if (yyla.type_get () == yyeof_)
           YYABORT;
-        else if (!yyempty)
+        else if (!yyla.empty ())
           {
             yy_destroy_ ("Error: discarding", yyla);
-            yyempty = true;
+            yyla.clear ();
           }
       }
 
@@ -1236,18 +1278,17 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
   | yyerrorlab -- error raised explicitly by YYERROR.  |
   `---------------------------------------------------*/
   yyerrorlab:
-
-    /* Pacify compilers like GCC when the user code never invokes
-       YYERROR and the label yyerrorlab therefore never appears in user
-       code.  */
+    /* Pacify compilers when the user code never invokes YYERROR and
+       the label yyerrorlab therefore never appears in user code.  */
     if (false)
-      goto yyerrorlab;
-    yyerror_range[1].location = yystack_[yylen - 1].location;
+      YYERROR;
+
     /* Do not reclaim the symbols of the rule whose action triggered
        this YYERROR.  */
     yypop_ (yylen);
     yylen = 0;
     goto yyerrlab1;
+
 
   /*-------------------------------------------------------------.
   | yyerrlab1 -- common code for both syntax error and YYERROR.  |
@@ -1258,11 +1299,11 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
       stack_symbol_type error_token;
       for (;;)
         {
-          yyn = yypact_[yystack_[0].state];
+          yyn = yypact_[+yystack_[0].state];
           if (!yy_pact_value_is_default_ (yyn))
             {
-              yyn += yyterror_;
-              if (0 <= yyn && yyn <= yylast_ && yycheck_[yyn] == yyterror_)
+              yyn += yy_error_token_;
+              if (0 <= yyn && yyn <= yylast_ && yycheck_[yyn] == yy_error_token_)
                 {
                   yyn = yytable_[yyn];
                   if (0 < yyn)
@@ -1284,23 +1325,33 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
       YYLLOC_DEFAULT (error_token.location, yyerror_range, 2);
 
       // Shift the error token.
-      error_token.state = yyn;
-      yypush_ ("Shifting", error_token);
+      error_token.state = state_type (yyn);
+      yypush_ ("Shifting", YY_MOVE (error_token));
     }
     goto yynewstate;
 
-    // Accept.
+
+  /*-------------------------------------.
+  | yyacceptlab -- YYACCEPT comes here.  |
+  `-------------------------------------*/
   yyacceptlab:
     yyresult = 0;
     goto yyreturn;
 
-    // Abort.
+
+  /*-----------------------------------.
+  | yyabortlab -- YYABORT comes here.  |
+  `-----------------------------------*/
   yyabortlab:
     yyresult = 1;
     goto yyreturn;
 
+
+  /*-----------------------------------------------------.
+  | yyreturn -- parsing is finished, return the result.  |
+  `-----------------------------------------------------*/
   yyreturn:
-    if (!yyempty)
+    if (!yyla.empty ())
       yy_destroy_ ("Cleanup: discarding lookahead", yyla);
 
     /* Do not reclaim the symbols of the rule whose action triggered
@@ -1314,13 +1365,13 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
 
     return yyresult;
   }
+#if YY_EXCEPTIONS
     catch (...)
       {
-        YYCDEBUG << "Exception caught: cleaning lookahead and stack"
-                 << std::endl;
+        YYCDEBUG << "Exception caught: cleaning lookahead and stack\n";
         // Do not try to display the values of the reclaimed symbols,
-        // as their printer might throw an exception.
-        if (!yyempty)
+        // as their printers might throw an exception.
+        if (!yyla.empty ())
           yy_destroy_ (YY_NULLPTR, yyla);
 
         while (1 < yystack_.size ())
@@ -1330,22 +1381,22 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
           }
         throw;
       }
+#endif // YY_EXCEPTIONS
   }
 
   void
   Parser::error (const syntax_error& yyexc)
   {
-    error (yyexc.location, yyexc.what());
+    error (yyexc.location, yyexc.what ());
   }
 
   // Generate an error message.
   std::string
-  Parser::yysyntax_error_ (state_type yystate, symbol_number_type yytoken) const
+  Parser::yysyntax_error_ (state_type yystate, const symbol_type& yyla) const
   {
-    std::string yyres;
     // Number of reported tokens (one for the "unexpected", one per
     // "expected").
-    size_t yycount = 0;
+    std::ptrdiff_t yycount = 0;
     // Its maximum.
     enum { YYERROR_VERBOSE_ARGS_MAXIMUM = 5 };
     // Arguments of yyformat.
@@ -1356,7 +1407,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
          the only way this function was invoked is if the default action
          is an error action.  In that case, don't check for expected
          tokens because there are none.
-       - The only way there can be no lookahead present (in yytoken) is
+       - The only way there can be no lookahead present (in yyla) is
          if this state is a consistent state with a default action.
          Thus, detecting the absence of a lookahead is sufficient to
          determine that there is no unexpected or expected token to
@@ -1369,17 +1420,18 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
        - Of course, the expected token list depends on states to have
          correct lookahead information, and it depends on the parser not
          to perform extra reductions after fetching a lookahead from the
-         scanner and before detecting a syntax error.  Thus, state
-         merging (from LALR or IELR) and default reductions corrupt the
-         expected token list.  However, the list is correct for
-         canonical LR with one exception: it will still contain any
-         token that will not be accepted due to an error action in a
-         later state.
+         scanner and before detecting a syntax error.  Thus, state merging
+         (from LALR or IELR) and default reductions corrupt the expected
+         token list.  However, the list is correct for canonical LR with
+         one exception: it will still contain any token that will not be
+         accepted due to an error action in a later state.
     */
-    if (yytoken != yyempty_)
+    if (!yyla.empty ())
       {
+        symbol_number_type yytoken = yyla.type_get ();
         yyarg[yycount++] = yytname_[yytoken];
-        int yyn = yypact_[yystate];
+
+        int yyn = yypact_[+yystate];
         if (!yy_pact_value_is_default_ (yyn))
           {
             /* Start YYX at -YYN if negative to avoid negative indexes in
@@ -1390,7 +1442,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
             int yychecklim = yylast_ - yyn + 1;
             int yyxend = yychecklim < yyntokens_ ? yychecklim : yyntokens_;
             for (int yyx = yyxbegin; yyx < yyxend; ++yyx)
-              if (yycheck_[yyx + yyn] == yyx && yyx != yyterror_
+              if (yycheck_[yyx + yyn] == yyx && yyx != yy_error_token_
                   && !yy_table_value_is_error_ (yytable_[yyx + yyn]))
                 {
                   if (yycount == YYERROR_VERBOSE_ARGS_MAXIMUM)
@@ -1411,17 +1463,19 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
         case N:                               \
           yyformat = S;                       \
         break
-        YYCASE_(0, YY_("syntax error"));
-        YYCASE_(1, YY_("syntax error, unexpected %s"));
-        YYCASE_(2, YY_("syntax error, unexpected %s, expecting %s"));
-        YYCASE_(3, YY_("syntax error, unexpected %s, expecting %s or %s"));
-        YYCASE_(4, YY_("syntax error, unexpected %s, expecting %s or %s or %s"));
-        YYCASE_(5, YY_("syntax error, unexpected %s, expecting %s or %s or %s or %s"));
+      default: // Avoid compiler warnings.
+        YYCASE_ (0, YY_("syntax error"));
+        YYCASE_ (1, YY_("syntax error, unexpected %s"));
+        YYCASE_ (2, YY_("syntax error, unexpected %s, expecting %s"));
+        YYCASE_ (3, YY_("syntax error, unexpected %s, expecting %s or %s"));
+        YYCASE_ (4, YY_("syntax error, unexpected %s, expecting %s or %s or %s"));
+        YYCASE_ (5, YY_("syntax error, unexpected %s, expecting %s or %s or %s or %s"));
 #undef YYCASE_
       }
 
+    std::string yyres;
     // Argument number.
-    size_t yyi = 0;
+    std::ptrdiff_t yyi = 0;
     for (char const* yyp = yyformat; *yyp; ++yyp)
       if (yyp[0] == '%' && yyp[1] == 's' && yyi < yycount)
         {
@@ -1452,7 +1506,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
      -15,   -15
   };
 
-  const unsigned char
+  const signed char
   Parser::yydefact_[] =
   {
       49,     0,     1,    46,     2,     3,    39,    29,     0,    42,
@@ -1480,7 +1534,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
       23,    24,    25,    26,    27,    28,    29,    50,    51,     1
   };
 
-  const unsigned char
+  const signed char
   Parser::yytable_[] =
   {
       42,     2,    33,    47,     3,     4,     3,     5,     6,     7,
@@ -1494,7 +1548,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
       73,    40,    41,    78,    79,    80,    81,    60,    30
   };
 
-  const unsigned char
+  const signed char
   Parser::yycheck_[] =
   {
       14,     0,     6,     0,     3,     4,     3,     6,     7,     8,
@@ -1508,7 +1562,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
       20,    12,    13,     6,     6,     6,     6,    32,     1
   };
 
-  const unsigned char
+  const signed char
   Parser::yystos_[] =
   {
        0,    43,     0,     3,     4,     6,     7,     8,     9,    10,
@@ -1522,7 +1576,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
        6,     6
   };
 
-  const unsigned char
+  const signed char
   Parser::yyr1_[] =
   {
        0,    24,    25,    26,    27,    27,    28,    28,    29,    29,
@@ -1533,7 +1587,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
       43,    43,    43,    43
   };
 
-  const unsigned char
+  const signed char
   Parser::yyr2_[] =
   {
        0,     2,     1,     1,     1,     3,     1,     3,     3,     4,
@@ -1563,7 +1617,7 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
   };
 
 #if YYDEBUG
-  const unsigned short int
+  const short
   Parser::yyrline_[] =
   {
        0,   151,   151,   156,   162,   167,   173,   179,   186,   191,
@@ -1583,19 +1637,19 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
            i = yystack_.begin (),
            i_end = yystack_.end ();
          i != i_end; ++i)
-      *yycdebug_ << ' ' << i->state;
-    *yycdebug_ << std::endl;
+      *yycdebug_ << ' ' << int (i->state);
+    *yycdebug_ << '\n';
   }
 
   // Report on the debug stream that the rule \a yyrule is going to be reduced.
   void
   Parser::yy_reduce_print_ (int yyrule)
   {
-    unsigned int yylno = yyrline_[yyrule];
+    int yylno = yyrline_[yyrule];
     int yynrhs = yyr2_[yyrule];
     // Print the symbols being reduced, and their result.
     *yycdebug_ << "Reducing stack by rule " << yyrule - 1
-               << " (line " << yylno << "):" << std::endl;
+               << " (line " << yylno << "):\n";
     // The symbols being reduced.
     for (int yyi = 0; yyi < yynrhs; yyi++)
       YY_SYMBOL_PRINT ("   $" << yyi + 1 << " =",
@@ -1603,16 +1657,16 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
   }
 #endif // YYDEBUG
 
-  // Symbol number corresponding to token number t.
-  inline
   Parser::token_number_type
   Parser::yytranslate_ (int t)
   {
+    // YYTRANSLATE[TOKEN-NUM] -- Symbol number corresponding to
+    // TOKEN-NUM as returned by yylex.
     static
     const token_number_type
     translate_table[] =
     {
-     0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,    21,     2,     2,
@@ -1640,21 +1694,21 @@ namespace runtime { namespace physical { namespace calc { namespace detail {
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12
     };
-    const unsigned int user_token_number_max_ = 267;
-    const token_number_type undef_token_ = 2;
+    const int user_token_number_max_ = 267;
 
-    if (static_cast<int>(t) <= yyeof_)
+    if (t <= 0)
       return yyeof_;
-    else if (static_cast<unsigned int> (t) <= user_token_number_max_)
+    else if (t <= user_token_number_max_)
       return translate_table[t];
     else
-      return undef_token_;
+      return yy_undef_token_;
   }
 
-#line 52 "Parser.yy" // lalr1.cc:1155
+#line 52 "Parser.yy"
 } } } } // runtime::physical::calc::detail
-#line 1657 "pregen-parser/Parser.cpp" // lalr1.cc:1155
-#line 469 "Parser.yy" // lalr1.cc:1156
+#line 1710 "pregen-parser/Parser.cpp"
+
+#line 469 "Parser.yy"
  /*** Additional Code ***/
 
 namespace runtime { namespace physical { namespace calc { namespace detail {
