@@ -370,6 +370,10 @@ class Quantity(object):
         else:
             return cmp(self.coeff, other.coeff)
 
+    def __hash__(self):
+        return hash((self.coeff, tuple(self.units.keys()),
+                                 tuple(self.units.values())))
+
     def __eq__(self,other):
         um = self.unitsMatch(other)
         if um < 0:
