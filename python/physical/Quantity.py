@@ -13,51 +13,51 @@ class pretty_print:
         self.precision = precision
 
     def get_name(self):
-      return ('pretty',{'precision': self.precision})
+        return ('pretty',{'precision': self.precision})
 
     def __call__(self, Q):
-      # first sort into pos or neg exponent (of units)
-      utuples = list(Q.units.items())
-      # insert marker tuple
-      marker = ('--',0)
-      utuples.append(marker)
-      utuples.sort(key = lambda u: -u[1])
+        # first sort into pos or neg exponent (of units)
+        utuples = list(Q.units.items())
+        # insert marker tuple
+        marker = ('--',0)
+        utuples.append(marker)
+        utuples.sort(key = lambda u: -u[1])
 
-      # find marker
-      mi = utuples.index(marker)
+        # find marker
+        mi = utuples.index(marker)
 
-      # separate into separate tuples and then sort lexically
-      putuples = utuples[:mi]
-      nutuples = utuples[(mi+1):]
-      putuples.sort(key = lambda u: u[0])
-      nutuples.sort(key = lambda u: u[0])
+        # separate into separate tuples and then sort lexically
+        putuples = utuples[:mi]
+        nutuples = utuples[(mi+1):]
+        putuples.sort(key = lambda u: u[0])
+        nutuples.sort(key = lambda u: u[0])
 
-      U = ''
+        U = ''
 
-      # numerator first
-      sep = ''
-      for u,e in putuples:
-          U += sep + u
-          sep = ' '
-          if e != 1:
-              U += '^' + repr(e)
+        # numerator first
+        sep = ''
+        for u,e in putuples:
+            U += sep + u
+            sep = ' '
+            if e != 1:
+                U += '^' + repr(e)
 
-      # now denominator
-      if nutuples != []:
-          U += ' /'
+        # now denominator
+        if nutuples != []:
+            U += ' /'
 
-      for u,e in nutuples:
-          U += sep + u
-          sep = ' '
-          if e != -1:
-              U += '^' + repr(-e)
+        for u,e in nutuples:
+            U += sep + u
+            sep = ' '
+            if e != -1:
+                U += '^' + repr(-e)
 
-      name = ''
-      if Q.name is not None:
-          name = ' (' + Q.name + ')'
+        name = ''
+        if Q.name is not None:
+            name = ' (' + Q.name + ')'
 
-      return Q.fmt.format(coeff=Q.coeff, precision=self.precision, units=U,
-                          name=name)
+        return Q.fmt.format(coeff=Q.coeff, precision=self.precision, units=U,
+                            name=name)
 
 
 class math_print:
@@ -311,23 +311,23 @@ class Quantity(object):
 
     @staticmethod
     def to_dict(q):
-      """
-      Serialization for physical.Quantity.
-      """
-      return dict(name=q.name, coeff=q.coeff, units=q.units,
-                  __class__=Quantity.SERIALIZATION_NAME)
+        """
+        Serialization for physical.Quantity.
+        """
+        return dict(name=q.name, coeff=q.coeff, units=q.units,
+                    __class__=Quantity.SERIALIZATION_NAME)
 
     @staticmethod
     def from_dict(cls_name, D):
-      """
-      Deserialization for physical.Quantity.
-      """
-      assert cls_name == Quantity.SERIALIZATION_NAME, \
-        'mismatch on class name for physical.Quantity deserialization'
-      return Quantity(D['coeff'], D['units'], D['name'])
+        """
+        Deserialization for physical.Quantity.
+        """
+        assert cls_name == Quantity.SERIALIZATION_NAME, \
+          'mismatch on class name for physical.Quantity deserialization'
+        return Quantity(D['coeff'], D['units'], D['name'])
 
     def __repr__(self):
-      return self.print_style(self)
+        return self.print_style(self)
 
     def __add__(self,other):
         if sympy_util.is_sympy(other):
