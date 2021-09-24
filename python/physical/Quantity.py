@@ -9,10 +9,13 @@ UnitsNotDimensionless = 'Units not dimensionless:  cannot create non-integer pow
 
 
 class pretty_print:
-    def get_name(self):
-      return ('pretty',{})
+    def __init__(self, precision=15):
+        self.precision = precision
 
-    def __call__(self,Q):
+    def get_name(self):
+      return ('pretty',{'precision': self.precision})
+
+    def __call__(self, Q):
       # first sort into pos or neg exponent (of units)
       utuples = list(Q.units.items())
       # insert marker tuple
@@ -53,7 +56,8 @@ class pretty_print:
       if Q.name is not None:
           name = ' (' + Q.name + ')'
 
-      return Q.fmt.format(coeff=Q.coeff, units=U, name=name)
+      return Q.fmt.format(coeff=Q.coeff, precision=self.precision, units=U,
+                          name=name)
 
 
 class math_print:
@@ -256,7 +260,7 @@ class Quantity(object):
     """
     This is the documentation for a physical Quantity.
     """
-    fmt = '<{coeff} {units}>{name}'
+    fmt = '<{coeff:.{precision}} {units}>{name}'
     print_style = pretty_print()
 
     @classmethod
@@ -267,7 +271,7 @@ class Quantity(object):
 
         usage: set_default_print_style(style, options)
           STYLES      OPTIONS
-          'pretty'
+          'pretty'    precision [=15]
           'math'      precision [=12]
                       omit_outside_parens [=False]
           'latex'     precision [=12]
