@@ -1,4 +1,4 @@
-from math import log10
+from math import log10, isclose
 
 from . import sympy_util
 
@@ -10,6 +10,9 @@ UnitsNotDimensionless = 'Units not dimensionless:  cannot create non-integer pow
 
 class pretty_print:
     def __init__(self, precision=15):
+        self.precision = precision
+
+    def set_precision(self, precision):
         self.precision = precision
 
     def get_name(self):
@@ -64,6 +67,9 @@ class math_print:
     def __init__(self, precision=12, omit_outside_parens=False):
         self.precision = precision
         self.omit_parens = omit_outside_parens
+
+    def set_precision(self, precision):
+        self.precision = precision
 
     def get_name(self):
         return ('math',
@@ -130,6 +136,9 @@ class latex_print:
     def __init__(self, precision=12, oneline=True):
         self.precision = precision
         self.oneline = oneline
+
+    def set_precision(self, precision):
+        self.precision = precision
 
     def get_name(self):
         return ('latex',
@@ -232,6 +241,9 @@ class ugly_print:
     def __init__(self, precision=12):
         self.precision = precision
 
+    def set_precision(self, precision):
+        self.precision = precision
+
     def get_name(self):
         return ('ugly', {'precision':self.precision})
 
@@ -261,7 +273,8 @@ class Quantity(object):
     This is the documentation for a physical Quantity.
     """
     fmt = '<{coeff:.{precision}} {units}>{name}'
-    print_style = pretty_print()
+    precision = 15
+    print_style = pretty_print(precision=precision)
 
     @classmethod
     def set_default_print_style(cls, *args, **kwargs):
@@ -301,6 +314,47 @@ class Quantity(object):
         set for this quantity.
         """
         return self.print_style.get_name()
+
+    @classmethod
+    def set_default_precision(cls, precision):
+        """
+        Sets the default comparison for all coefficient comparisons.
+
+        This function also sets the precision for the default printer.
+        """
+        cls.precision = precision
+        cls.print_style.set_precision(precision)
+
+    @classmethod
+    def get_default_precision(cls, precision):
+        """
+        Gets the default comparison for all coefficient comparisons.
+        """
+        return cls.precision
+
+    def set_precision(self, precision):
+        """
+        Sets the comparison for all coefficient comparisons for this instance.
+
+        This function also sets the precision for the printer for this instance.
+        If this instance did not previously have a specific printer, it will
+        now.  This function does not modify the precision for the default
+        printer.
+        """
+        self.precision = precision
+
+        if id(self.__class__.print_style) == id(self.print_style):
+          # make a copy of printer
+          name, kwargs = self.__class__.print_style.get_name()
+          self.print_style = mkPrinter(name, **kwargs)
+
+        self.print_style.set_precision(precision)
+
+    def get_precision(self, precision):
+        """
+        Gets the comparison for all coefficient comparisons for this instance.
+        """
+        return self.precision
 
     def __init__(self,coeff,units,name=None):
         self.name = name
@@ -380,10 +434,11 @@ class Quantity(object):
 
     def __eq__(self,other):
         um = self.unitsMatch(other)
+        rel_tol = 10**(-self.precision)
         if um < 0:
-            return self.coeff == other
+            return isclose(self.coeff, other, rel_tol=rel_tol)
         else:
-            return self.coeff == other.coeff
+            return isclose(self.coeff, other.coeff, rel_tol=rel_tol)
 
     def __lt__(self,other):
         um = self.unitsMatch(other)
