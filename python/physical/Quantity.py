@@ -378,6 +378,8 @@ class Quantity(object):
         """
         assert cls_name == Quantity.SERIALIZATION_NAME, \
           'mismatch on class name for physical.Quantity deserialization'
+        if isinstance(D['coeff'], dict) and D['coeff']['__class__'] == 'float':
+          D['coeff'] = float(D['coeff']['value'])
         return Quantity(D['coeff'], D['units'], D['name'])
 
     def __repr__(self):
