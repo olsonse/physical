@@ -326,7 +326,7 @@ class Quantity(object):
         cls.print_style.set_precision(precision)
 
     @classmethod
-    def get_default_precision(cls, precision):
+    def get_default_precision(cls):
         """
         Gets the default comparison for all coefficient comparisons.
         """
@@ -350,7 +350,7 @@ class Quantity(object):
 
         self.print_style.set_precision(precision)
 
-    def get_precision(self, precision):
+    def get_precision(self):
         """
         Gets the comparison for all coefficient comparisons for this instance.
         """
