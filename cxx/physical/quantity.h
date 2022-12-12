@@ -296,7 +296,7 @@ namespace runtime {
         for (units_map::iterator i = u.begin(); i != u.end(); i++) {
             units_pair & p = (*i);
             if (fexp < 1) {
-                register T fexp_inv = static_cast<T>(1)/fexp;
+                T fexp_inv = static_cast<T>(1)/fexp;
                 if (std::fmod(static_cast<T>(p.second), fexp_inv) != 0)
                     throw exception(UnitsNotRoot);
             } else if ( (int(fexp) - fexp) != 0 )

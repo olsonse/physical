@@ -44,10 +44,10 @@ namespace runtime {
 #  define PHYSICAL_QUANTITY_INITu(name,c,u)  (c)
 #  define PHYSICAL_QUANTITY_INITn(name,c,n)  (c)
 #  define PHYSICAL_QUANTITY_INITun(name,c,n) (c)
-#  define _QUANTITY(name,c)       const Quantity name (c)
-#  define _QUANTITYu(name,c,u)    const Quantity name (c)
-#  define _QUANTITYn(name,c,n)    const Quantity name (c)
-#  define _QUANTITYun(name,c,u,n) const Quantity name (c)
+#  define _QUANTITY(name,c)       constexpr Quantity name (c)
+#  define _QUANTITYu(name,c,u)    constexpr Quantity name (c)
+#  define _QUANTITYn(name,c,n)    constexpr Quantity name (c)
+#  define _QUANTITYun(name,c,u,n) constexpr Quantity name (c)
 
 #else
 
