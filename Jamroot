@@ -218,8 +218,8 @@ obj Parser
     ;
 
 feature phys-type : complex cfloat double float : composite ;
-feature.compose <phys-type>complex : <define>RUNTIME_PHYSICAL_QUANTITY=\"std::complex<double>\" ;
-feature.compose <phys-type>cfloat : <define>RUNTIME_PHYSICAL_QUANTITY=\"std::complex<float>\" ;
+feature.compose <phys-type>complex : <define>RUNTIME_PHYSICAL_QUANTITY=\"std\:\:complex<double>\" ;
+feature.compose <phys-type>cfloat : <define>RUNTIME_PHYSICAL_QUANTITY=\"std\:\:complex<float>\" ;
 feature.compose <phys-type>double : <define>RUNTIME_PHYSICAL_QUANTITY=double ;
 feature.compose <phys-type>float : <define>RUNTIME_PHYSICAL_QUANTITY=float ;
 
