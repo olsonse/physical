@@ -29,7 +29,7 @@ include /usr/share/dpkg/default.mk
 
 # main packaging script based on dh7 syntax
 %:
-	dh $@ --with python2,python3
+	dh $@ --with python3
 
 build binary :  $(CURDIR)/debian/changelog $(CURDIR)/debian/copyright
 
@@ -50,11 +50,6 @@ override_dh_auto_install:
 		$(CURDIR)/debian/physical/usr/bin/
 	install $(CURDIR)/examples/calc/interactive/ounits \
 		$(CURDIR)/debian/physical/usr/bin/
-	@#
-	@echo "Installing Python(2) code"
-	mkdir -p $(CURDIR)/debian/python-physical/usr/lib/python2.7/dist-packages/
-	cp -R    $(CURDIR)/python/physical \
-		 $(CURDIR)/debian/python-physical/usr/lib/python2.7/dist-packages/
 	@#
 	@echo "Installing Python(3) code"
 	mkdir -p $(CURDIR)/debian/python3-physical/usr/lib/python3/dist-packages/
